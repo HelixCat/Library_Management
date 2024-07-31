@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en" style="direction: ltr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+<head>
+    <title>Signup</title>
+</head>
+<style>
+
+    #sign_inForm {
+        background-color: #ffffff;
+        margin: 60px auto;
+        padding: 40px;
+        width: 50%;
+        min-width: 300px;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* Style the input fields */
+    input {
+        padding: 10px;
+        width: 100%;
+        font-size: 16px;
+        border: 1px solid #aaaaaa;
+    }
+
+    input.invalid {
+        background-color: #ffdddd;
+    }
+
+</style>
+
+<body>
+<form th:action="@{/sign_in}" method="post" th:object="${userDTO}" id="sign_inForm">
+    <h1>Login</h1>
+    <div class="tab">
+        <h2>Login Information</h2>
+        <p>
+            <label class="emailLabel">email</label>
+            <input type="email" th:field="*{email}" required
+                   class="emailInput" name="email" id="email" placeholder="email"/>
+        </p>
+        <p>
+            <label class="passwordLabel">password</label>
+            <input type="password" th:field="*{password}" required
+                   class="passwordInput" name="password" id="password" placeholder="password"/>
+        </p>
+    </div>
+
+    <!-- Navigation buttons -->
+    <div style="overflow:auto;">
+        <div style="align-items: center;">
+            <button type="submit" id="login" >Sign in</button>
+        </div>
+    </div>
+</form>
+</body>
+</html>
