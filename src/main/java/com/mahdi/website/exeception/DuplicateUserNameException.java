@@ -1,12 +1,12 @@
 package com.mahdi.website.exeception;
 
-public class DupplicateUserNameException extends BusinessException {
+public class DuplicateUserNameException extends BusinessException {
 
-    public DupplicateUserNameException(String errorMessage, Throwable ex) {
+    public DuplicateUserNameException(String errorMessage, Throwable ex) {
         super(errorMessage, ex);
     }
 
-    public DupplicateUserNameException(String errorMessage) {
+    public DuplicateUserNameException(String errorMessage) {
         super(errorMessage);
     }
 }

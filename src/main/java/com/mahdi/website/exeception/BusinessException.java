@@ -1,4 +1,4 @@
-package com.mahdi.website.service.exeception;
+package com.mahdi.website.exeception;
 
 public class BusinessException extends RuntimeException{
 

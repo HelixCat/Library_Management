@@ -1,14 +1,16 @@
 package com.mahdi.website.dto;
 
+
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.io.Serializable;
 
 @Getter
 @Setter
-@RequiredArgsConstructor
-public class UserDTO implements Serializable {
+@AllArgsConstructor
+@NoArgsConstructor
+public class UserDTO {
 
     private Long id;
     private String fullName;
@@ -18,9 +20,11 @@ public class UserDTO implements Serializable {
     private String email;
     private String phoneNumber;
     private String nationalCode;
-    private Boolean manager;
+    private Boolean admin;
     private String password;
-    private String job;
+    private String gender;
+    private String FatherName;
+    private String birthday;
     private byte[] image;
     private String base64ProfileImage;
     private AddressDTO addressDTO;

@@ -3,7 +3,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org">
 <head>
-    <title>Signup</title>
+    <title>Sign_in</title>
 </head>
 <style>
 
@@ -46,7 +46,9 @@
                    class="passwordInput" name="password" id="password" placeholder="password"/>
         </p>
     </div>
-
+    <div th:if="${errorMessage}">
+        <p th:text="${errorMessage}" style="color: red;"></p>
+    </div>
     <!-- Navigation buttons -->
     <div style="overflow:auto;">
         <div style="align-items: center;">

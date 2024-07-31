@@ -1,48 +1,56 @@
 package com.mahdi.website.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import java.util.Date;
 import java.util.List;
 
 
 @Getter
 @Setter
-@RequiredArgsConstructor
 @Entity
 @Table(name = "t_user")
 public class User extends BaseEntity {
 
-    @NotBlank
     @NotNull
-    @Column(name = "c_user_name", nullable = false, length = 16)
+    @NotEmpty
+    @Column(name = "c_user_name", nullable = false, unique = true, length = 16)
     private String username;
     @Column(name = "c_first_name", length = 45)
     private String firstName;
     @Column(name = "c_last_name", length = 45)
     private String lastName;
-    @NotBlank
-    @NotNull
-    @Email(message = "Invalid email format")
+    @Email(message = "incorrect format!!!")
     @Column(name = "c_email", length = 60)
     private String email;
-    @NotBlank
     @NotNull
+    @NotEmpty
     @Column(name = "c_phone_number", nullable = false, unique = true, length = 11)
     private String phoneNumber;
-    @Column(name = "c_password", nullable = false, length = 4000, unique = true)
+    @NotNull
+    @NotEmpty
+    @Column(name = "c_password", nullable = false, length = 4000)
     private String password;
-    @Column(name = "c_national_code", length = 10, nullable = false, unique = true)
+    @NotNull
+    @NotEmpty
+    @Column(name = "c_national_code", nullable = false, unique = true, length = 10)
     private String nationalCode;
-    @Column(name = "c_manager")
-    private Boolean manager;
-    @Column(name = "c_job")
-    private String job;
+    @Column(name = "c_gender", nullable = false, length = 10)
+    private String gender;
+    @Column(name = "c_birthday", length = 10)
+    private String birthday;
+    @Column(name = "c_register_day", length = 10)
+    private String registerDay;
+    @Column(name = "c_admin")
+    private Boolean admin;
+    @Column(name = "c_father_name")
+    private String fatherName;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
     @Lob

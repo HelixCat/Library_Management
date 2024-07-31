@@ -10,17 +10,19 @@ import java.util.List;
 
 public interface UserServiceInterface {
     List<User> getAllUsers();
-    void saveUser(UserDTO userDTO) throws Exception;
-
+    User saveUser(UserDTO userDTO) throws Exception;
     List<Address> saveAddress(List<Address> addressList);
-
     UserDTO AddAddressToTheUser(String username, AddressDTO addressDTO);
-
     User loadUserByEmail(String email);
+
+    User loadUserByPhoneNumber(String email);
+
+    User loadUserByNationalCode(String nationalCode);
+
     User loadUserByUserName(String userName);
     UserDTO loadUserDTOByUserName(String userName);
-    UserDTO loadUserDTOByEmail(String email);
+    UserDTO loadUserDTOByEmailForLoginPage(UserDTO userDTO);
+    UserDTO loadUserDTOByEmail(UserDTO userDTO);
     void updateUser(String userName, UserDTO userDTO) throws Exception;
     void updateUserPassword(String username, ChangePasswordDTO changePasswordDTO) throws Exception;
-    Boolean isValidPassword(String plainPassword, String hashedPassword);
 }

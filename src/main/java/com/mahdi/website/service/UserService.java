@@ -3,22 +3,23 @@ package com.mahdi.website.service;
 import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
+import com.mahdi.website.exeception.IncorrectPasswordExceprion;
+import com.mahdi.website.exeception.UserNotFoundExcpetion;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.AddressRepository;
 import com.mahdi.website.repository.UserRepository;
-import com.mahdi.website.service.exeception.BusinessException;
+import com.mahdi.website.exeception.BusinessException;
+import com.mahdi.website.service.validation.LoginValidationInterface;
+import com.mahdi.website.service.validation.SignUpValidationInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Objects;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class UserService implements UserServiceInterface {
@@ -26,14 +27,16 @@ public class UserService implements UserServiceInterface {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final ModelMapper modelMapper;
-    private final PasswordEncoder passwordEncoder;
+    private final LoginValidationInterface loginValidation;
+    private final SignUpValidationInterface signUpValidation;
 
     @Autowired
-    public UserService(AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
+    public UserService(AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper, LoginValidationInterface loginValidation, SignUpValidationInterface signUpValidation) {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
-        this.passwordEncoder = passwordEncoder;
+        this.loginValidation = loginValidation;
+        this.signUpValidation = signUpValidation;
     }
 
     @Override
@@ -42,15 +45,16 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public void saveUser(UserDTO userDTO) {
+    public User saveUser(UserDTO userDTO) {
+        signUpValidation.signUpValidation(userDTO);
         User user = prepareUser(null, userDTO);
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     private User prepareUser(User userDetail, UserDTO userDTO) {
         User user = Objects.nonNull(userDetail) ? userDetail : new User();
         user.setActive(Boolean.TRUE);
-        user.setManager(prepareAdminUser(userDTO));
+        user.setAdmin(prepareAdminUser(userDTO));
         user.setUsername(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -60,7 +64,11 @@ public class UserService implements UserServiceInterface {
         user.setPassword(prepareHashedPassword(userDTO.getPassword()));
         user.setAddresses(prepareAddress(userDTO.getAddressDTO(), user));
         user.setProfileImage(userDTO.getImage());
-        user.setJob(userDTO.getJob());
+        user.setGender(userDTO.getGender());
+        user.setBirthday(userDTO.getBirthday());
+        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+        user.setRegisterDay((formatter.format(new Date())));
+        user.setFatherName(userDTO.getFatherName());
         return user;
     }
 
@@ -74,10 +82,14 @@ public class UserService implements UserServiceInterface {
     }
 
     private Boolean prepareAdminUser(UserDTO userDTO) {
-        if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
-            return Boolean.TRUE;
+        if (Boolean.TRUE.equals(userDTO.getAdmin())) {
+            return true;
         } else {
-            return Boolean.FALSE;
+            if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
+                return Boolean.TRUE;
+            } else {
+                return Boolean.FALSE;
+            }
         }
     }
 
@@ -121,23 +133,50 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User loadUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new UserNotFoundExcpetion("user with email " + email + " does not exist"));
+
+    }
+
+    @Override
+    public User loadUserByPhoneNumber(String phoneNumber) {
+        return userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new UserNotFoundExcpetion("user with phoneNumber " + phoneNumber + " does not exist"));
+
+    }
+
+    @Override
+    public User loadUserByNationalCode(String nationalCode) {
+        return userRepository.findByNationalCode(nationalCode)
+                .orElseThrow(() -> new UserNotFoundExcpetion("user with nationalCode " + nationalCode + " does not exist"));
+
     }
 
     @Override
     public User loadUserByUserName(String userName) {
-        return userRepository.findByUserName(userName);
+        return userRepository.findByUserName(userName)
+                .orElseThrow(() -> new UserNotFoundExcpetion("user with email " + userName + " does not exist"));
     }
 
     @Override
     public UserDTO loadUserDTOByUserName(String userName) {
-        User user = userRepository.findByUserName(userName);
+        User user = loadUserByUserName(userName);
         return prepareUserDTO(user);
     }
 
     @Override
-    public UserDTO loadUserDTOByEmail(String email) {
-        User user = userRepository.findByEmail(email);
+    public UserDTO loadUserDTOByEmailForLoginPage(UserDTO userDTO) {
+        User user = loadUserByEmail(userDTO.getEmail());
+        if(loginValidation.isValidPassword(userDTO.getPassword(), user.getPassword())) {
+            return prepareUserDTO(user);
+        } else {
+            throw new IncorrectPasswordExceprion("password is not correct!!!");
+        }
+    }
+
+    @Override
+    public UserDTO loadUserDTOByEmail(UserDTO userDTO) {
+        User user = loadUserByEmail(userDTO.getEmail());
         return prepareUserDTO(user);
     }
 
@@ -161,11 +200,11 @@ public class UserService implements UserServiceInterface {
     private void changePassword(ChangePasswordDTO changePasswordDTO) {
         User user = loadUserByUserName(changePasswordDTO.getUserName());
         if (Objects.nonNull(user)) {
-            if (Boolean.TRUE.equals(isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword()))) {
+            if (Boolean.TRUE.equals(loginValidation.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword()))) {
                 String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
                 userRepository.updateUserPassword(user.getUsername(), hashedPassword);
             } else {
-                throw new BusinessException("گذرواژه را اشتباه وارد کرده اید");
+                throw new IncorrectPasswordExceprion("password is not correct!!!");
             }
         } else {
             throw new BusinessException(" کاربری با این نام کاربری وجود ندارد " + changePasswordDTO.getUserName());
@@ -180,11 +219,11 @@ public class UserService implements UserServiceInterface {
         userDTO.setLastName(user.getLastName());
         userDTO.setEmail(user.getEmail());
         userDTO.setUsername(user.getUsername());
-        userDTO.setManager(user.getManager());
+        userDTO.setAdmin(user.getAdmin());
         userDTO.setNationalCode(user.getNationalCode());
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setImage(user.getProfileImage());
-        userDTO.setJob(user.getJob());
+        userDTO.setFatherName(user.getFatherName());
         userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
         userDTO.setAddressDTO(prepareAddressDTO(user.getAddresses()));
         return userDTO;
@@ -197,10 +236,5 @@ public class UserService implements UserServiceInterface {
     private AddressDTO prepareAddressDTO(List<Address> addressList) {
         Address address = addressList.stream().findFirst().orElse(null);
         return modelMapper.map(address, AddressDTO.class);
-    }
-
-    @Override
-    public Boolean isValidPassword(String plainPassword, String hashedPassword) {
-        return passwordEncoder.matches(plainPassword, hashedPassword);
     }
 }

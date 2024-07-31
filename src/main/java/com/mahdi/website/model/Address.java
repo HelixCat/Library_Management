@@ -1,11 +1,12 @@
 package com.mahdi.website.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 
 
 @Getter
@@ -25,8 +26,11 @@ public class Address extends BaseEntity {
     @NotNull
     @Column(name = "c_postal_code" ,length = 10, nullable = false)
     private String postalCode;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name="user_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
     private User user;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="publisher_id")
+    private Publisher publisher;
 
 }

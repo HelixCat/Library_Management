@@ -3,7 +3,6 @@ package com.mahdi.website.controller;
 import com.mahdi.website.dto.UserDTO;
 
 import com.mahdi.website.service.UserServiceInterface;
-import com.mahdi.website.service.validation.LoginValidationInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,13 +15,9 @@ public class IndexPageController {
 
     private final UserServiceInterface userService;
 
-    private final LoginValidationInterface loginValidation;
-
-
     @Autowired
-    public IndexPageController(UserServiceInterface userService, LoginValidationInterface loginValidation) {
+    public IndexPageController(UserServiceInterface userService) {
         this.userService = userService;
-        this.loginValidation = loginValidation;
     }
 
     @GetMapping("")
@@ -33,7 +28,7 @@ public class IndexPageController {
     @GetMapping("/signup")
     public String showSaveNewUserForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());
-        return "sign_up";
+        return "signup";
     }
 
     @PostMapping("/save")
@@ -42,29 +37,33 @@ public class IndexPageController {
             userDTO.setImage(file.getBytes());
         }
         userService.saveUser(userDTO);
-        return "redirect:login";
+        return "redirect:sign_in";
     }
 
-    @GetMapping("/login")
+    @GetMapping("/sign_in")
     public String showLoginUserForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());
-        return "login";
+        return "sign_in";
     }
 
     @PostMapping ("/sign_in")
     public String login(UserDTO userDTO, Model model) {
-        String redirect = "redirect:";
-        if (Objects.nonNull(userDTO)) {
-            Boolean validateRequest = loginValidation.validateLoginRequest(userDTO.getEmail(), userDTO.getPassword());
-            UserDTO userDetail = userService.loadUserDTOByEmail(userDTO.getEmail());
-            if (Boolean.TRUE.equals(validateRequest)) {
-                model.addAttribute("userDetail", userDetail);
-                return "home";
-            } else {
-                model.addAttribute("error", "Invalid credentials");
-                redirect = redirect + "login";
-            }
-        }
-        return redirect;
+        UserDTO userDetail = userService.loadUserDTOByEmailForLoginPage(userDTO);
+        model.addAttribute("userDetail", userDetail);
+        return "home";
+    }
+
+    @GetMapping(value = "/profile/{username}")
+    public String profile(@PathVariable String username, Model model) {
+        UserDTO userDetail = userService.loadUserDTOByUserName(username);
+        model.addAttribute("userDetail", userDetail);
+        return "profile";
+    }
+
+    @GetMapping("/home")
+    public String returnToHome(UserDTO userDTO, Model model) {
+        UserDTO userDetail = userService.loadUserDTOByEmail(userDTO);
+        model.addAttribute("userDetail", userDetail);
+        return "home";
     }
 }
