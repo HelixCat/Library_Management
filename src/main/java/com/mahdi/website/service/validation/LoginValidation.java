@@ -1,5 +1,6 @@
 package com.mahdi.website.service.validation;
 
+import com.mahdi.website.exeception.IncorrectPasswordExceprion;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,8 +16,10 @@ public class LoginValidation implements LoginValidationInterface{
     }
 
     @Override
-    public Boolean isValidPassword(String plainPassword, String hashedPassword) {
-        return passwordEncoder.matches(plainPassword, hashedPassword);
+    public void isValidPassword(String plainPassword, String hashedPassword, String context) {
+        if (Boolean.FALSE.equals(passwordEncoder.matches(plainPassword, hashedPassword))) {
+            throw new IncorrectPasswordExceprion("password is not correct!!!", context);
+        }
     }
 
 }

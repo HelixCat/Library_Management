@@ -12,15 +12,18 @@
         max-width: 100px;
         margin: 25px auto;
     }
+
     .avatar-upload .avatar-edit {
         position: absolute;
         right: 12px;
         z-index: 1;
         top: 10px;
     }
+
     .avatar-upload .avatar-edit input {
         display: none;
     }
+
     .avatar-upload .avatar-edit input + label {
         display: inline-block;
         width: 34px;
@@ -34,10 +37,12 @@
         font-weight: normal;
         transition: all 0.2s ease-in-out;
     }
+
     .avatar-upload .avatar-edit input + label:hover {
         background: #f1f1f1;
         border-color: #d6d6d6;
     }
+
     .avatar-upload .avatar-edit input + label:after {
         content: "\f040";
         font-family: 'FontAwesome';
@@ -49,6 +54,7 @@
         text-align: center;
         margin: auto;
     }
+
     .avatar-upload .avatar-preview {
         width: 192px;
         height: 192px;
@@ -57,6 +63,7 @@
         border: 6px solid #F8F8F8;
         box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
     }
+
     .avatar-upload .avatar-preview > div {
         width: 100%;
         height: 100%;
@@ -92,6 +99,19 @@
         display: none;
     }
 
+    .img {
+        display: grid;
+        place-items: center;
+    }
+
+    .img-thumbnail {
+        width: 120px;
+        height: 120px;
+        border-radius: 7%;
+        border-style: solid;
+        background-color: lightgreen;
+    }
+
     .step {
         height: 15px;
         width: 15px;
@@ -114,25 +134,9 @@
 </style>
 
 <body>
-<form id="ProfileForm" class="form" th:action="@{/home}" method="post" th:object="${userDetail}">
+<form id="profileForm" class="form" th:action="@{/home}" method="get" th:object="${userDetail}">
     <h1>Profile</h1>
 
-    <div class="text-muted font-weight-bold font-size-h4">
-        آدرس دیگری دارید؟
-        <a th:href="@{/add-address/{username}(username=${userDetail.username})}" class="navi-item">افزودن آدرس</a>
-    </div>
-
-    <div class="col-xl-6">
-        <!--begin::Input-->
-        <div class="form-group">
-            <label class="font-size-h6 font-weight-bolder text-dark">کلمه عبور</label>
-            <div class="text-danger font-weight-bold font-size-h6">
-                آیا قصد ویرایش کلمه عبور را دارید؟
-                <a th:href="@{/change-password/{username}(username=${userDetail.username})}" class="navi-item">ویرایش کلمه عبور</a>
-            </div>
-        </div>
-        <!--end::Input-->
-    </div>
     <!-- Step 1 -->
     <div class="tab">
         <h2>Personal Information</h2>
@@ -174,33 +178,13 @@
     <!-- Step 3 -->
     <div class="tab">
         <h2>Birthday and picture</h2>
-
-        <div class="container">
-            <div class="avatar-upload">
-                <div class="avatar-edit">
-                    <input type='file' id="profileImage" name="profileImage" accept=".png, .jpg, .jpeg"
-                           onchange="previewImage(this);"/>
-                    <label for="profileImage"></label>
-                </div>
-                <div class="avatar-preview">
-                    <div id="imagePreview" style="background-image: url('https://i.pravatar.cc/500?img=7');"></div>
-                </div>
-            </div>
-        </div>
-
+        <p class="img">
+            <img class="img-thumbnail" th:src="@{'data:image/jpg;base64,'+${userDetail.base64ProfileImage}}">
+        </p>
         <p>
             <label class="birthdayLabel">birthday</label>
             <input type="date" th:field="*{birthday}" required
                    class="birthdayInput" name="birthday" id="birthday" placeholder="birthday"/>
-        </p>
-        <p>
-            <label for="gender">Gender:</label>
-            <select id="gender" name="gender" th:field="*{gender}">
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="nonbinary">Non-binary</option>
-                <option value="prefer_not_to_say">Prefer not to say</option>
-            </select>
         </p>
     </div>
     <!-- Step 4 -->
@@ -212,9 +196,8 @@
                    class="usernameInput" name="username" id="username" placeholder="username"/>
         </p>
         <p>
-            <label class="passwordLabel">password</label>
-            <input type="password" th:field="*{password}" required
-                   class="passwordInput" name="password" id="password" placeholder="password"/>
+            <a th:href="@{/change-password/{username}(username=${userDetail.username})}" class="navi-item">Change
+                Password</a>
         </p>
     </div>
 
@@ -239,6 +222,9 @@
             <label class="postalCodeLabel">postalCode</label>
             <input type="text" th:field="*{addressDTO.postalCode}" required
                    class="postalCodeInput" name="postalCode" id="postalCode" placeholder="postalCode"/>
+        </p>
+        <p>
+            <a th:href="@{/add-address/{username}(username=${userDetail.username})}" class="navi-item">Add Address</a>
         </p>
     </div>
     <!-- Navigation buttons -->
@@ -295,7 +281,7 @@
         // if you have reached the end of the form...
         if (currentTab >= x.length) {
             // ... the form gets submitted:
-            document.getElementById("regForm").submit();
+            document.getElementById("profileForm").submit();
             return false;
         }
         // Otherwise, display the correct tab:
@@ -334,19 +320,5 @@
         x[n].className += " active";
     }
 
-    function previewImage(input) {
-        const preview = document.getElementById('imagePreview');
-
-        if (input.files && input.files[0]) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
-                preview.style.backgroundImage = 'url(' + e.target.result + ')';
-                preview.style.display = 'none';
-                preview.style.display = 'block';
-                preview.src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 </script>
 </html>

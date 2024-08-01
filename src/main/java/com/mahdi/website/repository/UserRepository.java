@@ -23,6 +23,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.nationalCode = :nationalCode")
     Optional<User> findByNationalCode(@Param("nationalCode") String nationalCode);
 
+    @Transactional
     @Modifying
     @Query("UPDATE User u SET u.password = :newHashedPassword WHERE u.username = :username")
     Integer updateUserPassword(@Param("username") String username, @Param("newHashedPassword") String newHashedPassword);

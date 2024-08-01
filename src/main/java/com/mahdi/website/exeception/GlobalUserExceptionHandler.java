@@ -2,6 +2,7 @@ package com.mahdi.website.exeception;
 
 
 import com.mahdi.website.dto.AddressDTO;
+import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -20,8 +21,13 @@ public class GlobalUserExceptionHandler {
     @ExceptionHandler(IncorrectPasswordExceprion.class)
     public String handleIncorrectPasswordException(IncorrectPasswordExceprion exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
-        model.addAttribute("userDTO", new UserDTO());
-        return "sign_in";
+        if(exception.getContext().equalsIgnoreCase("login")) {
+            model.addAttribute("userDTO", new UserDTO());
+            return "sign_in";
+        } else {
+            model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
+            return "change_password_page";
+        }
     }
 
     @ExceptionHandler(DuplicateUserNameException.class)
@@ -62,5 +68,11 @@ public class GlobalUserExceptionHandler {
         userDTO.setAddressDTO(addressDTO);
         model.addAttribute("userDTO",userDTO);
         return "signup";
+    }
+
+    @ExceptionHandler(Exception.class)
+    public String unHandledException(Exception exception, Model model) {
+        model.addAttribute("errorMessage", exception.getMessage());
+        return "unhandled_exception_page";
     }
 }

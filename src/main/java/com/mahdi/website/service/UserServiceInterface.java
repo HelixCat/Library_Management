@@ -14,11 +14,8 @@ public interface UserServiceInterface {
     List<Address> saveAddress(List<Address> addressList);
     UserDTO AddAddressToTheUser(String username, AddressDTO addressDTO);
     User loadUserByEmail(String email);
-
     User loadUserByPhoneNumber(String email);
-
     User loadUserByNationalCode(String nationalCode);
-
     User loadUserByUserName(String userName);
     UserDTO loadUserDTOByUserName(String userName);
     UserDTO loadUserDTOByEmailForLoginPage(UserDTO userDTO);

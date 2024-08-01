@@ -167,11 +167,8 @@ public class UserService implements UserServiceInterface {
     @Override
     public UserDTO loadUserDTOByEmailForLoginPage(UserDTO userDTO) {
         User user = loadUserByEmail(userDTO.getEmail());
-        if(loginValidation.isValidPassword(userDTO.getPassword(), user.getPassword())) {
-            return prepareUserDTO(user);
-        } else {
-            throw new IncorrectPasswordExceprion("password is not correct!!!");
-        }
+        loginValidation.isValidPassword(userDTO.getPassword(), user.getPassword(), "login");
+        return prepareUserDTO(user);
     }
 
     @Override
@@ -199,16 +196,9 @@ public class UserService implements UserServiceInterface {
 
     private void changePassword(ChangePasswordDTO changePasswordDTO) {
         User user = loadUserByUserName(changePasswordDTO.getUserName());
-        if (Objects.nonNull(user)) {
-            if (Boolean.TRUE.equals(loginValidation.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword()))) {
-                String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
-                userRepository.updateUserPassword(user.getUsername(), hashedPassword);
-            } else {
-                throw new IncorrectPasswordExceprion("password is not correct!!!");
-            }
-        } else {
-            throw new BusinessException(" کاربری با این نام کاربری وجود ندارد " + changePasswordDTO.getUserName());
-        }
+        loginValidation.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
+        String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
+        userRepository.updateUserPassword(user.getUsername(), hashedPassword);
     }
 
     private UserDTO prepareUserDTO(User user) {
@@ -224,6 +214,7 @@ public class UserService implements UserServiceInterface {
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setImage(user.getProfileImage());
         userDTO.setFatherName(user.getFatherName());
+        userDTO.setBirthday(user.getBirthday());
         userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
         userDTO.setAddressDTO(prepareAddressDTO(user.getAddresses()));
         return userDTO;

@@ -1,11 +1,19 @@
 package com.mahdi.website.exeception;
 
 public class IncorrectPasswordExceprion extends BusinessException{
+
+    private String context;
+
     public IncorrectPasswordExceprion(String errorMessage, Throwable ex) {
         super(errorMessage, ex);
     }
 
-    public IncorrectPasswordExceprion(String errorMessage) {
+    public IncorrectPasswordExceprion(String errorMessage, String context) {
         super(errorMessage);
+        this.context = context;
+    }
+
+    public String getContext() {
+        return context;
     }
 }

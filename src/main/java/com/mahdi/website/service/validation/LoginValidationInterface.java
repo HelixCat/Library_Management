@@ -2,6 +2,6 @@ package com.mahdi.website.service.validation;
 
 public interface LoginValidationInterface {
 
-    Boolean isValidPassword(String plainPassword, String hashedPassword);
+    void isValidPassword(String plainPassword, String hashedPassword, String context);
 
 }
