@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <title>Homepage | user</title>
 </head>
 
@@ -17,30 +16,12 @@
         padding: 0;
     }
     .banner-area{
-        background-color: #bd9cb5;
+        background-color: #979a8a;
         background-position: center center;
         background-size:cover ;
         height: 100vh;
         width: auto;
         margin: auto;
-    }
-    .menu{
-        float: right;
-        list-style: none;
-        margin-top:30px;
-    }
-    .menu ul li{
-        display: inline-block;
-    }
-    .menu ul li a{
-        color: #fff;
-        text-decoration: none;
-        padding: 5px 20px;
-        font-family: 'poppins' ,sans-serif;
-        font-size: 16px;
-    }
-    .menu ul li a:hover{
-        color: rgb(199, 139, 255);
     }
     .banner-text{
         position: absolute;
@@ -61,11 +42,19 @@
         color: #fff;
         font-size: 18px;
     }
-    .banner-text a{
+
+    .nav_links {
+        display: flex;
+        gap: 10px;
+    }
+
+    .nav-links a {
         border: 1px solid #fff;
-        padding: 10px 25px;
         text-decoration: none;
-        text-transform: uppercase;
+        padding: 10px 25px;;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+        color: #fff;
         font-size: 14px;
         margin-top: 20px;
         display: inline-block;
@@ -87,10 +76,36 @@
             Aspect-Oriented Programming (AOP), and robust exception handling, I aim to demonstrate my proficiency in
             crafting well-structured and scalable applications. This project serves as a testament to my ability to
             leverage a diverse technological stack to deliver exceptional software products.</p>
-        <form id="profileForm" action="/profile" method="get">
-            <a th:href="@{/profile/{username}(username=${userDetail.username})}">Profile</a>
-        </form>
-        <a href="#">Books</a>
+        <br>
+        <script>
+            const active = document.getElementById('aaa').value;
+            alert(active)
+        </script>
+        <div th:if="${userDetail.active}" class="nav_links">
+            <form id="userManagement" action="/user-management" method="get">
+                <a th:href="@{/user-management}">User Management</a>
+            </form>
+            <form id="bookManagement" action="/book-management" method="get">
+                <a th:href="@{/book-management}">Book Management</a>
+            </form>
+            <form id="authorManagement" action="/author-management" method="get">
+                <a th:href="@{/author-management}">Author Management</a>
+            </form>
+            <form id="TranslatorManagement" action="/translator-management" method="get">
+                <a th:href="@{/taranslator-management}">Translator Management</a>
+            </form>
+            <form id="publisherManagement" action="/publisher-management" method="get">
+                <a th:href="@{/publisher-management}">Publisher Management</a>
+            </form>
+        </div>
+        <div th:unless="${userDetail.active}" class="nav_links">
+            <form id="profileForm" action="/profile" method="get">
+                <a th:href="@{/profile/{username}(username=${userDetail.username})}">Profile</a>
+            </form>
+            <form id="BooksForm" action="/books" method="get">
+                <a th:href="@{/books/{username}(username=${userDetail.username})}">Books</a>
+            </form>
+        </div>
     </div>
 
 </div>

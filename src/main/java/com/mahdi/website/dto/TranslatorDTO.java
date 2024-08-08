@@ -16,6 +16,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class TranslatorDTO {
 
+    private Long id;
+    private Boolean active;
+    private Integer version;
+    private String manualId;
     private String firstName;
     private String lastName;
     private String email;

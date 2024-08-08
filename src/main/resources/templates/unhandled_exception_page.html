@@ -1,10 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html dir="ltr" lang="en" style="direction: ltr"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Error</title>
+    <style>
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #979a8a;
+            border: 1px solid #9a6066;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        function closePopup() {
+            document.getElementById('errorPage').style.display = 'none';
+            window.history.back();
+        }
+    </script>
 </head>
 <body>
-
+<div class="popup" id="errorPage">
+    <h2>Error</h2>
+    <p th:text="${errorMessage}"></p>
+    <button onclick="closePopup()">Back</button>
+</div>
 </body>
 </html>

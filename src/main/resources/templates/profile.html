@@ -7,6 +7,10 @@
 </head>
 <style>
 
+    .bodyClass {
+        background-color: #979a8a;
+    }
+
     .avatar-upload {
         position: relative;
         max-width: 100px;
@@ -133,7 +137,7 @@
 
 </style>
 
-<body>
+<body class="bodyClass">
 <form id="profileForm" class="form" th:action="@{/home}" method="get" th:object="${userDetail}">
     <h1>Profile</h1>
 

@@ -8,8 +8,8 @@
 <style>
 
     #sign_inForm {
-        background-color: #ffffff;
-        margin: 60px auto;
+        background-color: #979a8a;
+        margin: 170px auto;
         padding: 40px;
         width: 50%;
         min-width: 300px;
@@ -31,10 +31,9 @@
 </style>
 
 <body>
-<form th:action="@{/sign_in}" method="post" th:object="${userDTO}" id="sign_inForm">
+<form th:action="@{/sign-in}" method="post" th:object="${userDTO}" id="sign_inForm">
     <h1>Login</h1>
     <div class="tab">
-        <h2>Login Information</h2>
         <p>
             <label class="emailLabel">email</label>
             <input type="email" th:field="*{email}" required

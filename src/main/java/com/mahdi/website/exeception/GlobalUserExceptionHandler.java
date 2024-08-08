@@ -72,7 +72,9 @@ public class GlobalUserExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public String unHandledException(Exception exception, Model model) {
-        model.addAttribute("errorMessage", exception.getMessage());
+        String errorMessage = exception.getMessage();
+        System.err.println(errorMessage);
+        model.addAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
         return "unhandled_exception_page";
     }
 }

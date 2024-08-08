@@ -17,6 +17,10 @@ import java.util.Set;
 @NoArgsConstructor
 public class BookDTO {
 
+    private Long id;
+    private Boolean active;
+    private Integer version;
+    private String manualId;
     private String title;
     private String bookId;
     private Date publishDate;

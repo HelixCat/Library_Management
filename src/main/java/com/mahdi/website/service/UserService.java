@@ -3,13 +3,11 @@ package com.mahdi.website.service;
 import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
-import com.mahdi.website.exeception.IncorrectPasswordExceprion;
 import com.mahdi.website.exeception.UserNotFoundExcpetion;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.AddressRepository;
 import com.mahdi.website.repository.UserRepository;
-import com.mahdi.website.exeception.BusinessException;
 import com.mahdi.website.service.validation.LoginValidationInterface;
 import com.mahdi.website.service.validation.SignUpValidationInterface;
 import org.modelmapper.ModelMapper;
@@ -178,14 +176,11 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public void updateUser(String userName, UserDTO userDTO) throws Exception {
+    public void updateUser(String userName, UserDTO userDTO) {
         User user = loadUserByUserName(userName);
-        if (Objects.nonNull(user)) {
-            user = prepareUser(user, userDTO);
-            userRepository.save(user);
-        } else {
-            throw new Exception("user not found with userName " + userName);
-        }
+        user = prepareUser(user, userDTO);
+        userRepository.save(user);
+
     }
 
     @Override
@@ -204,6 +199,9 @@ public class UserService implements UserServiceInterface {
     private UserDTO prepareUserDTO(User user) {
         UserDTO userDTO = new UserDTO();
         userDTO.setId(user.getId());
+        userDTO.setActive(user.getActive());
+        userDTO.setVersion(user.getVersion());
+        userDTO.setManualId(userDTO.getManualId());
         userDTO.setFullName(user.getFirstName() + " " + user.getLastName());
         userDTO.setFirstName(user.getFirstName());
         userDTO.setLastName(user.getLastName());

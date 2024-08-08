@@ -42,13 +42,13 @@ public class IndexPageController {
         return "redirect:sign_in";
     }
 
-    @GetMapping("/sign_in")
+    @GetMapping("/sign-in")
     public String showLoginUserForm(Model model) {
         model.addAttribute("userDTO", new UserDTO());
         return "sign_in";
     }
 
-    @PostMapping ("/sign_in")
+    @PostMapping ("/sign-in")
     public String login(UserDTO userDTO, Model model) {
         UserDTO userDetail = userService.loadUserDTOByEmailForLoginPage(userDTO);
         model.addAttribute("userDetail", userDetail);
@@ -77,49 +77,32 @@ public class IndexPageController {
         return "profile";
     }
 
-    @PostMapping("/profile/{userName}")
-    public String updateUserProfile(@PathVariable String userName, UserDTO userDTO) {
-        try {
-            userService.updateUser(userName, userDTO);
-            return "redirect:/profile";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-
+    @PostMapping("/profile/{username}")
+    public String updateUserProfile(@PathVariable String username, UserDTO userDTO) throws Exception {
+        userService.updateUser(username, userDTO);
+        return "redirect:/profile";
     }
 
     @GetMapping("/change-password/{username}")
     public String updateUserPasswordPage(@PathVariable String username, Model model) {
-        try {
-            ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO();
-            changePasswordDTO.setUserName(username);
-            model.addAttribute("changePasswordDTO", changePasswordDTO);
-            return "change_password_page";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO();
+        changePasswordDTO.setUserName(username);
+        model.addAttribute("changePasswordDTO", changePasswordDTO);
+        return "change_password_page";
     }
 
     @PostMapping("/add-address-to-user/{username}")
     public String addAddress(@PathVariable String username, AddressDTO addressDTO, Model model) {
-        try {
-            UserDTO userDetail = userService.AddAddressToTheUser(username, addressDTO);
-            model.addAttribute("userDetail", userDetail);
-            return "profile";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        UserDTO userDetail = userService.AddAddressToTheUser(username, addressDTO);
+        model.addAttribute("userDetail", userDetail);
+        return "profile";
     }
 
     @GetMapping("/add-address/{username}")
     public String addAddressPage(@PathVariable String username, Model model) {
-        try {
-            AddressDTO addressDTO = new AddressDTO();
-            addressDTO.setUsername(username);
-            model.addAttribute("addressDTO", addressDTO);
-            return "add-address";
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setUsername(username);
+        model.addAttribute("addressDTO", addressDTO);
+        return "add-address";
     }
 }

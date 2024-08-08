@@ -17,7 +17,7 @@ public class Publisher extends BaseEntity {
 
     @NotNull
     @NotEmpty
-    @Column(name = "c_publisher_name", nullable = false, length = 20)
+    @Column(name = "c_publisher_name", nullable = false, unique = true, length = 20)
     private String name;
     @NotNull
     @NotEmpty
@@ -26,13 +26,11 @@ public class Publisher extends BaseEntity {
     @NotNull
     @NotEmpty
     @Email(message = "incorrect format!!!")
-    @Column(name = "c_email", length = 60)
+    @Column(name = "c_email", nullable = false, unique = true, length = 60)
     private String email;
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books;
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
-
-
 
 }

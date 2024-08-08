@@ -13,7 +13,7 @@ public interface UserServiceInterface {
     User saveUser(UserDTO userDTO) throws Exception;
     List<Address> saveAddress(List<Address> addressList);
     UserDTO AddAddressToTheUser(String username, AddressDTO addressDTO);
-    User loadUserByEmail(String email);
+    User loadUserByEmail(String email) throws Exception;
     User loadUserByPhoneNumber(String email);
     User loadUserByNationalCode(String nationalCode);
     User loadUserByUserName(String userName);
