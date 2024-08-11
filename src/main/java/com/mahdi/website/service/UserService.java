@@ -27,14 +27,16 @@ public class UserService implements UserServiceInterface {
     private final ModelMapper modelMapper;
     private final LoginValidationInterface loginValidation;
     private final SignUpValidationInterface signUpValidation;
+    private final AddressServiceInterface addressService;
 
     @Autowired
-    public UserService(AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper, LoginValidationInterface loginValidation, SignUpValidationInterface signUpValidation) {
+    public UserService(AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper, LoginValidationInterface loginValidation, SignUpValidationInterface signUpValidation, AddressServiceInterface addressService) {
         this.addressRepository = addressRepository;
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
         this.loginValidation = loginValidation;
         this.signUpValidation = signUpValidation;
+        this.addressService = addressService;
     }
 
     @Override
@@ -59,22 +61,34 @@ public class UserService implements UserServiceInterface {
         user.setEmail(userDTO.getEmail());
         user.setNationalCode(userDTO.getNationalCode());
         user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setPassword(prepareHashedPassword(userDTO.getPassword()));
-        user.setAddresses(prepareAddress(userDTO.getAddressDTO(), user));
         user.setProfileImage(userDTO.getImage());
-        user.setGender(userDTO.getGender());
         user.setBirthday(userDTO.getBirthday());
-        SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-        user.setRegisterDay((formatter.format(new Date())));
         user.setFatherName(userDTO.getFatherName());
+        if (Objects.nonNull(userDTO.getGender())) {
+            user.setGender(userDTO.getGender());
+        }
+        if (Objects.nonNull(userDTO.getPassword())) {
+            user.setPassword(prepareHashedPassword(userDTO.getPassword()));
+        }
+        if (Objects.nonNull(userDTO.getAddressDTO())) {
+            user.setAddresses(prepareAddress(userDTO.getAddressDTO(), user));
+        }
+        if (Objects.nonNull(userDTO.getGender())) {
+            user.setGender(userDTO.getGender());
+        }
+        if (Objects.isNull(user.getRegisterDay())) {
+            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+            user.setRegisterDay((formatter.format(new Date())));
+        }
         return user;
     }
 
     private List<Address> prepareAddress(AddressDTO addressDTO, User user) {
-        List<Address> addressList = new ArrayList<>();
+        List<Address> addressList = Objects.nonNull(user.getAddresses()) ? user.getAddresses() : new ArrayList<>();
         Address address = modelMapper.map(addressDTO, Address.class);
         address.setActive(Boolean.TRUE);
         address.setUser(user);
+        address.setId(addressDTO.getId());
         addressList.add(address);
         return addressList;
     }
@@ -153,7 +167,7 @@ public class UserService implements UserServiceInterface {
     @Override
     public User loadUserByUserName(String userName) {
         return userRepository.findByUserName(userName)
-                .orElseThrow(() -> new UserNotFoundExcpetion("user with email " + userName + " does not exist"));
+                .orElseThrow(() -> new UserNotFoundExcpetion("user with username " + userName + " does not exist"));
     }
 
     @Override
@@ -176,11 +190,10 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public void updateUser(String userName, UserDTO userDTO) {
-        User user = loadUserByUserName(userName);
-        user = prepareUser(user, userDTO);
+    public UserDTO updateUser(String userName, UserDTO userDTO) {
+        User user = prepareUser(loadUserByUserName(userName), userDTO);
         userRepository.save(user);
-
+        return prepareUserDTO(user);
     }
 
     @Override
@@ -211,9 +224,12 @@ public class UserService implements UserServiceInterface {
         userDTO.setNationalCode(user.getNationalCode());
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setImage(user.getProfileImage());
+        userDTO.setGender(user.getGender());
         userDTO.setFatherName(user.getFatherName());
         userDTO.setBirthday(user.getBirthday());
-        userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
+        if (Objects.nonNull(user.getProfileImage())) {
+            userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
+        }
         userDTO.setAddressDTO(prepareAddressDTO(user.getAddresses()));
         return userDTO;
     }
@@ -224,6 +240,8 @@ public class UserService implements UserServiceInterface {
 
     private AddressDTO prepareAddressDTO(List<Address> addressList) {
         Address address = addressList.stream().findFirst().orElse(null);
-        return modelMapper.map(address, AddressDTO.class);
+        AddressDTO addressDTO = modelMapper.map(address, AddressDTO.class);
+        addressDTO.setId(address.getId());
+        return addressDTO;
     }
 }

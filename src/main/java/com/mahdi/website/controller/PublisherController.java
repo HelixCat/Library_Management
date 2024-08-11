@@ -27,7 +27,7 @@ public class PublisherController {
     public String showPublisherManagement(Model model) {
         model.addAttribute("publisherDTO", new PublisherDTO());
         model.addAttribute("searchPerformed", Boolean.FALSE);
-        return "publisher_management";
+        return "publisher-management";
     }
 
     @PostMapping("/publisher-management/search")
@@ -40,13 +40,13 @@ public class PublisherController {
             model.addAttribute("publisherDTOList", publisherDTOList);
             model.addAttribute("searchPerformed", Boolean.TRUE);
         }
-        return "publisher_management";
+        return "publisher-management";
     }
 
     @GetMapping("/add-publisher")
     public String showAddPublisherPage(Model model) {
         model.addAttribute("publisherDTO", new PublisherDTO());
-        return "add_publisher";
+        return "add-publisher";
     }
 
     @PostMapping("/save-publisher")
@@ -54,7 +54,7 @@ public class PublisherController {
         publisherService.savePublisher(publisherDTO);
         model.addAttribute("message", "the publisher has been successfully saved.");
         model.addAttribute("publisherDTO", new PublisherDTO());
-        return "publisher_management";
+        return "publisher-management";
     }
 
     @GetMapping("/publisher-management/deactivate-publisher/{publisherId}")
@@ -62,14 +62,14 @@ public class PublisherController {
         publisherService.deactivatePublisherById(publisherId);
         model.addAttribute("message", "the publisher has been successfully deactivated.");
         model.addAttribute("publisherDTO", new PublisherDTO());
-        return "publisher_management";
+        return "redirect:/publisher_management";
     }
 
     @GetMapping("/publisher-management/update-publisher/{publisherId}")
     public String viewUpdatePublisherPage(@PathVariable Long publisherId, Model model) {
         PublisherDTO publisherDTO = publisherService.findPublisherDTOById(publisherId);
         model.addAttribute("publisherDTO", publisherDTO);
-        return "update_publisher";
+        return "update-publisher";
     }
 
     @PostMapping("/publisher-management/update-publisher/{publisherId}")
@@ -77,6 +77,6 @@ public class PublisherController {
         publisherService.updatePublisher(publisherId, publisherDTO);
         model.addAttribute("message", "the publisher has been successfully updated.");
         model.addAttribute("publisherDTO", new PublisherDTO());
-        return "publisher_management";
+        return "redirect:/publisher-management";
     }
 }

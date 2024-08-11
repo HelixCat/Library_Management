@@ -90,7 +90,7 @@ public class PublisherService implements PublisherServiceInterface {
         publisher.setEmail(publisherDTO.getEmail());
         publisher.setPhoneNumber(publisherDTO.getPhoneNumber());
         publisher.setActive(publisherDTO.getActive());
-        addressService.updatePublisherAddress(publisherDTO.getAddressDTO());
+        addressService.updateAddress(publisherDTO.getAddressDTO());
         publisherRepository.save(publisher);
     }
 

@@ -26,8 +26,16 @@ public class AddressService implements AddressServiceInterface {
     }
 
     @Override
-    public void updatePublisherAddress(AddressDTO addressDTO) {
-        addressRepository.save(modelMapper.map(addressDTO, Address.class));
+    public void updateAddress(AddressDTO addressDTO) {
+        Address address = addressRepository.findById(addressDTO.getId()).orElseThrow(() -> new AddressNotByIdFoundException("Address with id " + addressDTO.getId() + " does not exist"));
+        address.setCountry(addressDTO.getCountry());
+        address.setProvince(addressDTO.getProvince());
+        address.setCity(addressDTO.getCity());
+        address.setPostalCode(addressDTO.getPostalCode());
+        addressRepository.save(address);
     }
+
+
+
 
 }

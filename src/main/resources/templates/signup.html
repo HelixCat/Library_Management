@@ -7,10 +7,6 @@
 </head>
 <style>
 
-    .bodyClass {
-        background-color: #979a8a;
-    }
-
     .avatar-upload {
         position: relative;
         max-width: 100px;
@@ -71,7 +67,7 @@
     }
 
     #regForm {
-        background-color: #ffffff;
+        background-color: #979a8a;
         margin: 60px auto;
         padding: 40px;
         width: 50%;
@@ -124,23 +120,88 @@
     <div class="tab">
         <h2>Personal Information</h2>
         <p>
-            <label class="publisherNameLabel">publisher name</label>
-            <input type="text" th:field="*{name}" required
-                   class="publisherNameInput" name="name" id="name" placeholder="publisher name"/>
+            <label class="firstNameLabel">first name</label>
+            <input type="text" th:field="*{firstName}" required
+                   class="firstNameInput" name="firstName" id="firstName" placeholder="first name"/>
         </p>
         <p>
-            <label class="publisherEmailLabel">publisher email</label>
-            <input type="text" th:field="*{email}" required
-                   class="publisherEmailInput" name="publisherEmail" id="publisherEmail" placeholder="publisher email"/>
+            <label class="firstNameLabel">last name</label>
+            <input type="text" th:field="*{lastName}" required
+                   class="lastNameInput" name="lastName" id="lastName" placeholder="last name"/>
         </p>
         <p>
-            <label class="publisherPhoneNumberLabel">publisher phone number</label>
-            <input type="text" th:field="*{phoneNumber}" required
-                   class="publisherPhoneNumberInput" name="publisherPhoneNumber" id="publisherPhoneNumber" placeholder="publisher phone number"/>
+            <label class="fatherNameLabel">father name</label>
+            <input type="text" th:field="*{fatherName}" required
+                   class="fatherNameInput" name="fatherName" id="fatherName" placeholder="father name"/>
         </p>
     </div>
     <!-- Step 2 -->
-    <dv class="tab">
+    <div class="tab">
+        <h2>Contact Information</h2>
+        <p>
+            <label class="phoneNumberLabel">phone number</label>
+            <input type="tel" th:field="*{phoneNumber}" required
+                   class="phoneNumberInput" name="phoneNumber" id="phoneNumber" placeholder="phoneNumber"/>
+        </p>
+        <p>
+            <label class="nationalCodeLabel">national code</label>
+            <input type="text" th:field="*{nationalCode}" required
+                   class="nationalCodeInput" name="nationalCode" id="nationalCode" placeholder="nationalCode"/>
+        </p>
+        <p>
+            <label class="emailLabel">email</label>
+            <input type="email" th:field="*{email}" required
+                   class="emailInput" name="email" id="email" placeholder="email"/>
+        </p>
+    </div>
+    <!-- Step 3 -->
+    <div class="tab">
+        <h2>Birthday and picture</h2>
+
+        <div class="container">
+            <div class="avatar-upload">
+                <div class="avatar-edit">
+                    <input type='file' id="profileImage" name="profileImage" accept=".png, .jpg, .jpeg"
+                           onchange="previewImage(this);"/>
+                    <label for="profileImage"></label>
+                </div>
+                <div class="avatar-preview">
+                    <div id="imagePreview" th:field="*{p}" style="background-image: url('https://i.pravatar.cc/500?img=7');"></div>
+                </div>
+            </div>
+        </div>
+
+        <p>
+            <label class="birthdayLabel">birthday</label>
+            <input type="date" th:field="*{birthday}" required
+                   class="birthdayInput" name="birthday" id="birthday" placeholder="birthday"/>
+        </p>
+        <p>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender" th:field="*{gender}">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="nonBinary">Non-binary</option>
+                <option value="prefer_not_to_say">Prefer not to say</option>
+            </select>
+        </p>
+    </div>
+    <!-- Step 4 -->
+    <div class="tab">
+        <h2>Login Information</h2>
+        <p>
+            <label class="usernameLabel">username</label>
+            <input type="text" th:field="*{username}" required
+                   class="usernameInput" name="username" id="username" placeholder="username"/>
+        </p>
+        <p>
+            <label class="passwordLabel">password</label>
+            <input type="password" th:field="*{password}" required
+                   class="passwordInput" name="password" id="password" placeholder="password"/>
+        </p>
+    </div>
+
+    <div class="tab">
         <h2>Address</h2>
         <p>
             <label class="countryLabel">country</label>
@@ -162,7 +223,7 @@
             <input type="text" th:field="*{addressDTO.postalCode}" required
                    class="postalCodeInput" name="postalCode" id="postalCode" placeholder="postalCode"/>
         </p>
-    </dv>
+    </div>
     <!-- Navigation buttons -->
     <div style="overflow:auto;">
         <div style="float:right;">
@@ -175,6 +236,9 @@
     </div>
     <!-- Step indicators -->
     <div style="text-align:center;margin-top:40px;">
+        <span class="step"></span>
+        <span class="step"></span>
+        <span class="step"></span>
         <span class="step"></span>
         <span class="step"></span>
     </div>
@@ -193,7 +257,7 @@
         } else {
             document.getElementById("prevBtn").style.display = "inline";
         }
-        if (n === (x.length - 1)) {
+        if (n == (x.length - 1)) {
             document.getElementById("nextBtn").innerHTML = "Submit";
         } else {
             document.getElementById("nextBtn").innerHTML = "Next";
@@ -244,12 +308,29 @@
     }
 
     function fixStepIndicator(n) {
-        let i, x = document.getElementsByClassName("step");
+        // This function removes the "active" class of all steps...
+        var i, x = document.getElementsByClassName("step");
         for (i = 0; i < x.length; i++) {
             x[i].className = x[i].className.replace(" active", "");
         }
+        //... and adds the "active" class on the current step:
         x[n].className += " active";
     }
 
+    function previewImage(input) {
+        const preview = document.getElementById('imagePreview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                preview.style.backgroundImage = 'url(' + e.target.result + ')';
+                preview.style.display = 'none';
+                preview.style.display = 'block';
+                preview.src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
 </script>
 </html>
+

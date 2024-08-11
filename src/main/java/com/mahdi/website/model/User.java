@@ -51,9 +51,9 @@ public class User extends BaseEntity {
     private Boolean admin;
     @Column(name = "c_father_name")
     private String fatherName;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
     @Lob
     @Column(name = "c_profile_image", length = 200000)
     private byte[] profileImage;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Address> addresses;
 }

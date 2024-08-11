@@ -39,7 +39,7 @@ public class IndexPageController {
             userDTO.setImage(file.getBytes());
         }
         userService.saveUser(userDTO);
-        return "redirect:sign_in";
+        return "sign_in";
     }
 
     @GetMapping("/sign-in")
@@ -56,31 +56,39 @@ public class IndexPageController {
     }
 
     @GetMapping(value = "/profile/{username}")
-    public String profile(@PathVariable String username, Model model) {
-        UserDTO userDetail = userService.loadUserDTOByUserName(username);
-        model.addAttribute("userDetail", userDetail);
-        return "profile";
-    }
-
-    @GetMapping("/home")
-    public String returnToHome(UserDTO userDTO, Model model) {
-        UserDTO userDetail = userService.loadUserDTOByEmail(userDTO);
-        model.addAttribute("userDetail", userDetail);
-        return "home";
-    }
-
-    @PostMapping("/change-password-user/{username}")
-    public String updateUserPassword(@PathVariable String username, ChangePasswordDTO changePasswordDTO, Model model) throws Exception {
-        userService.updateUserPassword(username, changePasswordDTO);
+    public String viewProfilePage(@PathVariable String username, Model model) {
         UserDTO userDetail = userService.loadUserDTOByUserName(username);
         model.addAttribute("userDetail", userDetail);
         return "profile";
     }
 
     @PostMapping("/profile/{username}")
-    public String updateUserProfile(@PathVariable String username, UserDTO userDTO) throws Exception {
-        userService.updateUser(username, userDTO);
-        return "redirect:/profile";
+    public String updateUserProfile(@PathVariable String username, @ModelAttribute UserDTO userDTO, Model model) throws Exception {
+       UserDTO updatedUserDTO = userService.updateUser(username, userDTO);
+       model.addAttribute("userDetail", updatedUserDTO);
+       return "profile";
+    }
+
+    @GetMapping(value = "/profile/change-picture/{username}")
+    public String viewChangeProfilePicturePage(@PathVariable String username, Model model) {
+        UserDTO userDetail = userService.loadUserDTOByUserName(username);
+        model.addAttribute("userDetail", userDetail);
+        return "profile";
+    }
+
+    @PostMapping("/profile/change-picture/{username}")
+    public String changeProfilePicturePage(@PathVariable String username, @RequestParam("profileImage") MultipartFile file, Model model) throws Exception {
+        
+//        model.addAttribute("userDetail", updatedUserDTO);
+        return "profile";
+    }
+
+
+    @GetMapping("/home")
+    public String viewHomePage(UserDTO userDetail, Model model) {
+        UserDTO userDTO = userService.loadUserDTOByEmail(userDetail);
+        model.addAttribute("userDetail", userDTO);
+        return "home";
     }
 
     @GetMapping("/change-password/{username}")
@@ -88,14 +96,15 @@ public class IndexPageController {
         ChangePasswordDTO changePasswordDTO = new ChangePasswordDTO();
         changePasswordDTO.setUserName(username);
         model.addAttribute("changePasswordDTO", changePasswordDTO);
-        return "change_password_page";
+        return "change-password-page";
     }
 
-    @PostMapping("/add-address-to-user/{username}")
-    public String addAddress(@PathVariable String username, AddressDTO addressDTO, Model model) {
-        UserDTO userDetail = userService.AddAddressToTheUser(username, addressDTO);
+    @PostMapping("/change-password-user/{username}")
+    public String updateUserPassword(@PathVariable String username, ChangePasswordDTO changePasswordDTO, Model model) throws Exception {
+        userService.updateUserPassword(username, changePasswordDTO);
+        UserDTO userDetail = userService.loadUserDTOByUserName(username);
         model.addAttribute("userDetail", userDetail);
-        return "profile";
+        return "redirect:/profile";
     }
 
     @GetMapping("/add-address/{username}")
@@ -105,4 +114,13 @@ public class IndexPageController {
         model.addAttribute("addressDTO", addressDTO);
         return "add-address";
     }
+
+    @PostMapping("/add-address-to-user/{username}")
+    public String addAddress(@PathVariable String username, AddressDTO addressDTO, Model model) {
+        UserDTO userDetail = userService.AddAddressToTheUser(username, addressDTO);
+        model.addAttribute("userDetail", userDetail);
+        return "redirect:/profile";
+    }
+
+
 }

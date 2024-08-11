@@ -20,6 +20,6 @@ public interface UserServiceInterface {
     UserDTO loadUserDTOByUserName(String userName);
     UserDTO loadUserDTOByEmailForLoginPage(UserDTO userDTO);
     UserDTO loadUserDTOByEmail(UserDTO userDTO);
-    void updateUser(String userName, UserDTO userDTO) throws Exception;
+    UserDTO updateUser(String userName, UserDTO userDTO) throws Exception;
     void updateUserPassword(String username, ChangePasswordDTO changePasswordDTO) throws Exception;
 }
