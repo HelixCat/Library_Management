@@ -62,7 +62,7 @@ public class PublisherController {
         publisherService.deactivatePublisherById(publisherId);
         model.addAttribute("message", "the publisher has been successfully deactivated.");
         model.addAttribute("publisherDTO", new PublisherDTO());
-        return "redirect:/publisher_management";
+        return "redirect:/publisher-management";
     }
 
     @GetMapping("/publisher-management/update-publisher/{publisherId}")
