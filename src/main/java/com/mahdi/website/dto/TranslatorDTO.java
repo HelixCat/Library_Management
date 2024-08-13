@@ -20,8 +20,7 @@ public class TranslatorDTO {
     private Boolean active;
     private Integer version;
     private String manualId;
-    private String firstName;
-    private String lastName;
+    private String name;
     private String email;
     private String phoneNumber;
     private String nationalCode;

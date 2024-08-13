@@ -44,7 +44,7 @@ public class UserTests {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        userService = new UserService(null, userRepository, modelMapper, null, signUpValidation);
+//        userService = new UserService(null, userRepository, modelMapper, null, signUpValidation);
     }
 
 
