@@ -2,6 +2,7 @@ package com.mahdi.website.controller;
 
 import com.mahdi.website.dto.PublisherDTO;
 import com.mahdi.website.service.PublisherService;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,16 +13,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import java.util.List;
 
 
-
+@AllArgsConstructor
 @Controller
 public class PublisherController {
 
     private final PublisherService publisherService;
-
-    @Autowired
-    public PublisherController(PublisherService publisherService) {
-        this.publisherService = publisherService;
-    }
 
     @GetMapping("/publisher-management")
     public String showPublisherManagement(Model model) {

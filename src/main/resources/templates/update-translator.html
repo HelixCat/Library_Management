@@ -4,11 +4,11 @@
       xmlns:th="http://thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>update publisher</title>
+    <title>update translator</title>
 
 
     <style>
-        #addPublisherForm {
+        #addTranslatorForm {
             background-color: #979a8a;
             margin: 60px auto;
             padding: 40px;
@@ -56,25 +56,25 @@
 </head>
 
 <body>
-<form id="addPublisherForm" class="form" th:action="@{/publisher-management/update-publisher/{id}(id=${publisherDTO.id})}" method="post" th:object="${publisherDTO}">
-    <h1>add publisher</h1>
+<form id="addTranslatorForm" class="form" th:action="@{/translator-management/update-translator/{id}(id=${translatorDTO.id})}" method="post" th:object="${translatorDTO}">
+    <h1>add translator</h1>
     <!-- Step 1 -->
     <div class="tab">
-        <h2>Publisher Information</h2>
+        <h2>Translator Information</h2>
         <p>
-            <label class="publisherNameLabel">publisher name</label>
+            <label class="translatorNameLabel">translator name</label>
             <input type="text" th:field="*{name}" required
-                   class="publisherNameInput" name="publisherName" id="publisherName" placeholder="publisher name"/>
+                   class="translatorNameInput" name="translatorName" id="translatorName" placeholder="translator name"/>
         </p>
         <p>
-            <label class="publisherPhoneNumberLabel">publisher phone number</label>
+            <label class="translatorPhoneNumberLabel">translator phone number</label>
             <input type="text" th:field="*{phoneNumber}" required
-                   class="publisherPhoneNumberInput" name="publisherPhoneNumber" id="publisherPhoneNumber" placeholder="publisher phone number"/>
+                   class="translatorPhoneNumberInput" name="translatorPhoneNumber" id="translatorPhoneNumber" placeholder="translator phone number"/>
         </p>
         <p>
-            <label class="publisherEmailLabel">publisher email</label>
+            <label class="translatorEmailLabel">translator email</label>
             <input type="text" th:field="*{email}" required
-                   class="publisherEmailInput" name="publisherEmail" id="publisherEmail" placeholder="publisher email"/>
+                   class="translatorEmailInput" name="translatorEmail" id="translatorEmail" placeholder="translator email"/>
         </p>
 
         <p>
@@ -161,7 +161,7 @@
         // if you have reached the end of the form...
         if (currentTab >= x.length) {
             // ... the form gets submitted:
-            document.getElementById("addPublisherForm").submit();
+            document.getElementById("addTranslatorForm").submit();
             return false;
         }
         // Otherwise, display the correct tab:

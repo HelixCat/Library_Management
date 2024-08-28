@@ -3,6 +3,7 @@ package com.mahdi.website.service.validation;
 import com.mahdi.website.dto.PublisherDTO;
 import com.mahdi.website.exeception.DuplicatePublisherEmailException;
 import com.mahdi.website.exeception.DuplicatePublisherNameException;
+import com.mahdi.website.exeception.DuplicatePublisherPhoneNumberException;
 import com.mahdi.website.model.Publisher;
 import com.mahdi.website.repository.PublisherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class PublisherValidation implements PublisherValidationInterface {
     public void publisherPhoneNumberValidation(String phoneNumber) {
         Optional<Publisher> publisher = publisherRepository.findPublisherByPhoneNumber(phoneNumber);
         if (publisher.isPresent()) {
-            throw new DuplicatePublisherEmailException("this phone number is taken by other publishers");
+            throw new DuplicatePublisherPhoneNumberException("this phone number is taken by other publishers");
         }
     }
 
