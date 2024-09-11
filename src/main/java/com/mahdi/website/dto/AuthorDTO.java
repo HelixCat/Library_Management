@@ -23,6 +23,5 @@ public class AuthorDTO {
     private String email;
     private String phoneNumber;
     private String nationalCode;
-    private byte[] profileImage;
     private Set<Book> books;
 }

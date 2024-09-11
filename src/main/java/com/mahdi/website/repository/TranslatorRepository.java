@@ -13,8 +13,10 @@ import java.util.Optional;
 public interface TranslatorRepository extends CrudRepository<Translator, Long>, JpaSpecificationExecutor<Translator> {
 
     @Query("SELECT translator FROM Translator translator WHERE translator.active = :#{#translatorDTO.active} AND" +
-            "(:#{#translatorDTO.name} IS NULL OR translator.name = :#{#translatorDTO.name}) AND " +
+            "(:#{#translatorDTO.firstName} IS NULL OR translator.firstName = :#{#translatorDTO.firstName}) AND " +
+            "(:#{#translatorDTO.lastName} IS NULL OR translator.lastName = :#{#translatorDTO.lastName}) AND " +
             "(:#{#translatorDTO.phoneNumber} IS NULL OR translator.phoneNumber = :#{#translatorDTO.phoneNumber}) AND " +
+            "(:#{#translatorDTO.nationalCode} IS NULL OR translator.nationalCode = :#{#translatorDTO.nationalCode}) AND " +
             "(:#{#translatorDTO.email} IS NULL OR translator.email = :#{#translatorDTO.email})")
     List<Translator> searchTranslator(@Param("translatorDTO") TranslatorDTO translatorDTO);
 
@@ -24,6 +26,12 @@ public interface TranslatorRepository extends CrudRepository<Translator, Long>, 
     @Query("SELECT translator FROM Translator translator WHERE translator.phoneNumber = :phoneNumber")
     Optional<Translator> findTranslatorByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
-    @Query("SELECT translator FROM Translator translator WHERE translator.name = :name")
-    Optional<Translator> findByTranslatorName(@Param("name") String name);
+    @Query("SELECT translator FROM Translator translator WHERE translator.firstName = :firstName")
+    Optional<Translator> findByTranslatorByfirstName(@Param("firstName") String firstName);
+
+    @Query("SELECT translator FROM Translator translator WHERE translator.lastName = :lastName")
+    Optional<Translator> findByTranslatorBylastName(@Param("lastName") String lastName);
+
+    @Query("SELECT translator FROM Translator translator WHERE translator.nationalCode = :nationalCode")
+    Optional<Translator> findTranslatorByNationalCode(@Param("nationalCode") String nationalCode);
 }

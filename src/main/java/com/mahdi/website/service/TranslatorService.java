@@ -40,9 +40,15 @@ public class TranslatorService implements TranslatorServiceInterface{
     }
 
     @Override
-    public Translator findTranslatorByName(String name) {
-        return translatorRepository.findByTranslatorName(name)
-                .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + name + " does not exist"));
+    public Translator findTranslatorByFirstName(String firstName) {
+        return translatorRepository.findByTranslatorByfirstName(firstName)
+                .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + firstName + " does not exist"));
+    }
+
+    @Override
+    public Translator findTranslatorBylastName(String lastName) {
+        return translatorRepository.findByTranslatorByfirstName(lastName)
+                .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + lastName + " does not exist"));
     }
 
     @Override
@@ -79,7 +85,8 @@ public class TranslatorService implements TranslatorServiceInterface{
     public void updateTranslator(Long id, TranslatorDTO translatorDTO) {
         Translator translator = findTranslatorById(id);
         translatorValidation.updateTranslatorValidation(translator, translatorDTO);
-        translator.setName(translatorDTO.getName());
+        translator.setFirstName(translatorDTO.getFirstName());
+        translator.setLastName(translatorDTO.getLastName());
         translator.setEmail(translatorDTO.getEmail());
         translator.setPhoneNumber(translatorDTO.getPhoneNumber());
         translator.setActive(translatorDTO.getActive());

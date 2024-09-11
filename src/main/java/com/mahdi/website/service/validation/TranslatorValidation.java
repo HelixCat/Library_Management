@@ -1,6 +1,7 @@
 package com.mahdi.website.service.validation;
 
 import com.mahdi.website.dto.TranslatorDTO;
+import com.mahdi.website.exeception.DuplicateTranslatorNationalCodeException;
 import com.mahdi.website.exeception.translatorExceptions.DuplicateTranslatorEmailException;
 import com.mahdi.website.exeception.translatorExceptions.DuplicateTranslatorNameException;
 import com.mahdi.website.exeception.translatorExceptions.DuplicateTranslatorPhoneNumberException;
@@ -21,14 +22,7 @@ public class TranslatorValidation implements TranslatorValidationInterface {
         this.translatorRepository = translatorRepository;
     }
 
-    public void translatorNameValidation(String translatorName) {
-        Optional<Translator> translator = translatorRepository.findByTranslatorName(translatorName);
-        if (translator.isPresent()) {
-            throw new DuplicateTranslatorNameException("this name is taken by other translators");
-        }
-    }
-
-    public void translatorEamilValidation(String email) {
+    public void translatorEmailValidation(String email) {
         Optional<Translator> translator = translatorRepository.findTranslatorByEmail(email);
         if (translator.isPresent()) {
             throw new DuplicateTranslatorEmailException("this email is taken by other translators");
@@ -42,23 +36,30 @@ public class TranslatorValidation implements TranslatorValidationInterface {
         }
     }
 
+    public void translatorNationalCodeValidation(String nationalCode) {
+        Optional<Translator> translator = translatorRepository.findTranslatorByNationalCode(nationalCode);
+        if (translator.isPresent()) {
+            throw new DuplicateTranslatorNationalCodeException("this National code is taken by other translators");
+        }
+    }
+
     @Override
     public void addTranslatorValidation(TranslatorDTO translatorDTO) {
-        translatorNameValidation(translatorDTO.getName());
-        translatorEamilValidation(translatorDTO.getEmail());
+        translatorEmailValidation(translatorDTO.getEmail());
         translatorPhoneNumberValidation(translatorDTO.getPhoneNumber());
+        translatorNationalCodeValidation(translatorDTO.getNationalCode());
     }
 
     @Override
     public void updateTranslatorValidation(Translator translator, TranslatorDTO translatorDTO) {
-        if (!translatorDTO.getName().equals(translator.getName())) {
-            translatorNameValidation(translatorDTO.getName());
-        }
         if (!translatorDTO.getEmail().equals(translator.getEmail())) {
-            translatorEamilValidation(translatorDTO.getEmail());
+            translatorEmailValidation(translatorDTO.getEmail());
         }
         if (!translatorDTO.getPhoneNumber().equals(translator.getPhoneNumber())) {
             translatorPhoneNumberValidation(translatorDTO.getPhoneNumber());
+        }
+        if (!translatorDTO.getNationalCode().equals(translator.getNationalCode())) {
+            translatorNationalCodeValidation(translatorDTO.getNationalCode());
         }
     }
 

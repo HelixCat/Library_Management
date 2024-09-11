@@ -20,12 +20,11 @@ public class TranslatorDTO {
     private Boolean active;
     private Integer version;
     private String manualId;
-    private String name;
+    private String firstName;
+    private String lastName;
     private String email;
     private String phoneNumber;
     private String nationalCode;
-    private List<Address> addresses;
-    private byte[] profileImage;
     private Set<Book> books;
 
 }
