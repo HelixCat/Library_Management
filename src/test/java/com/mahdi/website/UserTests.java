@@ -1,14 +1,13 @@
 package com.mahdi.website;
 
-import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.UserDTO;
 import static org.mockito.Mockito.*;
 
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
-import com.mahdi.website.service.UserService;
-import com.mahdi.website.service.validation.SignUpValidation;
+import com.mahdi.website.service.impl.UserService;
+import com.mahdi.website.service.validation.impl.SignUpValidation;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

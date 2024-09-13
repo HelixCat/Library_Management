@@ -1,7 +1,7 @@
 package com.mahdi.website.controller;
 
 import com.mahdi.website.dto.TranslatorDTO;
-import com.mahdi.website.service.TranslatorServiceInterface;
+import com.mahdi.website.service.interfaces.TranslatorServiceInterface;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

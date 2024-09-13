@@ -26,7 +26,7 @@ public class LoggingAspect {
         this.logRepository = logRepository;
     }
 
-    @Before("execution(* com.mahdi.website.service.UserServiceInterface.saveUser(..))")
+    @Before("execution(* com.mahdi.website.service.interfaces.UserServiceInterface.saveUser(..))")
     public void loggBeforeCreateUser(JoinPoint joinPoint) {
         logger.info("before executing method save user In the User Service");
         logger.info(joinPoint.getSignature().getName());
@@ -36,7 +36,7 @@ public class LoggingAspect {
         mangoDBLoggSaver(new Date(), "INFO", message);
     }
 
-    @AfterReturning(pointcut = "execution(* com.mahdi.website.service.UserServiceInterface.saveUser(..))", returning = "result")
+    @AfterReturning(pointcut = "execution(* com.mahdi.website.service.interfaces.UserServiceInterface.saveUser(..))", returning = "result")
     public void loggAfterCreateUser(JoinPoint joinPoint, Object result) {
         logger.info("after executing method save user In the User Service");
         logger.info(joinPoint.getSignature().getName());
@@ -46,7 +46,7 @@ public class LoggingAspect {
         mangoDBLoggSaver(new Date(), "INFO", message);
     }
 
-    @AfterThrowing(pointcut = "execution(* com.mahdi.website.service.UserServiceInterface.saveUser(..))", throwing = "ex")
+    @AfterThrowing(pointcut = "execution(* com.mahdi.website.service.interfaces.UserServiceInterface.saveUser(..))", throwing = "ex")
     public void logAfterThrowingCreateUser(JoinPoint joinPoint, Exception ex){
         logger.info("after throwing exception executing method save user In the User Service");
         logger.info(joinPoint.getSignature().getName());

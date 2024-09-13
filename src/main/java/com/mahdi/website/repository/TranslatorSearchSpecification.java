@@ -34,16 +34,15 @@ public class TranslatorSearchSpecification implements Specification<Translator> 
         if (StringUtils.hasText(translatorDTO.getEmail())) {
             predicates.add(criteriaBuilder.equal(root.get("email"), translatorDTO.getEmail()));
         }
-        if (StringUtils.hasText(translatorDTO.getNationalCode())) {
-            predicates.add(criteriaBuilder.equal(root.get("nationalCode"), translatorDTO.getNationalCode()));
-        }
         if (StringUtils.hasText(translatorDTO.getPhoneNumber())) {
             predicates.add(criteriaBuilder.equal(root.get("phoneNumber"), translatorDTO.getPhoneNumber()));
         }
         if (Objects.nonNull(translatorDTO.getActive())) {
             predicates.add(criteriaBuilder.equal(root.get("active"), translatorDTO.getActive()));
         }
-
+        if (StringUtils.hasText(translatorDTO.getNationalCode())) {
+            predicates.add(criteriaBuilder.equal(root.get("nationalCode"), translatorDTO.getNationalCode()));
+        }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }

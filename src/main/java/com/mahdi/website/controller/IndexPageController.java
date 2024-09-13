@@ -4,7 +4,7 @@ import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 
-import com.mahdi.website.service.UserServiceInterface;
+import com.mahdi.website.service.interfaces.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
