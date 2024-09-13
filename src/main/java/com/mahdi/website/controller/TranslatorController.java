@@ -20,7 +20,7 @@ public class TranslatorController {
 
     @GetMapping("/translator-management")
     public String showTranslatorManagement(Model model) {
-        model.addAttribute("translator", new TranslatorDTO());
+        model.addAttribute("translatorDTO", new TranslatorDTO());
         model.addAttribute("searchPerformed", Boolean.FALSE);
         return "translator-management";
     }

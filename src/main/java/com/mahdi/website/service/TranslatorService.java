@@ -1,9 +1,13 @@
 package com.mahdi.website.service;
 
+import com.mahdi.website.dto.PublisherDTO;
 import com.mahdi.website.dto.TranslatorDTO;
 import com.mahdi.website.exeception.translatorExceptions.TranslatorNotFoundException;
+import com.mahdi.website.model.Publisher;
 import com.mahdi.website.model.Translator;
+import com.mahdi.website.repository.PublisherSearchSpecification;
 import com.mahdi.website.repository.TranslatorRepository;
+import com.mahdi.website.repository.TranslatorSearchSpecification;
 import com.mahdi.website.service.validation.TranslatorValidationInterface;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +32,8 @@ public class TranslatorService implements TranslatorServiceInterface{
 
     @Override
     public List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO) {
-        List<Translator> translatorList = translatorRepository.searchTranslator(translatorDTO);
+        TranslatorSearchSpecification  specification = new TranslatorSearchSpecification(translatorDTO);
+        List<Translator> translatorList = translatorRepository.findAll(specification);
         return prepareTranslatorList(translatorList);
     }
 
@@ -41,13 +46,13 @@ public class TranslatorService implements TranslatorServiceInterface{
 
     @Override
     public Translator findTranslatorByFirstName(String firstName) {
-        return translatorRepository.findByTranslatorByfirstName(firstName)
+        return translatorRepository.findByTranslatorByFirstName(firstName)
                 .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + firstName + " does not exist"));
     }
 
     @Override
     public Translator findTranslatorBylastName(String lastName) {
-        return translatorRepository.findByTranslatorByfirstName(lastName)
+        return translatorRepository.findByTranslatorByLastName(lastName)
                 .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + lastName + " does not exist"));
     }
 

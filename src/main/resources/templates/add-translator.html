@@ -62,43 +62,33 @@
   <div class="tab">
     <h2>Translator Information</h2>
     <p>
-      <label class="translatorNameLabel">translator name</label>
-      <input type="text" th:field="*{name}" required
-             class="translatorNameInput" name="translatorName" id="translatorName" placeholder="translator name"/>
+      <label class="translatorFirstNameLabel">first name</label>
+      <input type="text" th:field="*{firstName}" required
+             class="translatorFirstNameInput" name="firstName" id="firstName" placeholder="translator first name"/>
+    </p>
+    <p>
+      <label class="translatorLastNameLabel">first name</label>
+      <input type="text" th:field="*{lastName}" required
+             class="translatorLastNameInput" name="lastName" id="lastName" placeholder="translator last name"/>
     </p>
     <p>
       <label class="translatorPhoneNumberLabel">translator phone number</label>
       <input type="text" th:field="*{phoneNumber}" required
-             class="translatorPhoneNumberInput" name="translatorPhoneNumber" id="translatorPhoneNumber" placeholder="translator phone number"/>
+             class="translatorPhoneNumberInput" name="translatorPhoneNumber" id="translatorPhoneNumber" placeholder="phone number"/>
     </p>
+  </div>
+  <!-- Step 2 -->
+  <div class="tab">
+    <h2> Other translator information</h2>
     <p>
       <label class="translatorEmailLabel">translator email</label>
       <input type="text" th:field="*{email}" required
              class="translatorEmailInput" name="translatorEmail" id="translatorEmail" placeholder="translator email"/>
     </p>
-  </div>
-  <!-- Step 2 -->
-  <div class="tab">
-    <h2>Address</h2>
     <p>
-      <label class="countryLabel">country</label>
-      <input type="text" th:field="*{addressDTO.country}" required
-             class="countryInput" name="country" id="country" placeholder="country"/>
-    </p>
-    <p>
-      <label class="provinceLabel">province</label>
-      <input type="text" th:field="*{addressDTO.province}" required
-             class="provinceInput" name="province" id="province" placeholder="province"/>
-    </p>
-    <p>
-      <label class="cityLabel">city</label>
-      <input type="text" th:field="*{addressDTO.city}" required
-             class="cityInput" name="city" id="city" placeholder="city"/>
-    </p>
-    <p>
-      <label class="postalCodeLabel">postalCode</label>
-      <input type="text" th:field="*{addressDTO.postalCode}" required
-             class="postalCodeInput" name="postalCode" id="postalCode" placeholder="postalCode"/>
+      <label class="translatorNationalCodeLabel">national code</label>
+      <input type="text" th:field="*{nationalCode}" required
+             class="translatorNationalCodeInput" name="translatorNationalCode" id="translatorNationalCode" placeholder="national code"/>
     </p>
   </div>
   <!-- Navigation buttons -->

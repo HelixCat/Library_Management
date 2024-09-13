@@ -75,6 +75,22 @@
         .table_td_class {
             text-align: center;
         }
+
+        #firstSection {
+            margin-bottom: 15px;
+        }
+
+        #searchButton {
+            margin-left: 84px;
+        }
+
+        #phoneNumber {
+            width: 124px;
+        }
+
+        #nationalCode {
+            width: 130px;
+        }
     </style>
 </head>
 
@@ -84,17 +100,23 @@
     <form th:object="${translatorDTO}" th:action="@{/translator-management/search}" method="post"
           class="translatorManagementForm">
         <div class="translatorManagementContents">
-            <label for="firstName">first name:</label>
-            <input type="text" id="firstName" th:field="*{firstName}"/>
-            <label for="lastName">last name:</label>
-            <input type="text" id="lastName" th:field="*{lastName}"/>
-            <label for="phoneNumber">phone number:</label>
-            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}"/>
-            <label for="email">email:</label>
-            <input type="text" id="email" th:field="*{email}"/>
-            <label for="active">active:</label>
-            <input type="checkbox" id="active" th:field="*{active}" />
-            <button type="submit">Search</button>
+            <div id="firstSection">
+                <label for="firstName">first name:</label>
+                <input type="text" id="firstName" th:field="*{firstName}"/>
+                <label for="lastName">last name:</label>
+                <input type="text" id="lastName" th:field="*{lastName}"/>
+                <label for="email">email:</label>
+                <input type="text" id="email" th:field="*{email}"/>
+            </div>
+            <div id="secondSection">
+                <label for="phoneNumber">phone number:</label>
+                <input type="tel" id="phoneNumber" th:field="*{phoneNumber}"/>
+                <label for="nationalCode">national code:</label>
+                <input type="text" id="nationalCode" th:field="*{nationalCode}"/>
+                <label for="active">active:</label>
+                <input type="checkbox" id="active" th:field="*{active}" />
+                <button id="searchButton" type="submit">Search</button>
+            </div>
         </div>
     </form>
     <div style="padding-top: 15px; margin-left: 265px; width: 600px">
@@ -115,8 +137,9 @@
                 <th class="th_class">index</th>
                 <th class="th_class">deactivate</th>
                 <th class="th_class">update</th>
-                <th class="th_class">name</th>
-                <th class="th_class">phone Number</th>
+                <th class="th_class">first name</th>
+                <th class="th_class">last name</th>
+                <th class="th_class">phone number</th>
                 <th class="th_class">email</th>
                 <th class="th_class">active</th>
 
@@ -135,7 +158,8 @@
                         <i class="fas fa-edit"></i>
                     </a>
                 </td>
-                <td class="table_td_class" th:text="${translatorDTO.name}"></td>
+                <td class="table_td_class" th:text="${translatorDTO.firstName}"></td>
+                <td class="table_td_class" th:text="${translatorDTO.lastName}"></td>
                 <td class="table_td_class" th:text="${translatorDTO.phoneNumber}"></td>
                 <td class="table_td_class" th:text="${translatorDTO.email}"></td>
                 <td class="table_td_class" th:text="${translatorDTO.active ? 'Yes' : 'No'}"></td>
