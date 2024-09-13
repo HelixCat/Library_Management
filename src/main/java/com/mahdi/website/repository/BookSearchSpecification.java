@@ -1,6 +1,5 @@
 package com.mahdi.website.repository;
 
-import com.mahdi.website.dto.BookDTO;
 import com.mahdi.website.dto.SearchBookDTO;
 import com.mahdi.website.model.Author;
 import com.mahdi.website.model.Book;
@@ -31,27 +30,24 @@ public class BookSearchSpecification implements Specification<Book> {
         if (StringUtils.hasText(searchBookDTO.getBookId())) {
             predicates.add(criteriaBuilder.equal(root.get("bookId"), searchBookDTO.getBookId()));
         }
-        if (StringUtils.hasText(searchBookDTO.getPhoneNumber())) {
-            predicates.add(criteriaBuilder.equal(root.get("phoneNumber"), searchBookDTO.getPhoneNumber()));
-        }
         if (Objects.nonNull(searchBookDTO.getActive())) {
             predicates.add(criteriaBuilder.equal(root.get("active"), searchBookDTO.getActive()));
         }
-        if (StringUtils.hasText(searchBookDTO.)) {
+        if (StringUtils.hasText(searchBookDTO.getAuthorName())) {
             Join<Book, Author> authorJoin = root.join("authors");
-            predicates.add(criteriaBuilder.like(authorJoin.get("firstName"), "%" + bookDTO.getAuthor().getFirstName() + "%"));
+            predicates.add(criteriaBuilder.like(authorJoin.get("firstName"), "%" + searchBookDTO.getAuthorName() + "%"));
         }
-        if (StringUtils.hasText(bookDTO.getAuthor().getLastName())) {
+        if (StringUtils.hasText(searchBookDTO.getAuthorName())) {
             Join<Book, Author> authorJoin = root.join("authors");
-            predicates.add(criteriaBuilder.like(authorJoin.get("lastName"), "%" + bookDTO.getAuthor().getLastName() + "%"));
+            predicates.add(criteriaBuilder.like(authorJoin.get("lastName"), "%" + searchBookDTO.getAuthorName() + "%"));
         }
-        if (StringUtils.hasText(bookDTO.getTranslator().getFirstName())) {
+        if (StringUtils.hasText(searchBookDTO.getTranslatorName())) {
             Join<Book, Translator> translatorJoin = root.join("translators");
-            predicates.add(criteriaBuilder.like(translatorJoin.get("firstName"), "%" + bookDTO.getTranslator().getFirstName() + "%"));
+            predicates.add(criteriaBuilder.like(translatorJoin.get("firstName"), "%" + searchBookDTO.getTranslatorName() + "%"));
         }
-        if (StringUtils.hasText(bookDTO.getTranslator().getLastName())) {
+        if (StringUtils.hasText(searchBookDTO.getTranslatorName())) {
             Join<Book, Author> translatorJoin = root.join("translators");
-            predicates.add(criteriaBuilder.like(translatorJoin.get("firstName"), "%" + bookDTO.getTranslator().getFirstName() + "%"));
+            predicates.add(criteriaBuilder.like(translatorJoin.get("firstName"), "%" + searchBookDTO.getTranslatorName() + "%"));
         }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
