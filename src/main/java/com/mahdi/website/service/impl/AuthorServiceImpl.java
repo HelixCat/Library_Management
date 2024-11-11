@@ -2,44 +2,46 @@ package com.mahdi.website.service.impl;
 
 import com.mahdi.website.dto.AuthorDTO;
 import com.mahdi.website.exception.author.AuthorNotFoundException;
+import com.mahdi.website.mapper.AuthorMapper;
 import com.mahdi.website.model.Author;
 import com.mahdi.website.repository.AuthorRepository;
 import com.mahdi.website.repository.AuthorSearchSpecification;
-import com.mahdi.website.service.interfaces.AuthorServiceInterface;
+import com.mahdi.website.service.interfaces.AuthorService;
 import com.mahdi.website.service.validation.interfaces.AuthorValidationInterface;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
-public class AuthorService implements AuthorServiceInterface {
+@RequiredArgsConstructor
+public class AuthorServiceImpl implements AuthorService {
 
+    private final AuthorMapper authorMapper;
     private final AuthorRepository authorRepository;
-    private final ModelMapper modelMapper;
     private final AuthorValidationInterface authorValidation;
 
-    @Autowired
-    public AuthorService(AuthorRepository authorRepository, ModelMapper modelMapper, AuthorValidationInterface authorValidation) {
-        this.authorRepository = authorRepository;
-        this.modelMapper = modelMapper;
-        this.authorValidation = authorValidation;
+    @Override
+    public List<Author> searchAuthor(AuthorDTO authorDTO) {
+        AuthorSearchSpecification  specification = new AuthorSearchSpecification(authorDTO);
+        return authorRepository.findAll(specification);
     }
 
     @Override
-    public List<AuthorDTO> searchAuthor(AuthorDTO authorDTO) {
-        AuthorSearchSpecification  specification = new AuthorSearchSpecification(authorDTO);
-        List<Author> authorList = authorRepository.findAll(specification);
-        return prepareAuthorList(authorList);
+    public List<AuthorDTO> searchAuthorDTO(AuthorDTO authorDTO) {
+        return authorMapper.toAuthorDTOS(searchAuthor(authorDTO));
     }
 
     @Override
     public Author saveAuthor(AuthorDTO authorDTO) {
         authorValidation.addAuthorValidation(authorDTO);
-        Author author = prepareAuthor(authorDTO);
+        Author author = authorMapper.toAuthor(authorDTO);
+        author.setActive(Boolean.TRUE);
         return authorRepository.save(author);
+    }
+
+    public AuthorDTO saveAuthorDTO(AuthorDTO authorDTO) {
+        return authorMapper.toAuthorDTO(saveAuthor(authorDTO));
     }
 
     @Override
@@ -68,8 +70,7 @@ public class AuthorService implements AuthorServiceInterface {
 
     @Override
     public AuthorDTO findAuthorDTOById(Long id) {
-        Author author = findAuthorById(id);
-        return modelMapper.map(author, AuthorDTO.class);
+        return authorMapper.toAuthorDTO(findAuthorById(id));
     }
 
     @Override
@@ -78,41 +79,35 @@ public class AuthorService implements AuthorServiceInterface {
     }
 
     @Override
-    public void deactivateAuthorById(Long id) {
-        Author author = findAuthorById(id);
+    public AuthorDTO deactivateAuthorDTO(AuthorDTO authorDTO) {
+        Author author = findAuthorById(authorDTO.getId());
         author.setActive(Boolean.FALSE);
-        authorRepository.save(author);
+        return authorMapper.toAuthorDTO(authorRepository.save(author));
     }
 
     @Override
-    public void updateAuthor(Long id, AuthorDTO authorDTO) {
-        Author author = findAuthorById(id);
+    public void updateAuthor(AuthorDTO authorDTO) {
+        Author author = findAuthorById(authorDTO.getId());
         authorValidation.updateAuthorValidation(author, authorDTO);
-        author.setFirstName(authorDTO.getFirstName());
-        author.setLastName(authorDTO.getLastName());
-        author.setEmail(authorDTO.getEmail());
-        author.setPhoneNumber(authorDTO.getPhoneNumber());
-        author.setActive(authorDTO.getActive());
+        update(authorDTO, author);
         authorRepository.save(author);
     }
 
-
-    private Author prepareAuthor(AuthorDTO authorDTO) {
-        Author author = modelMapper.map(authorDTO, Author.class);
-        author.setActive(Boolean.TRUE);
-        return author;
-    }
-
-    private List<AuthorDTO> prepareAuthorList(List<Author> authorList) {
-        List<AuthorDTO> authorDTOList = new ArrayList<>();
-        for (Author author : authorList) {
-            AuthorDTO authorDTO = prepareAuthorDTO(author);
-            authorDTOList.add(authorDTO);
+    private void update(AuthorDTO authorDTO, Author author) {
+        if (Objects.nonNull(authorDTO.getEmail())) {
+            author.setEmail(authorDTO.getEmail());
         }
-        return authorDTOList;
-    }
-
-    private AuthorDTO prepareAuthorDTO(Author author) {
-        return modelMapper.map(author, AuthorDTO.class);
+        if (Objects.nonNull(authorDTO.getActive())) {
+            author.setActive(authorDTO.getActive());
+        }
+        if (Objects.nonNull(authorDTO.getLastName())) {
+            author.setLastName(authorDTO.getLastName());
+        }
+        if (Objects.nonNull(authorDTO.getFirstName())) {
+            author.setFirstName(authorDTO.getFirstName());
+        }
+        if (Objects.nonNull(authorDTO.getPhoneNumber())) {
+            author.setPhoneNumber(authorDTO.getPhoneNumber());
+        }
     }
 }

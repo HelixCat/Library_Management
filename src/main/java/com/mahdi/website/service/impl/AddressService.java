@@ -1,25 +1,22 @@
 package com.mahdi.website.service.impl;
 
-import com.mahdi.website.dto.AddressDTO;
-import com.mahdi.website.exception.address.AddressNotByIdFoundException;
+import java.util.Objects;
+import lombok.RequiredArgsConstructor;
 import com.mahdi.website.model.Address;
+import com.mahdi.website.dto.AddressDTO;
+import org.springframework.stereotype.Service;
+import com.mahdi.website.mapper.AddressMapper;
 import com.mahdi.website.repository.AddressRepository;
 import com.mahdi.website.service.interfaces.AddressServiceInterface;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.mahdi.website.exception.address.AddressNotByIdFoundException;
+
 
 @Service
+@RequiredArgsConstructor
 public class AddressService implements AddressServiceInterface {
 
     private final AddressRepository addressRepository;
-    private final ModelMapper modelMapper;
-
-    @Autowired
-    public AddressService(AddressRepository addressRepository, ModelMapper modelMapper) {
-        this.addressRepository = addressRepository;
-        this.modelMapper = modelMapper;
-    }
+    private final AddressMapper addressMapper;
 
     @Override
     public Address findAddressById(Long id) {
@@ -27,16 +24,20 @@ public class AddressService implements AddressServiceInterface {
     }
 
     @Override
-    public void updateAddress(AddressDTO addressDTO) {
-        Address address = addressRepository.findById(addressDTO.getId()).orElseThrow(() -> new AddressNotByIdFoundException("Address with id " + addressDTO.getId() + " does not exist"));
-        address.setCountry(addressDTO.getCountry());
-        address.setProvince(addressDTO.getProvince());
-        address.setCity(addressDTO.getCity());
-        address.setPostalCode(addressDTO.getPostalCode());
-        addressRepository.save(address);
+    public AddressDTO updateAddress(AddressDTO addressDTO) {
+        Address address = findAddressById(addressDTO.getId());
+        if (Objects.nonNull(addressDTO.getCountry())) {
+            address.setCountry(addressDTO.getCountry());
+        }
+        if (Objects.nonNull(addressDTO.getProvince())) {
+            address.setProvince(addressDTO.getProvince());
+        }
+        if (Objects.nonNull(addressDTO.getCity())) {
+            address.setCity(addressDTO.getCity());
+        }
+        if (Objects.nonNull(addressDTO.getPostalCode())) {
+            address.setPostalCode(addressDTO.getPostalCode());
+        }
+        return addressMapper.toAddressDTO(addressRepository.save(address));
     }
-
-
-
-
 }

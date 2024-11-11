@@ -1,4 +1,4 @@
-package com.mahdi.website.controller;
+package com.mahdi.website.controller.impl;
 
 import com.mahdi.website.dto.PublisherDTO;
 import com.mahdi.website.service.impl.PublisherService;

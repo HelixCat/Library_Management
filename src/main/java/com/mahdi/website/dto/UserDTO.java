@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -30,5 +32,5 @@ public class UserDTO {
     private String birthday;
     private byte[] image;
     private String base64ProfileImage;
-    private AddressDTO addressDTO;
+    private List<AddressDTO> addressDTO;
 }

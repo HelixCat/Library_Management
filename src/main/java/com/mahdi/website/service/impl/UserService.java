@@ -8,12 +8,10 @@ import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.AddressRepository;
 import com.mahdi.website.repository.UserRepository;
-import com.mahdi.website.service.interfaces.AddressServiceInterface;
 import com.mahdi.website.service.interfaces.UserServiceInterface;
 import com.mahdi.website.service.validation.interfaces.LoginValidationInterface;
 import com.mahdi.website.service.validation.interfaces.SignUpValidationInterface;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
@@ -29,17 +28,7 @@ public class UserService implements UserServiceInterface {
     private final ModelMapper modelMapper;
     private final LoginValidationInterface loginValidation;
     private final SignUpValidationInterface signUpValidation;
-    private final AddressServiceInterface addressService;
 
-    @Autowired
-    public UserService(AddressRepository addressRepository, UserRepository userRepository, ModelMapper modelMapper, LoginValidationInterface loginValidation, SignUpValidationInterface signUpValidation, AddressServiceInterface addressService) {
-        this.addressRepository = addressRepository;
-        this.userRepository = userRepository;
-        this.modelMapper = modelMapper;
-        this.loginValidation = loginValidation;
-        this.signUpValidation = signUpValidation;
-        this.addressService = addressService;
-    }
 
     @Override
     public List<User> getAllUsers() {
