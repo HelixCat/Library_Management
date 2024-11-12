@@ -3,9 +3,7 @@ package com.mahdi.website.service.impl;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.UserNotFoundException;
-import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
-import com.mahdi.website.repository.AddressRepository;
 import com.mahdi.website.repository.UserRepository;
 import com.mahdi.website.service.interfaces.UserServiceInterface;
 import com.mahdi.website.service.validation.interfaces.LoginValidationInterface;
@@ -23,7 +21,6 @@ import java.util.*;
 public class UserService implements UserServiceInterface {
 
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
     private final LoginValidationInterface loginValidation;
     private final SignUpValidationInterface signUpValidation;
 
@@ -78,25 +75,9 @@ public class UserService implements UserServiceInterface {
         return createHashedPassword(password);
     }
 
-    @Override
-    public List<Address> saveAddress(List<Address> addressList) {
-        for (Address address : addressList) {
-            address.setActive(true);
-            addressRepository.save(address);
-        }
-        return addressList;
-    }
-
     private String createHashedPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
         return encoder.encode(password);
-    }
-
-    @Override
-    public User loadUserByEmail(String email) {
-        return userRepository.findByEmail(email)
-                .orElseThrow(UserNotFoundException::new);
-
     }
 
     @Override

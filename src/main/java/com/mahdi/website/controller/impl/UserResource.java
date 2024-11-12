@@ -4,6 +4,7 @@ import com.mahdi.website.controller.rest.UserRemote;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.mapper.UserMapper;
+import com.mahdi.website.model.User;
 import com.mahdi.website.service.interfaces.UserServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,10 @@ public class UserResource implements UserRemote {
 
     @GetMapping("/find")
     public ResponseEntity<UserDTO> findUserByUserName(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(userMapper.toDTO(userService.loadUserByUserName(userDTO.getUsername())), HttpStatus.OK);
+        User user = userService.loadUserByUserName(userDTO.getUsername());
+        UserDTO DTO = userMapper.toDTO(user);
+        DTO.setPassword(null);
+        return new ResponseEntity<>(DTO, HttpStatus.OK);
 
     }
 

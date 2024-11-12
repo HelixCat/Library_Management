@@ -13,7 +13,8 @@ public class AddressDTO {
     private String country;
     private Integer version;
     private String manualId;
-    private String username;
+    private UserDTO user;
     private String province;
     private String postalCode;
+    private PublisherDTO publisher;
 }
