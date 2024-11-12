@@ -1,5 +1,6 @@
 package com.mahdi.website.model;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -7,10 +8,10 @@ import java.util.Date;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.annotation.Id;
 
-@Document(collation = "logs")
-@Getter
-@Setter
+
+@Data
 @RequiredArgsConstructor
+@Document(collation = "logs")
 public class Logg {
 
     @Id
@@ -20,3 +21,4 @@ public class Logg {
     private String message;
 
 }
+
