@@ -6,36 +6,38 @@ import com.mahdi.website.dto.AuthorDTO;
 import com.mahdi.website.mapper.AuthorMapper;
 import com.mahdi.website.service.interfaces.AuthorService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/author")
+@RequestMapping("/author-management")
 public class AuthorResource implements AuthorRemote {
 
     private final AuthorMapper authorMapper;
     private final AuthorService authorService;
 
     @Override
-    public List<AuthorDTO> searchAuthors(@RequestBody AuthorDTO authorDTO) {
-        return authorService.searchAuthorDTO(authorDTO);
+    public ResponseEntity<List<AuthorDTO>> searchAuthors(@RequestBody AuthorDTO authorDTO) {
+        return new ResponseEntity<>(authorMapper.toDTOList(authorService.searchAuthor(authorDTO)), HttpStatus.FOUND);
     }
 
     @Override
-    public AuthorDTO saveAuthor(@RequestBody AuthorDTO authorDTO) {
-        return authorService.saveAuthorDTO(authorDTO);
+    public ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDTO) {
+        return new ResponseEntity<>(authorMapper.toDTO(authorService.saveAuthor(authorDTO)), HttpStatus.CREATED);
     }
 
     @Override
-    public AuthorDTO deactivateAuthor(@RequestBody AuthorDTO authorDTO) {
-        return authorService.deactivateAuthorDTO(authorDTO);
+    public ResponseEntity<AuthorDTO> deactivateAuthor(@RequestBody AuthorDTO authorDTO) {
+        return new ResponseEntity<>(authorMapper.toDTO(authorService.deactivateAuthor(authorDTO)), HttpStatus.OK);
     }
 
     @Override
-    public AuthorDTO updateAuthor(@RequestBody AuthorDTO authorDTO) {
-        return authorMapper.toDTO(authorService.updateAuthor(authorDTO));
+    public ResponseEntity<AuthorDTO> updateAuthor(@RequestBody AuthorDTO authorDTO) {
+        return new ResponseEntity<>(authorMapper.toDTO(authorService.updateAuthor(authorDTO)), HttpStatus.OK);
     }
 }
 

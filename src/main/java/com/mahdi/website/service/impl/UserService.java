@@ -30,12 +30,6 @@ public class UserService implements UserServiceInterface {
     private final LoginValidationInterface loginValidation;
     private final SignUpValidationInterface signUpValidation;
 
-
-    @Override
-    public List<User> getAllUsers() {
-        return (List<User>) userRepository.findAll();
-    }
-
     @Override
     public User saveUser(UserDTO userDTO) {
         signUpValidation.signUpValidation(userDTO);
@@ -99,25 +93,6 @@ public class UserService implements UserServiceInterface {
         return addressList;
     }
 
-    @Override
-    public UserDTO AddAddressToTheUser(String username, AddressDTO addressDTO) {
-        User user = loadUserByUserName(username);
-        List<Address> addressList = user.getAddresses();
-        addressList.add(prepareAddressDTOToAddress(addressDTO));
-        saveAddress(addressList);
-        user = loadUserByUserName(username);
-        return prepareUserDTO(user);
-    }
-
-    private Address prepareAddressDTOToAddress(AddressDTO addressDTO) {
-        Address address = new Address();
-        address.setCountry(addressDTO.getCountry());
-        address.setProvince(addressDTO.getProvince());
-        address.setCity(addressDTO.getCity());
-        address.setPostalCode(addressDTO.getPostalCode());
-        return address;
-    }
-
     private String createHashedPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
         return encoder.encode(password);
@@ -131,86 +106,28 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public User loadUserByPhoneNumber(String phoneNumber) {
-        return userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(UserNotFoundException::new);
-
-    }
-
-    @Override
-    public User loadUserByNationalCode(String nationalCode) {
-        return userRepository.findByNationalCode(nationalCode)
-                .orElseThrow(UserNotFoundException::new);
-
-    }
-
-    @Override
     public User loadUserByUserName(String userName) {
         return userRepository.findByUserName(userName)
                 .orElseThrow(UserNotFoundException::new);
     }
 
     @Override
-    public UserDTO loadUserDTOByUserName(String userName) {
-        User user = loadUserByUserName(userName);
-        return prepareUserDTO(user);
-    }
-
-    @Override
-    public UserDTO loadUserDTOByEmailForLoginPage(UserDTO userDTO) {
-        User user = loadUserByEmail(userDTO.getEmail());
-        loginValidation.isValidPassword(userDTO.getPassword(), user.getPassword(), "login");
-        return prepareUserDTO(user);
-    }
-
-    @Override
-    public UserDTO loadUserDTOByEmail(UserDTO userDTO) {
-        User user = loadUserByEmail(userDTO.getEmail());
-        return prepareUserDTO(user);
-    }
-
-    @Override
-    public UserDTO updateUser(String userName, UserDTO userDTO) {
-        User user = prepareUser(loadUserByUserName(userName), userDTO);
+    public User updateUser(UserDTO userDTO) {
+        User user = prepareUser(loadUserByUserName(userDTO.getUsername()), userDTO);
         userRepository.save(user);
-        return prepareUserDTO(user);
-    }
-
-    @Override
-    public void updateUserPassword(String username, ChangePasswordDTO changePasswordDTO) {
-        changePasswordDTO.setUserName(username);
-        changePassword(changePasswordDTO);
-    }
-
-    private void changePassword(ChangePasswordDTO changePasswordDTO) {
-        User user = loadUserByUserName(changePasswordDTO.getUserName());
-        loginValidation.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
-        String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
-        userRepository.updateUserPassword(user.getUsername(), hashedPassword);
-    }
-
-    private UserDTO prepareUserDTO(User user) {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setId(user.getId());
-        userDTO.setActive(user.getActive());
-        userDTO.setVersion(user.getVersion());
-        userDTO.setManualId(userDTO.getManualId());
-        userDTO.setFullName(user.getFirstName() + " " + user.getLastName());
-        userDTO.setFirstName(user.getFirstName());
-        userDTO.setLastName(user.getLastName());
-        userDTO.setEmail(user.getEmail());
-        userDTO.setUsername(user.getUsername());
-        userDTO.setAdmin(user.getAdmin());
-        userDTO.setNationalCode(user.getNationalCode());
-        userDTO.setPhoneNumber(user.getPhoneNumber());
-        userDTO.setImage(user.getProfileImage());
-        userDTO.setGender(user.getGender());
-        userDTO.setBirthday(user.getBirthday());
         if (Objects.nonNull(user.getProfileImage())) {
             userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
         }
-        userDTO.setAddressDTOList(addressMapper.toDTOList(user.getAddresses()));
-        return userDTO;
+        return user;
+    }
+
+    @Override
+    public User updateUserPassword(ChangePasswordDTO changePasswordDTO) {
+        User user = loadUserByUserName(changePasswordDTO.getUserName());
+        loginValidation.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
+        String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
+        user.setPassword(hashedPassword);
+        return userRepository.save(user);
     }
 
     private String prepareByteArrayToBase64(byte[] profileImage) {

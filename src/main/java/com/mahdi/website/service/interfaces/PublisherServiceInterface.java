@@ -21,4 +21,6 @@ public interface PublisherServiceInterface {
     Publisher findPublisherById(Long id);
 
     Publisher deactivatePublisherById(Long id);
+
+    Publisher updatePublisher(PublisherDTO publisherDTO);
 }

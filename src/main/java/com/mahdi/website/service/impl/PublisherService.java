@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.mahdi.website.exception.publisher.PublisherNotFoundException;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -78,13 +77,14 @@ public class PublisherService implements PublisherServiceInterface {
         return publisherRepository.save(publisher);
     }
 
-    public void updatePublisher(Long id, PublisherDTO publisherDTO) {
-        Publisher publisher = findPublisherById(id);
+    @Override
+    public Publisher updatePublisher(PublisherDTO publisherDTO) {
+        Publisher publisher = findPublisherById(publisherDTO.getId());
         publisherValidation.updatePublisherValidation(publisher, publisherDTO);
         publisher.setName(publisherDTO.getName());
         publisher.setEmail(publisherDTO.getEmail());
         publisher.setPhoneNumber(publisherDTO.getPhoneNumber());
         publisher.setActive(publisherDTO.getActive());
-        publisherRepository.save(publisher);
+        return publisherRepository.save(publisher);
     }
 }

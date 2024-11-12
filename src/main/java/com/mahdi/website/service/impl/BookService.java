@@ -12,7 +12,6 @@ import com.mahdi.website.service.validation.interfaces.BookValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,10 +25,9 @@ public class BookService implements BookServiceInterface {
 
 
     @Override
-    public List<BookDTO> searchBook(BookDTO bookDTO) {
+    public List<Book> searchBook(BookDTO bookDTO) {
         BookSearchSpecification  specification = new BookSearchSpecification(bookDTO);
-        List<Book> bookList = bookRepository.findAll(specification);
-        return prepareBookList(bookList);
+        return bookRepository.findAll(specification);
     }
 
     @Override
@@ -38,30 +36,6 @@ public class BookService implements BookServiceInterface {
         Book book = bookMapper.toEntity(bookDTO);
         book.setActive(Boolean.TRUE);
         return bookRepository.save(book);
-    }
-
-    @Override
-    public Book findBookByBookTitle(String title) {
-        return bookRepository.findBookByBookTitle(title)
-                .orElseThrow(BookNotFoundException::new);
-    }
-
-    @Override
-    public Book findBookByBookId(String bookId) {
-        return bookRepository.findBookByBookId(bookId)
-                .orElseThrow(BookNotFoundException::new);
-    }
-
-    @Override
-    public Book findBookByPublishYear(String publishYear) {
-        return bookRepository.findBookByPublishYear(publishYear)
-                .orElseThrow(BookNotFoundException::new);
-    }
-
-    @Override
-    public Book findByBookByPublishDate(String publisherDate) {
-        return bookRepository.findByBookByPublishDate(publisherDate)
-                .orElseThrow(BookNotFoundException::new);
     }
 
     @Override
@@ -75,29 +49,20 @@ public class BookService implements BookServiceInterface {
     }
 
     @Override
-    public void deactivateBookById(Long id) {
-        Book book = findBookById(id);
+    public Book deactivateBookByBookId(String BookId) {
+        Book book = bookRepository.findBookByBookId(BookId).orElseThrow(BookNotFoundException::new);
         book.setActive(Boolean.FALSE);
-        bookRepository.save(book);
+        return bookRepository.save(book);
     }
 
     @Override
-    public void updateBook(Long id, BookDTO bookDTO) {
-        Book book = findBookById(id);
+    public Book updateBook(BookDTO bookDTO) {
+        Book book = findBookById(bookDTO.getId());
         book.setTitle(bookDTO.getTitle());
         book.setActive(bookDTO.getActive());
         book.setPublishYear(bookDTO.getPublishYear());
         book.setPublishDate(bookDTO.getPublishDate());
         book.setPublisher(publisherMapper.toEntity(bookDTO.getPublisher()));
-        bookRepository.save(book);
-    }
-
-    private List<BookDTO> prepareBookList(List<Book> bookList) {
-        List<BookDTO> bookDTOList = new ArrayList<>();
-        for (Book book : bookList) {
-            BookDTO bookDTO = bookMapper.toDTO(book);
-            bookDTOList.add(bookDTO);
-        }
-        return bookDTOList;
+        return bookRepository.save(book);
     }
 }

@@ -28,11 +28,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public List<AuthorDTO> searchAuthorDTO(AuthorDTO authorDTO) {
-        return authorMapper.toDTOList(searchAuthor(authorDTO));
-    }
-
-    @Override
     public Author saveAuthor(AuthorDTO authorDTO) {
         authorValidation.addAuthorValidation(authorDTO);
         Author author = authorMapper.toEntity(authorDTO);
@@ -79,10 +74,10 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public AuthorDTO deactivateAuthorDTO(AuthorDTO authorDTO) {
+    public Author deactivateAuthor(AuthorDTO authorDTO) {
         Author author = findAuthorById(authorDTO.getId());
         author.setActive(Boolean.FALSE);
-        return authorMapper.toDTO(authorRepository.save(author));
+        return authorRepository.save(author);
     }
 
     @Override
