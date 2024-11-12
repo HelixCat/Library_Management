@@ -55,9 +55,6 @@ public class UserService implements UserServiceInterface {
         if (Objects.nonNull(userDTO.getPassword())) {
             user.setPassword(prepareHashedPassword(userDTO.getPassword()));
         }
-        if (Objects.nonNull(userDTO.getAddressDTOList()) && !userDTO.getAddressDTOList().isEmpty()) {
-            user.setAddresses(addressMapper.ToEntities(userDTO.getAddressDTOList()));
-        }
         if (Objects.nonNull(userDTO.getGender())) {
             user.setGender(userDTO.getGender());
         }

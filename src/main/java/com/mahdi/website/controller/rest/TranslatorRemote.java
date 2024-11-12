@@ -14,7 +14,7 @@ public interface TranslatorRemote {
     @PostMapping("/save")
     ResponseEntity<TranslatorDTO> saveTranslator(@RequestBody TranslatorDTO translatorDTO);
 
-    @PutMapping( "/deactivate}")
+    @PutMapping( "/deactivate")
     ResponseEntity<TranslatorDTO> deactivateTranslator(@RequestBody TranslatorDTO translatorDTO);
 
     @PostMapping("/update")

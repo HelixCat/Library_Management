@@ -16,7 +16,7 @@ public interface BookRemote {
     @PostMapping("/save")
     ResponseEntity<BookDTO> saveBook(@RequestBody BookDTO bookDTO);
 
-    @PutMapping("/deactivate}")
+    @PutMapping("/deactivate")
     ResponseEntity<BookDTO> deactivateBook(@RequestBody BookDTO bookDTO);
 
     @PutMapping("/update")

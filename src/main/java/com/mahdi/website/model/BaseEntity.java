@@ -17,6 +17,7 @@ public class BaseEntity {
     private Boolean active;
     @Column(name = "c_manual_id")
     private String manualId;
+    @Version
     @Column(name = "c_version")
     private Integer version;
 }

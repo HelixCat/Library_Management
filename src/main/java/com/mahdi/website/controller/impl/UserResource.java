@@ -35,7 +35,7 @@ public class UserResource implements UserRemote {
 
     }
 
-    @PostMapping("/change-password}")
+    @PostMapping("/change-password")
     public ResponseEntity<UserDTO> updateUserPassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception {
         return new ResponseEntity<>(userMapper.toDTO(userService.updateUserPassword(changePasswordDTO)), HttpStatus.OK);
     }

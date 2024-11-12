@@ -35,7 +35,6 @@ public class BookJob {
         publisherDTO.setName("entesharate fati khoshgle");
         publisherDTO.setEmail("fati@gmail.com");
         publisherDTO.setPhoneNumber("09352877455");
-        publisherDTO.setAddresses(new ArrayList<>());
         return publisherDTO;
     }
 

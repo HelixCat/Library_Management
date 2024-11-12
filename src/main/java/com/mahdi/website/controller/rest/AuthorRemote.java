@@ -4,6 +4,7 @@ import com.mahdi.website.dto.AuthorDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface AuthorRemote {
     @PostMapping("/save")
     ResponseEntity<AuthorDTO> saveAuthor(@RequestBody AuthorDTO authorDTO);
 
-    @GetMapping("/deactivate")
+    @PutMapping("/deactivate")
     ResponseEntity<AuthorDTO> deactivateAuthor(@RequestBody AuthorDTO authorDTO);
 
     @PostMapping("/update")

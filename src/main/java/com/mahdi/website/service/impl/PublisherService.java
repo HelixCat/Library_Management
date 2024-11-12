@@ -61,7 +61,6 @@ public class PublisherService implements PublisherServiceInterface {
     public PublisherDTO findPublisherDTOById(Long id) {
         Publisher publisher = findPublisherById(id);
         PublisherDTO publisherDTO = publisherMapper.toDTO(publisher);
-        publisherDTO.setAddresses(addressMapper.toDTOList(publisher.getAddresses()));
         return publisherDTO;
     }
 
