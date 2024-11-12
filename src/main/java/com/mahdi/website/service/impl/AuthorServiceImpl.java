@@ -40,35 +40,6 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author findAuthorByFirstName(String firstName) {
-        return authorRepository.findByAuthorByFirstName(firstName)
-                .orElseThrow(AuthorNotFoundException::new);
-    }
-
-    @Override
-    public Author findAuthorBylastName(String lastName) {
-        return authorRepository.findByAuthorByLastName(lastName)
-                .orElseThrow(AuthorNotFoundException::new);
-    }
-
-    @Override
-    public Author findAuthorByEmail(String email) {
-        return authorRepository.findAuthorByEmail(email)
-                .orElseThrow(AuthorNotFoundException::new);
-    }
-
-    @Override
-    public Author findAuthorByPhoneNumber(String phoneNumber) {
-        return authorRepository.findAuthorByPhoneNumber(phoneNumber)
-                .orElseThrow(AuthorNotFoundException::new);
-    }
-
-    @Override
-    public AuthorDTO findAuthorDTOById(Long id) {
-        return authorMapper.toDTO(findAuthorById(id));
-    }
-
-    @Override
     public Author findAuthorById(Long id) {
         return authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
     }
