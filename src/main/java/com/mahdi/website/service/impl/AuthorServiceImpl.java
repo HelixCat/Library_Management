@@ -35,10 +35,6 @@ public class AuthorServiceImpl implements AuthorService {
         return authorRepository.save(author);
     }
 
-    public AuthorDTO saveAuthorDTO(AuthorDTO authorDTO) {
-        return authorMapper.toDTO(saveAuthor(authorDTO));
-    }
-
     @Override
     public Author findAuthorById(Long id) {
         return authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
