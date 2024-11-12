@@ -23,8 +23,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublisherService implements PublisherServiceInterface {
 
-    private final PublisherMapper publisherMapper;
     private final AddressMapper addressMapper;
+    private final PublisherMapper publisherMapper;
     private final AddressServiceInterface addressService;
     private final PublisherRepository publisherRepository;
     private final PublisherValidationInterface publisherValidation;
@@ -46,19 +46,19 @@ public class PublisherService implements PublisherServiceInterface {
     @Override
     public Publisher findPublisherByName(String name) {
         return publisherRepository.findByPublisherName(name)
-                .orElseThrow(() -> new PublisherNotFoundException("publisher with name " + name + " does not exist"));
+                .orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
     public Publisher findPublisherByEmail(String email) {
         return publisherRepository.findPublisherByEmail(email)
-                .orElseThrow(() -> new PublisherNotFoundException("publisher with email " + email + " does not exist"));
+                .orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
     public Publisher findPublisherByPhoneNumber(String phoneNumber) {
         return publisherRepository.findPublisherByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new PublisherNotFoundException("publisher with phone number " + phoneNumber + " does not exist"));
+                .orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
@@ -71,7 +71,7 @@ public class PublisherService implements PublisherServiceInterface {
 
     @Override
     public Publisher findPublisherById(Long id) {
-        return publisherRepository.findById(id).orElseThrow(() -> new PublisherNotFoundException("publisher with id " + id + " does not exist"));
+        return publisherRepository.findById(id).orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override

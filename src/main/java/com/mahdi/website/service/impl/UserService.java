@@ -3,7 +3,7 @@ package com.mahdi.website.service.impl;
 import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
-import com.mahdi.website.exception.user.UserNotFoundExcpetion;
+import com.mahdi.website.exception.user.UserNotFoundException;
 import com.mahdi.website.mapper.AddressMapper;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
@@ -128,28 +128,28 @@ public class UserService implements UserServiceInterface {
     @Override
     public User loadUserByEmail(String email) {
         return userRepository.findByEmail(email)
-                .orElseThrow(() -> new UserNotFoundExcpetion("user with email " + email + " does not exist"));
+                .orElseThrow(UserNotFoundException::new);
 
     }
 
     @Override
     public User loadUserByPhoneNumber(String phoneNumber) {
         return userRepository.findByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new UserNotFoundExcpetion("user with phoneNumber " + phoneNumber + " does not exist"));
+                .orElseThrow(UserNotFoundException::new);
 
     }
 
     @Override
     public User loadUserByNationalCode(String nationalCode) {
         return userRepository.findByNationalCode(nationalCode)
-                .orElseThrow(() -> new UserNotFoundExcpetion("user with nationalCode " + nationalCode + " does not exist"));
+                .orElseThrow(UserNotFoundException::new);
 
     }
 
     @Override
     public User loadUserByUserName(String userName) {
         return userRepository.findByUserName(userName)
-                .orElseThrow(() -> new UserNotFoundExcpetion("user with username " + userName + " does not exist"));
+                .orElseThrow(UserNotFoundException::new);
     }
 
     @Override

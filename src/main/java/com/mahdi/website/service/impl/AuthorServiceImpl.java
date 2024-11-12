@@ -29,68 +29,68 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public List<AuthorDTO> searchAuthorDTO(AuthorDTO authorDTO) {
-        return authorMapper.toAuthorDTOS(searchAuthor(authorDTO));
+        return authorMapper.toDTOList(searchAuthor(authorDTO));
     }
 
     @Override
     public Author saveAuthor(AuthorDTO authorDTO) {
         authorValidation.addAuthorValidation(authorDTO);
-        Author author = authorMapper.toAuthor(authorDTO);
+        Author author = authorMapper.toEntity(authorDTO);
         author.setActive(Boolean.TRUE);
         return authorRepository.save(author);
     }
 
     public AuthorDTO saveAuthorDTO(AuthorDTO authorDTO) {
-        return authorMapper.toAuthorDTO(saveAuthor(authorDTO));
+        return authorMapper.toDTO(saveAuthor(authorDTO));
     }
 
     @Override
     public Author findAuthorByFirstName(String firstName) {
         return authorRepository.findByAuthorByFirstName(firstName)
-                .orElseThrow(() -> new AuthorNotFoundException("author with name " + firstName + " does not exist"));
+                .orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
     public Author findAuthorBylastName(String lastName) {
         return authorRepository.findByAuthorByLastName(lastName)
-                .orElseThrow(() -> new AuthorNotFoundException("author with name " + lastName + " does not exist"));
+                .orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
     public Author findAuthorByEmail(String email) {
         return authorRepository.findAuthorByEmail(email)
-                .orElseThrow(() -> new AuthorNotFoundException("author with email " + email + " does not exist"));
+                .orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
     public Author findAuthorByPhoneNumber(String phoneNumber) {
         return authorRepository.findAuthorByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new AuthorNotFoundException("author with phone number " + phoneNumber + " does not exist"));
+                .orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
     public AuthorDTO findAuthorDTOById(Long id) {
-        return authorMapper.toAuthorDTO(findAuthorById(id));
+        return authorMapper.toDTO(findAuthorById(id));
     }
 
     @Override
     public Author findAuthorById(Long id) {
-        return authorRepository.findById(id).orElseThrow(() -> new AuthorNotFoundException("author with id " + id + " does not exist"));
+        return authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
     public AuthorDTO deactivateAuthorDTO(AuthorDTO authorDTO) {
         Author author = findAuthorById(authorDTO.getId());
         author.setActive(Boolean.FALSE);
-        return authorMapper.toAuthorDTO(authorRepository.save(author));
+        return authorMapper.toDTO(authorRepository.save(author));
     }
 
     @Override
-    public void updateAuthor(AuthorDTO authorDTO) {
+    public Author updateAuthor(AuthorDTO authorDTO) {
         Author author = findAuthorById(authorDTO.getId());
         authorValidation.updateAuthorValidation(author, authorDTO);
         update(authorDTO, author);
-        authorRepository.save(author);
+        return authorRepository.save(author);
     }
 
     private void update(AuthorDTO authorDTO, Author author) {

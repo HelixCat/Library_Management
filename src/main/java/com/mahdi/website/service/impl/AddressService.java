@@ -20,7 +20,7 @@ public class AddressService implements AddressServiceInterface {
 
     @Override
     public Address findAddressById(Long id) {
-        return addressRepository.findById(id).orElseThrow(() -> new AddressNotByIdFoundException("Address with id " + id + " does not exist"));
+        return addressRepository.findById(id).orElseThrow(AddressNotByIdFoundException::new);
     }
 
     @Override
@@ -38,6 +38,6 @@ public class AddressService implements AddressServiceInterface {
         if (Objects.nonNull(addressDTO.getPostalCode())) {
             address.setPostalCode(addressDTO.getPostalCode());
         }
-        return addressMapper.toAddressDTO(addressRepository.save(address));
+        return addressMapper.toDTO(addressRepository.save(address));
     }
 }

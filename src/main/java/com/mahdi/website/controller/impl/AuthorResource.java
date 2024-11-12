@@ -3,6 +3,7 @@ package com.mahdi.website.controller.impl;
 import com.mahdi.website.controller.rest.AuthorRemote;
 import com.mahdi.website.dto.AuthorDTO;
 
+import com.mahdi.website.mapper.AuthorMapper;
 import com.mahdi.website.service.interfaces.AuthorService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/author")
 public class AuthorResource implements AuthorRemote {
 
+    private final AuthorMapper authorMapper;
     private final AuthorService authorService;
 
     @Override
@@ -33,7 +35,7 @@ public class AuthorResource implements AuthorRemote {
 
     @Override
     public AuthorDTO updateAuthor(@RequestBody AuthorDTO authorDTO) {
-        return authorService.updateAuthor(authorDTO);
+        return authorMapper.toDTO(authorService.updateAuthor(authorDTO));
     }
 }
 

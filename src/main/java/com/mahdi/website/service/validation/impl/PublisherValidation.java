@@ -25,28 +25,28 @@ public class PublisherValidation implements PublisherValidationInterface {
     public void publisherNameValidation(String publisherName) {
         Optional<Publisher> publisher = publisherRepository.findByPublisherName(publisherName);
         if (publisher.isPresent()) {
-            throw new DuplicatePublisherNameException("this name is taken by other publishers");
+            throw new DuplicatePublisherNameException();
         }
     }
 
-    public void publisherEamilValidation(String email) {
+    public void publisherEmailValidation(String email) {
         Optional<Publisher> publisher = publisherRepository.findPublisherByEmail(email);
         if (publisher.isPresent()) {
-            throw new DuplicatePublisherEmailException("this email is taken by other publishers");
+            throw new DuplicatePublisherEmailException();
         }
     }
 
     public void publisherPhoneNumberValidation(String phoneNumber) {
         Optional<Publisher> publisher = publisherRepository.findPublisherByPhoneNumber(phoneNumber);
         if (publisher.isPresent()) {
-            throw new DuplicatePublisherPhoneNumberException("this phone number is taken by other publishers");
+            throw new DuplicatePublisherPhoneNumberException();
         }
     }
 
     @Override
     public void addPublisherValidation(PublisherDTO publisherDTO) {
         publisherNameValidation(publisherDTO.getName());
-        publisherEamilValidation(publisherDTO.getEmail());
+        publisherEmailValidation(publisherDTO.getEmail());
         publisherPhoneNumberValidation(publisherDTO.getPhoneNumber());
     }
 
@@ -56,7 +56,7 @@ public class PublisherValidation implements PublisherValidationInterface {
             publisherNameValidation(publisherDTO.getName());
         }
         if (!publisherDTO.getEmail().equals(publisher.getEmail())) {
-            publisherEamilValidation(publisherDTO.getEmail());
+            publisherEmailValidation(publisherDTO.getEmail());
         }
         if (!publisherDTO.getPhoneNumber().equals(publisher.getPhoneNumber())) {
             publisherPhoneNumberValidation(publisherDTO.getPhoneNumber());

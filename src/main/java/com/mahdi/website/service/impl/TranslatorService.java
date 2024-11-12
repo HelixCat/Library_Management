@@ -40,25 +40,25 @@ public class TranslatorService implements TranslatorServiceInterface {
     @Override
     public Translator findTranslatorByFirstName(String firstName) {
         return translatorRepository.findByTranslatorByFirstName(firstName)
-                .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + firstName + " does not exist"));
+                .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
     public Translator findTranslatorBylastName(String lastName) {
         return translatorRepository.findByTranslatorByLastName(lastName)
-                .orElseThrow(() -> new TranslatorNotFoundException("translator with name " + lastName + " does not exist"));
+                .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
     public Translator findTranslatorByEmail(String email) {
         return translatorRepository.findTranslatorByEmail(email)
-                .orElseThrow(() -> new com.mahdi.website.exception.translator.TranslatorNotFoundException("translator with email " + email + " does not exist"));
+                .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
     public Translator findTranslatorByPhoneNumber(String phoneNumber) {
         return translatorRepository.findTranslatorByPhoneNumber(phoneNumber)
-                .orElseThrow(() -> new TranslatorNotFoundException("translator with phone number " + phoneNumber + " does not exist"));
+                .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
@@ -69,7 +69,7 @@ public class TranslatorService implements TranslatorServiceInterface {
 
     @Override
     public Translator findTranslatorById(Long id) {
-        return translatorRepository.findById(id).orElseThrow(() -> new TranslatorNotFoundException("translator with id " + id + " does not exist"));
+        return translatorRepository.findById(id).orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override

@@ -8,26 +8,22 @@ import com.mahdi.website.exception.user.DuplicateUserNameException;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
 import com.mahdi.website.service.validation.interfaces.SignUpValidationInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class SignUpValidation implements SignUpValidationInterface {
 
     private final UserRepository userRepository;
-
-    @Autowired
-    public SignUpValidation(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @Override
     public void userNameValidation(String userName) {
         Optional<User> user = userRepository.findByUserName(userName);
         if (user.isPresent()) {
-            throw new DuplicateUserNameException("this username is taken by other user");
+            throw new DuplicateUserNameException();
         }
     }
 
@@ -35,7 +31,7 @@ public class SignUpValidation implements SignUpValidationInterface {
     public void emailValidation(String email) {
         Optional<User> user = userRepository.findByEmail(email);
         if (user.isPresent()) {
-            throw new DuplicateEmailException("this email is taken by other user");
+            throw new DuplicateEmailException();
         }
     }
 
@@ -43,7 +39,7 @@ public class SignUpValidation implements SignUpValidationInterface {
     public void phoneNumberValidation(String phoneNumber) {
         Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
         if (user.isPresent()) {
-            throw new DuplicatePhoneNumberException("this phoneNumber is taken by other user");
+            throw new DuplicatePhoneNumberException();
         }
     }
 
@@ -51,7 +47,7 @@ public class SignUpValidation implements SignUpValidationInterface {
     public void nationalCodeValidation(String nationalCode) {
         Optional<User> user = userRepository.findByNationalCode(nationalCode);
         if (user.isPresent()) {
-            throw new DuplicateNationalCodeException("this nationalCode is taken by other user");
+            throw new DuplicateNationalCodeException();
         }
     }
 

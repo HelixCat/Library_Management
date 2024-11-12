@@ -1,15 +1,22 @@
 package com.mahdi.website.multiThread;
 
+import com.mahdi.website.dto.UserDTO;
+import com.mahdi.website.mapper.UserMapper;
+import com.mahdi.website.model.User;
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class MultiThread {
 
-    public static void main(String[] args) {
+    private final UserMapper userMapper;
+
+    public void main(String[] args) {
+
+        User user = new User();
+        UserDTO userDTO = userMapper.toDTO(user);
+        System.out.println(user);
+        System.out.println(userDTO);
 
 
-        MyRunnable myRunnable = new MyRunnable();
-        Thread thread = new Thread(myRunnable, "t1");
-
-        thread.start();
-
-        myRunnable.doStop();
     }
 }

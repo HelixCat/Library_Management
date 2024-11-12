@@ -19,5 +19,5 @@ public interface AuthorService {
     Author findAuthorById(Long id);
     AuthorDTO deactivateAuthorDTO(AuthorDTO authorDTO);
 
-    void updateAuthor(AuthorDTO authorDTO);
+    Author updateAuthor(AuthorDTO authorDTO);
 }

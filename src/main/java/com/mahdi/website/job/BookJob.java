@@ -6,7 +6,7 @@ import com.mahdi.website.exception.BusinessException;
 import com.mahdi.website.repository.PublisherRepository;
 import com.mahdi.website.service.interfaces.PublisherServiceInterface;
 import com.mahdi.website.service.validation.interfaces.PublisherValidationInterface;
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
@@ -14,21 +14,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class BookJob {
 
     private final PublisherRepository publisherRepository;
-    private final ModelMapper modelMapper;
     private final PublisherValidationInterface publisherValidation;
     private final PublisherServiceInterface publisherService;
-
-    @Autowired
-    public BookJob(PublisherRepository publisherRepository, ModelMapper modelMapper, PublisherValidationInterface publisherValidation, PublisherServiceInterface publisherService) {
-        this.publisherRepository = publisherRepository;
-        this.modelMapper = modelMapper;
-        this.publisherValidation = publisherValidation;
-        this.publisherService = publisherService;
-
-    }
 
     // run every 1 sec
     @Scheduled(cron = "*/1 * * * * ?")
@@ -60,7 +51,7 @@ public class BookJob {
 
     private static void displayMessage(PublisherDTO publisherDTO, int number) {
         if (number < 5) {
-            throw new BusinessException("good try to know retry");
+            throw new BusinessException();
         }
     }
 }

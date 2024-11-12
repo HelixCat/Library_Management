@@ -3,6 +3,7 @@ package com.mahdi.website;
 import com.mahdi.website.dto.UserDTO;
 import static org.mockito.Mockito.*;
 
+import com.mahdi.website.mapper.UserMapper;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
@@ -15,7 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ public class UserTests {
     private SignUpValidation signUpValidation;
 
     @Mock
-    private ModelMapper modelMapper;
+    private UserMapper userMapper;
 
     @InjectMocks
     private UserService userService;
@@ -67,7 +67,7 @@ public class UserTests {
         addressList.add(address);
         user.setAddresses(addressList);
 
-        doReturn(user).when(modelMapper).map(userDTO, User.class);
+        doReturn(user).when(userMapper).toEntity(userDTO);
         when(userRepository.save(user)).thenReturn(user);
 
         User savedUser = userService.saveUser(userDTO);
@@ -76,7 +76,7 @@ public class UserTests {
         assertNotNull(savedUser);
         assertEquals("Ghomsheh", savedUser.getLastName());
         assertEquals("masood", savedUser.getFirstName());
-        verify(modelMapper, times(1)).map(userDTO, User.class);
+        verify(userMapper, times(1)).toEntity(userDTO);
         verify(userRepository, times(1)).save(user);
     }
 }

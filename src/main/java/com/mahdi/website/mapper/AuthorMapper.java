@@ -8,13 +8,5 @@ import java.util.List;
 
 
 @Mapper(componentModel = "spring")
-public interface AuthorMapper {
-
-    Author toAuthor(AuthorDTO authorDTO);
-
-    AuthorDTO toAuthorDTO(Author author);
-
-    List<AuthorDTO> toAuthorDTOS(List<Author> authors);
-
-    List<Author> toAuthorS(List<AuthorDTO> authorDTOSs);
+public interface AuthorMapper extends BaseMapper<Author, AuthorDTO>{
 }

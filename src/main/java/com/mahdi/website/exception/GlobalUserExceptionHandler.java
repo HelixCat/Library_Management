@@ -1,6 +1,5 @@
 package com.mahdi.website.exception;
 
-import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.*;
 import org.springframework.ui.Model;
@@ -10,23 +9,19 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalUserExceptionHandler {
 
-    @ExceptionHandler(UserNotFoundExcpetion.class)
-    public String handleUserNotFoundException(UserNotFoundExcpetion exception, Model model) {
+    // TODO change UserException Handler
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public String handleUserNotFoundException(UserNotFoundException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
         model.addAttribute("userDTO", new UserDTO());
         return "sign_in";
     }
 
-    @ExceptionHandler(IncorrectPasswordExceprion.class)
-    public String handleIncorrectPasswordException(IncorrectPasswordExceprion exception, Model model) {
+    @ExceptionHandler(IncorrectPasswordException.class)
+    public String handleIncorrectPasswordException(IncorrectPasswordException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
-        if(exception.getContext().equalsIgnoreCase("login")) {
-            model.addAttribute("userDTO", new UserDTO());
-            return "sign_in";
-        } else {
-            model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
-            return "change_password_page";
-        }
+        return null;
     }
 
     @ExceptionHandler(DuplicateUserNameException.class)
