@@ -8,10 +8,10 @@ import java.util.List;
 public interface BookServiceInterface {
     List<BookDTO> searchBook(BookDTO bookDTO);
     Book saveBook(BookDTO bookDTO);
-    Book findBookByFirstName(String firstName);
-    Book findBookBylastName(String lastName);
-    Book findBookByEmail(String email);
-    Book findBookByPhoneNumber(String phoneNumber);
+    Book findBookByBookTitle(String title);
+    Book findBookByBookId(String bookId);
+    Book findBookByPublishYear(String publisherYear);
+    Book findByBookByPublishDate(String phoneNumber);
     BookDTO findBookDTOById(Long id);
     Book findBookById(Long id);
     void deactivateBookById(Long id);

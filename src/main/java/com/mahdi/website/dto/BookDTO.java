@@ -26,6 +26,6 @@ public class BookDTO {
     private Integer publisherNumber;
     private String publishYear;
     private Publisher publisher;
-    private Set<Author> authors;
-    private Set<Translator> translators;
+    private Set<AuthorDTO> authors;
+    private Set<TranslatorDTO> translators;
 }

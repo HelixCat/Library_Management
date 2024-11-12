@@ -6,10 +6,6 @@ import com.mahdi.website.dto.BookDTO;
 
 
 @Mapper(componentModel = "spring")
-public interface BookMapper {
-
-    Book toBook(BookDTO bookDTO);
-
-    BookDTO toBookDTO(Book book);
+public interface BookMapper extends BaseMapper<Book, BookDTO> {
 
 }

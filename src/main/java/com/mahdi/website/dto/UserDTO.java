@@ -32,5 +32,5 @@ public class UserDTO {
     private String birthday;
     private byte[] image;
     private String base64ProfileImage;
-    private List<AddressDTO> addressDTO;
+    private List<AddressDTO> addressDTOList;
 }

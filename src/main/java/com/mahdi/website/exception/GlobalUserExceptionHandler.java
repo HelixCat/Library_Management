@@ -1,7 +1,5 @@
 package com.mahdi.website.exception;
 
-
-import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.*;
@@ -35,8 +33,6 @@ public class GlobalUserExceptionHandler {
     public String handleDuplicateUserNameException(DuplicateUserNameException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
         UserDTO userDTO = new UserDTO();
-        AddressDTO addressDTO = new AddressDTO();
-        userDTO.setAddressDTO(addressDTO);
         model.addAttribute("userDTO",userDTO);
         return "signup";
     }
@@ -45,8 +41,7 @@ public class GlobalUserExceptionHandler {
     public String handleDuplicateEmailException(DuplicateEmailException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
         UserDTO userDTO = new UserDTO();
-        AddressDTO addressDTO = new AddressDTO();
-        userDTO.setAddressDTO(addressDTO);
+
         model.addAttribute("userDTO",userDTO);
         return "signup";
     }
@@ -55,8 +50,6 @@ public class GlobalUserExceptionHandler {
     public String handleDuplicateNationalCodeException(DuplicateNationalCodeException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
         UserDTO userDTO = new UserDTO();
-        AddressDTO addressDTO = new AddressDTO();
-        userDTO.setAddressDTO(addressDTO);
         model.addAttribute("userDTO",userDTO);
         return "signup";
     }
@@ -65,8 +58,6 @@ public class GlobalUserExceptionHandler {
     public String handleDuplicatePhoneNumberException(DuplicatePhoneNumberException exception, Model model) {
         model.addAttribute("errorMessage", exception.getMessage());
         UserDTO userDTO = new UserDTO();
-        AddressDTO addressDTO = new AddressDTO();
-        userDTO.setAddressDTO(addressDTO);
         model.addAttribute("userDTO",userDTO);
         return "signup";
     }

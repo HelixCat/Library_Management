@@ -1,15 +1,11 @@
 package com.mahdi.website.mapper;
 
-import org.mapstruct.Mapper;
+
 import com.mahdi.website.model.Publisher;
 import com.mahdi.website.dto.PublisherDTO;
 
 
-@Mapper(componentModel = "spring")
-public interface PublisherMapper {
+public interface PublisherMapper extends BaseMapper<Publisher, PublisherDTO>{
 
-    Publisher toPublisher(PublisherDTO publisherDTO);
-
-    PublisherDTO toPublisherDTO(Publisher publisher);
 
 }

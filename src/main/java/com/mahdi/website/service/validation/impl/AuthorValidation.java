@@ -7,39 +7,35 @@ import com.mahdi.website.exception.author.DuplicateAuthorPhoneNumberException;
 import com.mahdi.website.model.Author;
 import com.mahdi.website.repository.AuthorRepository;
 import com.mahdi.website.service.validation.interfaces.AuthorValidationInterface;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AuthorValidation implements AuthorValidationInterface {
 
     private final AuthorRepository authorRepository;
 
-    @Autowired
-    public AuthorValidation(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
-
     public void authorEmailValidation(String email) {
         Optional<Author> author = authorRepository.findAuthorByEmail(email);
         if (author.isPresent()) {
-            throw new DuplicateAuthorEmailException("this email is taken by other authors");
+            throw new DuplicateAuthorEmailException();
         }
     }
 
     public void authorPhoneNumberValidation(String phoneNumber) {
         Optional<Author> author = authorRepository.findAuthorByPhoneNumber(phoneNumber);
         if (author.isPresent()) {
-            throw new DuplicateAuthorPhoneNumberException("this phone number is taken by other authors");
+            throw new DuplicateAuthorPhoneNumberException();
         }
     }
 
     public void authorNationalCodeValidation(String nationalCode) {
         Optional<Author> author = authorRepository.findAuthorByNationalCode(nationalCode);
         if (author.isPresent()) {
-            throw new DuplicateAuthorNationalCodeException("this National code is taken by other authors");
+            throw new DuplicateAuthorNationalCodeException();
         }
     }
 

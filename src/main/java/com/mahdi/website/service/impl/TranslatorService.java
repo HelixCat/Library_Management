@@ -2,31 +2,26 @@ package com.mahdi.website.service.impl;
 
 import com.mahdi.website.dto.TranslatorDTO;
 import com.mahdi.website.exception.translator.TranslatorNotFoundException;
+import com.mahdi.website.mapper.TranslatorMapper;
 import com.mahdi.website.model.Translator;
 import com.mahdi.website.repository.TranslatorRepository;
 import com.mahdi.website.repository.TranslatorSearchSpecification;
 import com.mahdi.website.service.interfaces.TranslatorServiceInterface;
 import com.mahdi.website.service.validation.interfaces.TranslatorValidationInterface;
-import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TranslatorService implements TranslatorServiceInterface {
 
+    private final TranslatorMapper translatorMapper;
     private final TranslatorRepository translatorRepository;
-    private final ModelMapper modelMapper;
     private final TranslatorValidationInterface translatorValidation;
 
-    @Autowired
-    public TranslatorService(TranslatorRepository translatorRepository, ModelMapper modelMapper, TranslatorValidationInterface translatorValidation) {
-        this.translatorRepository = translatorRepository;
-        this.modelMapper = modelMapper;
-        this.translatorValidation = translatorValidation;
-    }
 
     @Override
     public List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO) {
@@ -69,7 +64,7 @@ public class TranslatorService implements TranslatorServiceInterface {
     @Override
     public TranslatorDTO findTranslatorDTOById(Long id) {
         Translator translator = findTranslatorById(id);
-        return modelMapper.map(translator, TranslatorDTO.class);
+        return translatorMapper.toDTO(translator);
     }
 
     @Override
@@ -98,7 +93,7 @@ public class TranslatorService implements TranslatorServiceInterface {
 
 
     private Translator prepareTranslator(TranslatorDTO translatorDTO) {
-        Translator translator = modelMapper.map(translatorDTO, Translator.class);
+        Translator translator = translatorMapper.toEntity(translatorDTO);
         translator.setActive(Boolean.TRUE);
         return translator;
     }
@@ -106,13 +101,9 @@ public class TranslatorService implements TranslatorServiceInterface {
     private List<TranslatorDTO> prepareTranslatorList(List<Translator> translatorList) {
         List<TranslatorDTO> translatorDTOList = new ArrayList<>();
         for (Translator translator : translatorList) {
-            TranslatorDTO translatorDTO = prepareTranslatorDTO(translator);
+            TranslatorDTO translatorDTO = translatorMapper.toDTO(translator);
             translatorDTOList.add(translatorDTO);
         }
         return translatorDTOList;
-    }
-
-    private TranslatorDTO prepareTranslatorDTO(Translator translator) {
-        return modelMapper.map(translator, TranslatorDTO.class);
     }
 }

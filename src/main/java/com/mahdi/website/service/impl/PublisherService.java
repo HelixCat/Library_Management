@@ -2,6 +2,8 @@ package com.mahdi.website.service.impl;
 
 import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.PublisherDTO;
+import com.mahdi.website.mapper.AddressMapper;
+import com.mahdi.website.mapper.PublisherMapper;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.Publisher;
 import com.mahdi.website.repository.PublisherRepository;
@@ -9,7 +11,7 @@ import com.mahdi.website.repository.PublisherSearchSpecification;
 import com.mahdi.website.service.interfaces.AddressServiceInterface;
 import com.mahdi.website.service.interfaces.PublisherServiceInterface;
 import com.mahdi.website.service.validation.interfaces.PublisherValidationInterface;
-import org.modelmapper.ModelMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.mahdi.website.exception.publisher.PublisherNotFoundException;
@@ -18,20 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PublisherService implements PublisherServiceInterface {
 
-    private final PublisherRepository publisherRepository;
-    private final ModelMapper modelMapper;
-    private final PublisherValidationInterface publisherValidation;
+    private final PublisherMapper publisherMapper;
+    private final AddressMapper addressMapper;
     private final AddressServiceInterface addressService;
-
-    @Autowired
-    public PublisherService(PublisherRepository publisherRepository, ModelMapper modelMapper, PublisherValidationInterface publisherValidation, AddressServiceInterface addressService) {
-        this.publisherRepository = publisherRepository;
-        this.modelMapper = modelMapper;
-        this.publisherValidation = publisherValidation;
-        this.addressService = addressService;
-    }
+    private final PublisherRepository publisherRepository;
+    private final PublisherValidationInterface publisherValidation;
 
     @Override
     public List<PublisherDTO> searchPublisher(PublisherDTO publisherDTO) {
@@ -68,8 +64,8 @@ public class PublisherService implements PublisherServiceInterface {
     @Override
     public PublisherDTO findPublisherDTOById(Long id) {
         Publisher publisher = findPublisherById(id);
-        PublisherDTO publisherDTO = modelMapper.map(publisher, PublisherDTO.class);
-        publisherDTO.setAddressDTO(modelMapper.map(publisher.getAddresses().getFirst(), AddressDTO.class));
+        PublisherDTO publisherDTO = publisherMapper.toDTO(publisher);
+        publisherDTO.setAddressDTO(addressMapper.toDTO(publisher.getAddresses().getFirst()));
         return publisherDTO;
     }
 
@@ -98,7 +94,7 @@ public class PublisherService implements PublisherServiceInterface {
 
 
     private Publisher preparePublisher(PublisherDTO publisherDTO) {
-        Publisher publisher = modelMapper.map(publisherDTO, Publisher.class);
+        Publisher publisher = publisherMapper.toEntity(publisherDTO);
         publisher.setActive(Boolean.TRUE);
         List<Address> addressList = prepareAddress(publisherDTO.getAddressDTO(), publisher);
         publisher.setAddresses(addressList);
@@ -108,19 +104,15 @@ public class PublisherService implements PublisherServiceInterface {
     private List<PublisherDTO> preparePublisherDTOList(List<Publisher> publisherList) {
         List<PublisherDTO> publisherDTOList = new ArrayList<>();
         for (Publisher publisher : publisherList) {
-            PublisherDTO publisherDTO = preparePublisherDTO(publisher);
+            PublisherDTO publisherDTO = publisherMapper.toDTO(publisher);
             publisherDTOList.add(publisherDTO);
         }
         return publisherDTOList;
     }
 
-    private PublisherDTO preparePublisherDTO(Publisher publisher) {
-        return modelMapper.map(publisher, PublisherDTO.class);
-    }
-
     private List<Address> prepareAddress(AddressDTO addressDTO, Publisher publisher) {
         List<Address> addressList = new ArrayList<>();
-        Address address = modelMapper.map(addressDTO, Address.class);
+        Address address = addressMapper.toEntity(addressDTO);
         address.setActive(Boolean.TRUE);
         address.setPublisher(publisher);
         addressList.add(address);

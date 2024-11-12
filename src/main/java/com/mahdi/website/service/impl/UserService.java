@@ -4,6 +4,7 @@ import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.UserNotFoundExcpetion;
+import com.mahdi.website.mapper.AddressMapper;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.AddressRepository;
@@ -23,9 +24,9 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService implements UserServiceInterface {
 
+    private final AddressMapper addressMapper;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
-    private final ModelMapper modelMapper;
     private final LoginValidationInterface loginValidation;
     private final SignUpValidationInterface signUpValidation;
 
@@ -61,8 +62,8 @@ public class UserService implements UserServiceInterface {
         if (Objects.nonNull(userDTO.getPassword())) {
             user.setPassword(prepareHashedPassword(userDTO.getPassword()));
         }
-        if (Objects.nonNull(userDTO.getAddressDTO())) {
-            user.setAddresses(prepareAddress(userDTO.getAddressDTO(), user));
+        if (Objects.nonNull(userDTO.getAddressDTOList()) && !userDTO.getAddressDTOList().isEmpty()) {
+            user.setAddresses(addressMapper.ToEntities(userDTO.getAddressDTOList()));
         }
         if (Objects.nonNull(userDTO.getGender())) {
             user.setGender(userDTO.getGender());
@@ -72,16 +73,6 @@ public class UserService implements UserServiceInterface {
             user.setRegisterDay((formatter.format(new Date())));
         }
         return user;
-    }
-
-    private List<Address> prepareAddress(AddressDTO addressDTO, User user) {
-        List<Address> addressList = Objects.nonNull(user.getAddresses()) ? user.getAddresses() : new ArrayList<>();
-        Address address = modelMapper.map(addressDTO, Address.class);
-        address.setActive(Boolean.TRUE);
-        address.setUser(user);
-        address.setId(addressDTO.getId());
-        addressList.add(address);
-        return addressList;
     }
 
     private Boolean prepareAdminUser(UserDTO userDTO) {
@@ -221,18 +212,11 @@ public class UserService implements UserServiceInterface {
         if (Objects.nonNull(user.getProfileImage())) {
             userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
         }
-        userDTO.setAddressDTO(prepareAddressDTO(user.getAddresses()));
+        userDTO.setAddressDTOList(addressMapper.toDTOList(user.getAddresses()));
         return userDTO;
     }
 
     private String prepareByteArrayToBase64(byte[] profileImage) {
         return Base64.getEncoder().encodeToString(profileImage);
-    }
-
-    private AddressDTO prepareAddressDTO(List<Address> addressList) {
-        Address address = addressList.stream().findFirst().orElse(null);
-        AddressDTO addressDTO = modelMapper.map(address, AddressDTO.class);
-        addressDTO.setId(address.getId());
-        return addressDTO;
     }
 }
