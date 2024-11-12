@@ -14,12 +14,12 @@ import java.util.Set;
 public class TranslatorDTO {
 
     private Long id;
+    private String email;
     private Boolean active;
     private Integer version;
     private String manualId;
-    private String firstName;
     private String lastName;
-    private String email;
+    private String firstName;
     private String phoneNumber;
     private String nationalCode;
     private Set<Book> books;

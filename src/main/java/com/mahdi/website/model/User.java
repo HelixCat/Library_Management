@@ -4,13 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 import java.util.List;
 
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "t_user")
 public class User extends BaseEntity {
@@ -46,8 +44,6 @@ public class User extends BaseEntity {
     private String registerDay;
     @Column(name = "c_admin")
     private Boolean admin;
-    @Column(name = "c_father_name")
-    private String fatherName;
     @Lob
     @Column(name = "c_profile_image", length = 200000)
     private byte[] profileImage;

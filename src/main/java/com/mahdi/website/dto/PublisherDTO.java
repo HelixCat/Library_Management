@@ -1,5 +1,6 @@
 package com.mahdi.website.dto;
 
+import com.mahdi.website.model.Address;
 import com.mahdi.website.model.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,12 +15,12 @@ import java.util.List;
 public class PublisherDTO {
 
     private Long id;
-    private Boolean active;
-    private Integer version;
-    private String manualId;
     private String name;
-    private String phoneNumber;
     private String email;
+    private Boolean active;
+    private String manualId;
+    private Integer version;
     private List<Book> books;
-    private AddressDTO addressDTO;
+    private String phoneNumber;
+    private List<AddressDTO> addresses;
 }

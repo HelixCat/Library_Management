@@ -2,16 +2,17 @@ package com.mahdi.website.job;
 
 import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.PublisherDTO;
-import com.mahdi.website.exception.BusinessException;
+import com.mahdi.website.exception.global.BusinessException;
 import com.mahdi.website.repository.PublisherRepository;
 import com.mahdi.website.service.interfaces.PublisherServiceInterface;
 import com.mahdi.website.service.validation.interfaces.PublisherValidationInterface;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 @RequiredArgsConstructor
@@ -34,7 +35,7 @@ public class BookJob {
         publisherDTO.setName("entesharate fati khoshgle");
         publisherDTO.setEmail("fati@gmail.com");
         publisherDTO.setPhoneNumber("09352877455");
-        publisherDTO.setAddressDTO(new AddressDTO());
+        publisherDTO.setAddresses(new ArrayList<>());
         return publisherDTO;
     }
 

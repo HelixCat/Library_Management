@@ -1,4 +1,4 @@
-package com.mahdi.website.exception;
+package com.mahdi.website.exception.global;
 
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.*;

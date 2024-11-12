@@ -55,7 +55,6 @@ public class UserService implements UserServiceInterface {
         user.setPhoneNumber(userDTO.getPhoneNumber());
         user.setProfileImage(userDTO.getImage());
         user.setBirthday(userDTO.getBirthday());
-        user.setFatherName(userDTO.getFatherName());
         if (Objects.nonNull(userDTO.getGender())) {
             user.setGender(userDTO.getGender());
         }
@@ -104,19 +103,18 @@ public class UserService implements UserServiceInterface {
     public UserDTO AddAddressToTheUser(String username, AddressDTO addressDTO) {
         User user = loadUserByUserName(username);
         List<Address> addressList = user.getAddresses();
-        addressList.add(prepareAddressDTOToAddress(user, addressDTO));
+        addressList.add(prepareAddressDTOToAddress(addressDTO));
         saveAddress(addressList);
         user = loadUserByUserName(username);
         return prepareUserDTO(user);
     }
 
-    private Address prepareAddressDTOToAddress(User user, AddressDTO addressDTO) {
+    private Address prepareAddressDTOToAddress(AddressDTO addressDTO) {
         Address address = new Address();
         address.setCountry(addressDTO.getCountry());
         address.setProvince(addressDTO.getProvince());
         address.setCity(addressDTO.getCity());
         address.setPostalCode(addressDTO.getPostalCode());
-        address.setUser(user);
         return address;
     }
 
@@ -207,7 +205,6 @@ public class UserService implements UserServiceInterface {
         userDTO.setPhoneNumber(user.getPhoneNumber());
         userDTO.setImage(user.getProfileImage());
         userDTO.setGender(user.getGender());
-        userDTO.setFatherName(user.getFatherName());
         userDTO.setBirthday(user.getBirthday());
         if (Objects.nonNull(user.getProfileImage())) {
             userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));

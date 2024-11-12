@@ -1,26 +1,22 @@
 package com.mahdi.website.dto;
 
+import lombok.*;
 import com.mahdi.website.model.Book;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthorDTO {
 
     private Long id;
+    private String email;
     private Boolean active;
+    private String lastName;
     private Integer version;
     private String manualId;
     private String firstName;
-    private String lastName;
-    private String email;
     private String phoneNumber;
     private String nationalCode;
     private Set<Book> books;

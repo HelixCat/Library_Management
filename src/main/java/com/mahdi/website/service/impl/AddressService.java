@@ -1,5 +1,7 @@
 package com.mahdi.website.service.impl;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import com.mahdi.website.model.Address;
@@ -24,20 +26,25 @@ public class AddressService implements AddressServiceInterface {
     }
 
     @Override
-    public AddressDTO updateAddress(AddressDTO addressDTO) {
-        Address address = findAddressById(addressDTO.getId());
-        if (Objects.nonNull(addressDTO.getCountry())) {
-            address.setCountry(addressDTO.getCountry());
+    public List<AddressDTO> updateAddress(List<AddressDTO> addressDTOList) {
+
+        List<AddressDTO> addressDTOS = new ArrayList<>();
+        for (AddressDTO addressDTO : addressDTOList) {
+            Address address = findAddressById(addressDTO.getId());
+            if (Objects.nonNull(addressDTO.getCountry())) {
+                address.setCountry(addressDTO.getCountry());
+            }
+            if (Objects.nonNull(addressDTO.getProvince())) {
+                address.setProvince(addressDTO.getProvince());
+            }
+            if (Objects.nonNull(addressDTO.getCity())) {
+                address.setCity(addressDTO.getCity());
+            }
+            if (Objects.nonNull(addressDTO.getPostalCode())) {
+                address.setPostalCode(addressDTO.getPostalCode());
+            }
+            addressDTOS.add(addressMapper.toDTO(addressRepository.save(address)));
         }
-        if (Objects.nonNull(addressDTO.getProvince())) {
-            address.setProvince(addressDTO.getProvince());
-        }
-        if (Objects.nonNull(addressDTO.getCity())) {
-            address.setCity(addressDTO.getCity());
-        }
-        if (Objects.nonNull(addressDTO.getPostalCode())) {
-            address.setPostalCode(addressDTO.getPostalCode());
-        }
-        return addressMapper.toDTO(addressRepository.save(address));
+        return addressDTOS;
     }
 }

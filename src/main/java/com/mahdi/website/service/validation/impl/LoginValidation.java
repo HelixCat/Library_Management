@@ -1,6 +1,6 @@
 package com.mahdi.website.service.validation.impl;
 
-import com.mahdi.website.exception.IncorrectPasswordException;
+import com.mahdi.website.exception.global.IncorrectPasswordException;
 import com.mahdi.website.service.validation.interfaces.LoginValidationInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;

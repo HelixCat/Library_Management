@@ -14,14 +14,14 @@ import java.util.Date;
 @NoArgsConstructor
 public class SearchBookDTO {
     private Long id;
+    private String title;
+    private String bookId;
     private Boolean active;
     private Integer version;
     private String manualId;
-    private String title;
-    private String bookId;
+    private Date publishDate;
+    private String authorName;
     private String publishYear;
     private String publisherName;
-    private String authorName;
     private String translatorName;
-    private Date publishDate;
 }

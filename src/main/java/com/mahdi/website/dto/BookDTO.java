@@ -1,31 +1,26 @@
 package com.mahdi.website.dto;
 
-import com.mahdi.website.model.Author;
-import com.mahdi.website.model.Publisher;
-import com.mahdi.website.model.Translator;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 import java.util.Set;
 
-@Getter
-@Setter
+
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class BookDTO {
+
     private Long id;
+    private String title;
+    private String bookId;
     private Boolean active;
     private Integer version;
     private String manualId;
-    private String title;
-    private String bookId;
     private Date publishDate;
-    private Integer publisherNumber;
     private String publishYear;
-    private Publisher publisher;
+    private PublisherDTO publisher;
+    private Integer publisherNumber;
     private Set<AuthorDTO> authors;
     private Set<TranslatorDTO> translators;
 }

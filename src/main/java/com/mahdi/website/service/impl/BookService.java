@@ -3,6 +3,7 @@ package com.mahdi.website.service.impl;
 import com.mahdi.website.dto.BookDTO;
 import com.mahdi.website.exception.book.BookNotFoundException;
 import com.mahdi.website.mapper.BookMapper;
+import com.mahdi.website.mapper.PublisherMapper;
 import com.mahdi.website.model.Book;
 import com.mahdi.website.repository.BookRepository;
 import com.mahdi.website.repository.BookSearchSpecification;
@@ -19,6 +20,7 @@ import java.util.List;
 public class BookService implements BookServiceInterface {
 
     private final BookMapper bookMapper;
+    private final PublisherMapper publisherMapper;
     private final BookValidation bookValidation;
     private final BookRepository bookRepository;
 
@@ -84,9 +86,9 @@ public class BookService implements BookServiceInterface {
         Book book = findBookById(id);
         book.setTitle(bookDTO.getTitle());
         book.setActive(bookDTO.getActive());
-        book.setPublisher(bookDTO.getPublisher());
         book.setPublishYear(bookDTO.getPublishYear());
         book.setPublishDate(bookDTO.getPublishDate());
+        book.setPublisher(publisherMapper.toEntity(bookDTO.getPublisher()));
         bookRepository.save(book);
     }
 

@@ -29,8 +29,6 @@ public class Publisher extends BaseEntity {
     @Column(name = "c_email", nullable = false, unique = true, length = 60)
     private String email;
     @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Book> books;
-    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Address> addresses;
 
 }
