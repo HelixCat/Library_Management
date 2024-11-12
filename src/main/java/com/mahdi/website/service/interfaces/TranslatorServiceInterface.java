@@ -14,6 +14,6 @@ public interface TranslatorServiceInterface {
     Translator findTranslatorByPhoneNumber(String phoneNumber);
     TranslatorDTO findTranslatorDTOById(Long id);
     Translator findTranslatorById(Long id);
-    void deactivateTranslatorById(Long id);
-    void updateTranslator(Long id, TranslatorDTO translatorDTO);
+    Translator deactivateTranslatorById(Long id);
+    Translator updateTranslator(TranslatorDTO translatorDTO);
 }

@@ -73,22 +73,22 @@ public class TranslatorService implements TranslatorServiceInterface {
     }
 
     @Override
-    public void deactivateTranslatorById(Long id) {
+    public Translator deactivateTranslatorById(Long id) {
         Translator translator = findTranslatorById(id);
         translator.setActive(Boolean.FALSE);
-        translatorRepository.save(translator);
+        return translatorRepository.save(translator);
     }
 
     @Override
-    public void updateTranslator(Long id, TranslatorDTO translatorDTO) {
-        Translator translator = findTranslatorById(id);
+    public Translator updateTranslator(TranslatorDTO translatorDTO) {
+        Translator translator = findTranslatorById(translatorDTO.getId());
         translatorValidation.updateTranslatorValidation(translator, translatorDTO);
         translator.setFirstName(translatorDTO.getFirstName());
         translator.setLastName(translatorDTO.getLastName());
         translator.setEmail(translatorDTO.getEmail());
         translator.setPhoneNumber(translatorDTO.getPhoneNumber());
         translator.setActive(translatorDTO.getActive());
-        translatorRepository.save(translator);
+        return translatorRepository.save(translator);
     }
 
 

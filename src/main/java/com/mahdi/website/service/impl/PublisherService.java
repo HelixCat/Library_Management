@@ -27,10 +27,9 @@ public class PublisherService implements PublisherServiceInterface {
     private final PublisherValidationInterface publisherValidation;
 
     @Override
-    public List<PublisherDTO> searchPublisher(PublisherDTO publisherDTO) {
+    public List<Publisher> searchPublisher(PublisherDTO publisherDTO) {
         PublisherSearchSpecification specification = new PublisherSearchSpecification(publisherDTO);
-        List<Publisher> publisherList = publisherRepository.findAll(specification);
-        return preparePublisherDTOList(publisherList);
+        return publisherRepository.findAll(specification);
     }
 
     @Override
@@ -73,10 +72,10 @@ public class PublisherService implements PublisherServiceInterface {
     }
 
     @Override
-    public void deactivatePublisherById(Long id) {
+    public Publisher deactivatePublisherById(Long id) {
         Publisher publisher = findPublisherById(id);
         publisher.setActive(Boolean.FALSE);
-        publisherRepository.save(publisher);
+        return publisherRepository.save(publisher);
     }
 
     public void updatePublisher(Long id, PublisherDTO publisherDTO) {
@@ -87,14 +86,5 @@ public class PublisherService implements PublisherServiceInterface {
         publisher.setPhoneNumber(publisherDTO.getPhoneNumber());
         publisher.setActive(publisherDTO.getActive());
         publisherRepository.save(publisher);
-    }
-
-    private List<PublisherDTO> preparePublisherDTOList(List<Publisher> publisherList) {
-        List<PublisherDTO> publisherDTOList = new ArrayList<>();
-        for (Publisher publisher : publisherList) {
-            PublisherDTO publisherDTO = publisherMapper.toDTO(publisher);
-            publisherDTOList.add(publisherDTO);
-        }
-        return publisherDTOList;
     }
 }
