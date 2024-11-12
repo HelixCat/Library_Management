@@ -2,12 +2,11 @@ package com.mahdi.website.dto;
 
 
 import lombok.*;
-
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
 
     private Long id;

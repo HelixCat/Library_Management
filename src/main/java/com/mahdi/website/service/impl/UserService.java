@@ -1,10 +1,8 @@
 package com.mahdi.website.service.impl;
 
-import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.UserNotFoundException;
-import com.mahdi.website.mapper.AddressMapper;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.AddressRepository;
@@ -24,7 +22,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService implements UserServiceInterface {
 
-    private final AddressMapper addressMapper;
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     private final LoginValidationInterface loginValidation;
