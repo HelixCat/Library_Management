@@ -3,6 +3,7 @@ package com.mahdi.website.service.impl;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.exception.user.UserNotFoundException;
+import com.mahdi.website.mapper.UserMapper;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
 import com.mahdi.website.service.interfaces.UserServiceInterface;
@@ -20,6 +21,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserService implements UserServiceInterface {
 
+    private final UserMapper userMapper;
     private final UserRepository userRepository;
     private final LoginValidationInterface loginValidation;
     private final SignUpValidationInterface signUpValidation;
@@ -84,6 +86,14 @@ public class UserService implements UserServiceInterface {
     public User loadUserByUserName(String userName) {
         return userRepository.findByUserName(userName)
                 .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public UserDTO prepareToUserDTO(User user) {
+
+        UserDTO DTO = userMapper.toDTO(user);
+        DTO.setPassword(null);
+        return DTO;
     }
 
     @Override
