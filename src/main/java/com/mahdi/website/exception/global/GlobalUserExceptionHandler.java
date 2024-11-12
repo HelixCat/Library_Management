@@ -36,6 +36,7 @@ public class GlobalUserExceptionHandler {
         exceptionDTO.setMessage("this user name is invalid");
         exceptionDTO.setStatusCode(HttpStatus.NOT_ACCEPTABLE.toString());
         logger.error(exceptionDTO.getMessage());
+        logger.error(exception);
         return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_ACCEPTABLE);
     }
 //
