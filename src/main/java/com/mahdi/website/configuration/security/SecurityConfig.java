@@ -1,4 +1,4 @@
-package com.mahdi.website.security;
+package com.mahdi.website.configuration.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
