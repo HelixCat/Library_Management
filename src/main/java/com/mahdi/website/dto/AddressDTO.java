@@ -9,11 +9,11 @@ public class AddressDTO {
 
     private Long id;
     private String city;
+    private UserDTO user;
     private Boolean active;
     private String country;
     private Integer version;
     private String manualId;
-    private UserDTO user;
     private String province;
     private String postalCode;
     private PublisherDTO publisher;

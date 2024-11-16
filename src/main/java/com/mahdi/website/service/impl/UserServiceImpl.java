@@ -6,7 +6,8 @@ import com.mahdi.website.exception.user.UserNotFoundException;
 import com.mahdi.website.mapper.UserMapper;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
-import com.mahdi.website.service.interfaces.UserServiceInterface;
+import com.mahdi.website.repository.UserSearchSpecification;
+import com.mahdi.website.service.interfaces.UserService;
 import com.mahdi.website.service.validation.interfaces.LoginValidationInterface;
 import com.mahdi.website.service.validation.interfaces.SignUpValidationInterface;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserServiceInterface {
+public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
@@ -89,8 +90,22 @@ public class UserService implements UserServiceInterface {
     }
 
     @Override
-    public UserDTO prepareToUserDTO(User user) {
+    public List<UserDTO> searchUser(UserDTO userDTO) {
+        UserSearchSpecification specification = new UserSearchSpecification(userDTO);
+        List<User> users = userRepository.findAll(specification);
+        return prepareUserDTOList(users);
+    }
 
+    private List<UserDTO> prepareUserDTOList(List<User> users) {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        for (User user : users) {
+            userDTOS.add(prepareToUserDTO(user));
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public UserDTO prepareToUserDTO(User user) {
         UserDTO DTO = userMapper.toDTO(user);
         DTO.setPassword(null);
         return DTO;
@@ -104,6 +119,13 @@ public class UserService implements UserServiceInterface {
             userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
         }
         return user;
+    }
+
+    @Override
+    public User deactivateUser(UserDTO userDTO) {
+        User user = loadUserByUserName(userDTO.getUsername());
+        user.setActive(Boolean.FALSE);
+        return userRepository.save(user);
     }
 
     @Override

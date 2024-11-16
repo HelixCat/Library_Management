@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 public interface IndexRemote {
     @PostMapping("/sign-in")
-    ResponseEntity login(UserDTO userDTO);
+    ResponseEntity<UserDTO> login(UserDTO userDTO);
 }

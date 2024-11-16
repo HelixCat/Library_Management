@@ -3,7 +3,7 @@ package com.mahdi.website.controller.impl;
 import com.mahdi.website.controller.rest.TranslatorRemote;
 import com.mahdi.website.dto.TranslatorDTO;
 import com.mahdi.website.mapper.TranslatorMapper;
-import com.mahdi.website.service.interfaces.TranslatorServiceInterface;
+import com.mahdi.website.service.interfaces.TranslatorService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 public class TranslatorResource implements TranslatorRemote {
 
     private final TranslatorMapper translatorMapper;
-    private final TranslatorServiceInterface translatorService;
+    private final TranslatorService translatorService;
 
     @Override
     public ResponseEntity<List<TranslatorDTO>> searchTranslators(@RequestBody TranslatorDTO translatorDTO) {

@@ -1,13 +1,11 @@
 package com.mahdi.website.service.impl;
 
 import com.mahdi.website.dto.PublisherDTO;
-import com.mahdi.website.mapper.AddressMapper;
 import com.mahdi.website.mapper.PublisherMapper;
 import com.mahdi.website.model.Publisher;
 import com.mahdi.website.repository.PublisherRepository;
 import com.mahdi.website.repository.PublisherSearchSpecification;
-import com.mahdi.website.service.interfaces.AddressServiceInterface;
-import com.mahdi.website.service.interfaces.PublisherServiceInterface;
+import com.mahdi.website.service.interfaces.PublisherService;
 import com.mahdi.website.service.validation.interfaces.PublisherValidationInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,11 +15,9 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PublisherService implements PublisherServiceInterface {
+public class PublisherServiceImpl implements PublisherService {
 
-    private final AddressMapper addressMapper;
     private final PublisherMapper publisherMapper;
-    private final AddressServiceInterface addressService;
     private final PublisherRepository publisherRepository;
     private final PublisherValidationInterface publisherValidation;
 
@@ -60,8 +56,7 @@ public class PublisherService implements PublisherServiceInterface {
     @Override
     public PublisherDTO findPublisherDTOById(Long id) {
         Publisher publisher = findPublisherById(id);
-        PublisherDTO publisherDTO = publisherMapper.toDTO(publisher);
-        return publisherDTO;
+        return publisherMapper.toDTO(publisher);
     }
 
     @Override

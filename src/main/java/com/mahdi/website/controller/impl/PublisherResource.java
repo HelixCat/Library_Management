@@ -3,7 +3,7 @@ package com.mahdi.website.controller.impl;
 import com.mahdi.website.controller.rest.PublisherRemote;
 import com.mahdi.website.dto.PublisherDTO;
 import com.mahdi.website.mapper.PublisherMapper;
-import com.mahdi.website.service.impl.PublisherService;
+import com.mahdi.website.service.interfaces.PublisherService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

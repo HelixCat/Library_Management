@@ -4,7 +4,7 @@ import com.mahdi.website.controller.rest.BookRemote;
 import com.mahdi.website.dto.BookDTO;
 
 import com.mahdi.website.mapper.BookMapper;
-import com.mahdi.website.service.interfaces.BookServiceInterface;
+import com.mahdi.website.service.interfaces.BookService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +19,7 @@ import java.util.List;
 public class BookResource implements BookRemote {
 
     private final BookMapper bookMapper;
-    private final BookServiceInterface bookService;
+    private final BookService bookService;
 
     @Override
     public ResponseEntity<List<BookDTO>> searchBooks(@RequestBody BookDTO bookDTO) {

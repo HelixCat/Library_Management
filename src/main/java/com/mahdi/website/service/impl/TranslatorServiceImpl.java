@@ -6,7 +6,7 @@ import com.mahdi.website.mapper.TranslatorMapper;
 import com.mahdi.website.model.Translator;
 import com.mahdi.website.repository.TranslatorRepository;
 import com.mahdi.website.repository.TranslatorSearchSpecification;
-import com.mahdi.website.service.interfaces.TranslatorServiceInterface;
+import com.mahdi.website.service.interfaces.TranslatorService;
 import com.mahdi.website.service.validation.interfaces.TranslatorValidationInterface;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class TranslatorService implements TranslatorServiceInterface {
+public class TranslatorServiceImpl implements TranslatorService {
 
     private final TranslatorMapper translatorMapper;
     private final TranslatorRepository translatorRepository;

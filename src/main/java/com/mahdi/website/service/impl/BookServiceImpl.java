@@ -7,7 +7,7 @@ import com.mahdi.website.mapper.PublisherMapper;
 import com.mahdi.website.model.Book;
 import com.mahdi.website.repository.BookRepository;
 import com.mahdi.website.repository.BookSearchSpecification;
-import com.mahdi.website.service.interfaces.BookServiceInterface;
+import com.mahdi.website.service.interfaces.BookService;
 import com.mahdi.website.service.validation.interfaces.BookValidation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class BookService implements BookServiceInterface {
+public class BookServiceImpl implements BookService {
 
     private final BookMapper bookMapper;
     private final PublisherMapper publisherMapper;

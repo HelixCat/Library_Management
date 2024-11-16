@@ -5,7 +5,7 @@ import com.mahdi.website.model.Book;
 
 import java.util.List;
 
-public interface BookServiceInterface {
+public interface BookService {
     List<Book> searchBook(BookDTO bookDTO);
     Book saveBook(BookDTO bookDTO);
     BookDTO findBookDTOById(Long id);

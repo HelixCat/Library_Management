@@ -36,12 +36,11 @@ public class BookSearchSpecification implements Specification<Book> {
         }
         for (AuthorDTO authorDTO : bookDTO.getAuthors()) {
             if (Objects.nonNull(authorDTO)) {
+                Join<Book, Author> authorJoin = root.join("authors");
                 if (StringUtils.hasText(authorDTO.getFirstName())) {
-                    Join<Book, Author> authorJoin = root.join("authors");
                     predicates.add(criteriaBuilder.like(authorJoin.get("firstName"), "%" + authorDTO.getFirstName() + "%"));
                 }
                 if (StringUtils.hasText(authorDTO.getLastName())) {
-                    Join<Book, Author> authorJoin = root.join("authors");
                     predicates.add(criteriaBuilder.like(authorJoin.get("lastName"), "%" + authorDTO.getLastName() + "%"));
                 }
             }
@@ -49,12 +48,11 @@ public class BookSearchSpecification implements Specification<Book> {
 
         for (TranslatorDTO translatorDTO : bookDTO.getTranslators()) {
             if (Objects.nonNull(translatorDTO)) {
+                Join<Book, Author> authorJoin = root.join("translators");
                 if (StringUtils.hasText(translatorDTO.getFirstName())) {
-                    Join<Book, Author> authorJoin = root.join("translators");
                     predicates.add(criteriaBuilder.like(authorJoin.get("firstName"), "%" + translatorDTO.getFirstName() + "%"));
                 }
                 if (StringUtils.hasText(translatorDTO.getLastName())) {
-                    Join<Book, Author> authorJoin = root.join("translators");
                     predicates.add(criteriaBuilder.like(authorJoin.get("lastName"), "%" + translatorDTO.getLastName() + "%"));
                 }
             }

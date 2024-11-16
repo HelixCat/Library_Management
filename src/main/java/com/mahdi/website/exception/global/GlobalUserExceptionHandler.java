@@ -1,6 +1,6 @@
 package com.mahdi.website.exception.global;
 
-import com.mahdi.website.dto.ExceptionDTO;
+import com.mahdi.website.dto.ResponseDTO;
 import com.mahdi.website.exception.user.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,60 +16,15 @@ public class GlobalUserExceptionHandler {
 
     // TODO change UserException Handler
 
-//    @ExceptionHandler(UserNotFoundException.class)
-//    public String handleUserNotFoundException(UserNotFoundException exception, Model model) {
-//        model.addAttribute("errorMessage", exception.getMessage());
-//        model.addAttribute("userDTO", new UserDTO());
-//        return "sign_in";
-//    }
-//
-//    @ExceptionHandler(IncorrectPasswordException.class)
-//    public String handleIncorrectPasswordException(IncorrectPasswordException exception, Model model) {
-//        model.addAttribute("errorMessage", exception.getMessage());
-//        return null;
-//    }
-//
-    @ExceptionHandler(DuplicateUserNameException.class)
-    public ResponseEntity<ExceptionDTO> handleDuplicateUserNameException(DuplicateUserNameException exception) {
-        ExceptionDTO exceptionDTO = new ExceptionDTO();
-        exceptionDTO.setStatus("field");
-        exceptionDTO.setMessage("this user name is invalid");
-        exceptionDTO.setStatusCode(HttpStatus.NOT_ACCEPTABLE.toString());
-        logger.error(exceptionDTO.getMessage());
+@ExceptionHandler(DuplicateUserNameException.class)
+    public ResponseEntity<ResponseDTO> handleDuplicateUserNameException(DuplicateUserNameException exception) {
+        ResponseDTO responseDTO = new ResponseDTO();
+        responseDTO.setStatus("field");
+        responseDTO.setMessage("this user name is invalid");
+        responseDTO.setStatusCode(HttpStatus.NOT_ACCEPTABLE.toString());
+        logger.error(responseDTO.getMessage());
         logger.error(exception);
-        return new ResponseEntity<>(exceptionDTO, HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(responseDTO, HttpStatus.NOT_ACCEPTABLE);
     }
-//
-//    @ExceptionHandler(DuplicateEmailException.class)
-//    public String handleDuplicateEmailException(DuplicateEmailException exception, Model model) {
-//        model.addAttribute("errorMessage", exception.getMessage());
-//        UserDTO userDTO = new UserDTO();
-//
-//        model.addAttribute("userDTO",userDTO);
-//        return "signup";
-//    }
-//
-//    @ExceptionHandler(DuplicateNationalCodeException.class)
-//    public String handleDuplicateNationalCodeException(DuplicateNationalCodeException exception, Model model) {
-//        model.addAttribute("errorMessage", exception.getMessage());
-//        UserDTO userDTO = new UserDTO();
-//        model.addAttribute("userDTO",userDTO);
-//        return "signup";
-//    }
-//
-//    @ExceptionHandler(DuplicatePhoneNumberException.class)
-//    public String handleDuplicatePhoneNumberException(DuplicatePhoneNumberException exception, Model model) {
-//        model.addAttribute("errorMessage", exception.getMessage());
-//        UserDTO userDTO = new UserDTO();
-//        model.addAttribute("userDTO",userDTO);
-//        return "signup";
-//    }
 
-//    @ExceptionHandler(Exception.class)
-//    public String unHandledException(Exception exception, Model model) {
-//        String errorMessage = exception.getMessage();
-//        System.err.println(errorMessage);
-//        model.addAttribute("errorMessage", "An unexpected error occurred. Please try again later.");
-//        return "unhandled_exception_page";
-//    }
 }
