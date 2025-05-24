@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     private User prepareUser(User userDetail, UserDTO userDTO) {
         User user = Objects.nonNull(userDetail) ? userDetail : new User();
         user.setActive(Boolean.TRUE);
-        user.setAdmin(prepareAdminUser(userDTO));
+        user.setRole(prepareRoleUser(userDTO));
         user.setUsername(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -62,14 +62,14 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
-    private Boolean prepareAdminUser(UserDTO userDTO) {
+    private String prepareRoleUser(UserDTO userDTO) {
         if (Boolean.TRUE.equals(userDTO.getAdmin())) {
-            return true;
+            return "ADMIN";
         } else {
             if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
-                return Boolean.TRUE;
+                return "ADMIN";
             } else {
-                return Boolean.FALSE;
+                return "NOT_ADMIN";
             }
         }
     }
@@ -86,6 +86,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User loadUserByUserName(String userName) {
         return userRepository.findByUserName(userName)
+                .orElseThrow(UserNotFoundException::new);
+    }
+
+    @Override
+    public User loadUserByEmail(String email) {
+        return userRepository.findByEmail(email)
                 .orElseThrow(UserNotFoundException::new);
     }
 

@@ -21,7 +21,6 @@ public class TranslatorDTO {
     private String lastName;
     private String firstName;
     private String phoneNumber;
-    private String nationalCode;
     private Set<Book> books;
 
 }

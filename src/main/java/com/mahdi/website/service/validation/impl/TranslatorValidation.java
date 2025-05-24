@@ -32,18 +32,10 @@ public class TranslatorValidation implements TranslatorValidationInterface {
         }
     }
 
-    public void translatorNationalCodeValidation(String nationalCode) {
-        Optional<Translator> translator = translatorRepository.findTranslatorByNationalCode(nationalCode);
-        if (translator.isPresent()) {
-            throw new DuplicateTranslatorNationalCodeException();
-        }
-    }
-
     @Override
     public void addTranslatorValidation(TranslatorDTO translatorDTO) {
         translatorEmailValidation(translatorDTO.getEmail());
         translatorPhoneNumberValidation(translatorDTO.getPhoneNumber());
-        translatorNationalCodeValidation(translatorDTO.getNationalCode());
     }
 
     @Override
@@ -53,9 +45,6 @@ public class TranslatorValidation implements TranslatorValidationInterface {
         }
         if (!translatorDTO.getPhoneNumber().equals(translator.getPhoneNumber())) {
             translatorPhoneNumberValidation(translatorDTO.getPhoneNumber());
-        }
-        if (!translatorDTO.getNationalCode().equals(translator.getNationalCode())) {
-            translatorNationalCodeValidation(translatorDTO.getNationalCode());
         }
     }
 

@@ -20,7 +20,4 @@ public interface AuthorRepository extends CrudRepository<Author, Long>, JpaSpeci
 
     @Query("SELECT author FROM Author author WHERE author.lastName = :lastName")
     Optional<Author> findByAuthorByLastName(@Param("lastName") String lastName);
-
-    @Query("SELECT author FROM Author author WHERE author.nationalCode = :nationalCode")
-    Optional<Author> findAuthorByNationalCode(@Param("nationalCode") String nationalCode);
 }

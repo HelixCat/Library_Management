@@ -1,19 +1,18 @@
 package com.mahdi.website.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
-import com.mahdi.website.repository.AddressSearchSpecification;
-import lombok.RequiredArgsConstructor;
-import com.mahdi.website.model.Address;
 import com.mahdi.website.dto.AddressDTO;
-import org.springframework.stereotype.Service;
-import com.mahdi.website.mapper.AddressMapper;
-import com.mahdi.website.repository.AddressRepository;
-import com.mahdi.website.service.interfaces.AddressService;
 import com.mahdi.website.exception.address.AddressByIdNotFoundException;
 import com.mahdi.website.exception.address.AddressByPostalCodeNotFoundException;
+import com.mahdi.website.mapper.AddressMapper;
+import com.mahdi.website.model.Address;
+import com.mahdi.website.repository.AddressRepository;
+import com.mahdi.website.repository.AddressSearchSpecification;
+import com.mahdi.website.service.interfaces.AddressService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Objects;
 
 
 @Service

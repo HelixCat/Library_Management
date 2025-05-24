@@ -29,8 +29,6 @@ public class Translator extends BaseEntity {
     @NotEmpty
     @Column(name = "c_phone_number", nullable = false, unique = true, length = 11)
     private String phoneNumber;
-    @Column(name = "c_national_code", nullable = false, unique = true, length = 10)
-    private String nationalCode;
     @ManyToMany(mappedBy = "translators")
     private Set<Book> books;
 }

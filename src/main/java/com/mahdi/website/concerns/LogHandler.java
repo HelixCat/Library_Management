@@ -1,4 +1,4 @@
-package com.mahdi.website.aspect;
+package com.mahdi.website.concerns;
 
 import com.mahdi.website.model.Logg;
 import com.mahdi.website.repository.LogRepository;
@@ -23,24 +23,24 @@ public class LogHandler {
         String methodName = joinPoint.getSignature().getName();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("log type for package ");
-        stringBuilder.append(packageName + " is ");
-        stringBuilder.append(logType + "\n ");
+        stringBuilder.append(packageName).append(" is ");
+        stringBuilder.append(logType).append("\n ");
         stringBuilder.append("class name : ");
-        stringBuilder.append(className + "\n ");
+        stringBuilder.append(className).append("\n ");
         stringBuilder.append("methodName : ");
-        stringBuilder.append(methodName + "\n ");
+        stringBuilder.append(methodName).append("\n ");
         stringBuilder.append("Arguments passed to the method {\n ");
-        stringBuilder.append(Arrays.toString(joinPoint.getArgs()) + "\n ");
+        stringBuilder.append(Arrays.toString(joinPoint.getArgs())).append("\n ");
         stringBuilder.append(" } \n ");
         if (StringUtils.hasText(result)) {
             stringBuilder.append("Result of the method is {\n ");
-            stringBuilder.append(result + "\n ");
+            stringBuilder.append(result).append("\n ");
             stringBuilder.append("} ");
         }
         if (Objects.nonNull(ex)) {
             stringBuilder.append("exception of the method is {\n ");
-            stringBuilder.append(ex.getCause() + "\n ");
-            stringBuilder.append(ex.getStackTrace());
+            stringBuilder.append(ex.getCause()).append("\n ");
+            stringBuilder.append(Arrays.toString(ex.getStackTrace()));
             stringBuilder.append("} ");
         }
         return stringBuilder;

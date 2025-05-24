@@ -4,10 +4,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.EqualsAndHashCode;
 
-
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(callSuper = false)
 @Entity
 @Table(name = "t_user")
 public class User extends BaseEntity {
@@ -41,9 +44,12 @@ public class User extends BaseEntity {
     private String birthday;
     @Column(name = "c_register_day", length = 10)
     private String registerDay;
-    @Column(name = "c_admin")
-    private Boolean admin;
     @Lob
     @Column(name = "c_profile_image", length = 200000)
     private byte[] profileImage;
+    @NotNull
+    @NotEmpty
+    @Column(name = "c_role", nullable = false, length = 20)
+    private String role;
 }
+

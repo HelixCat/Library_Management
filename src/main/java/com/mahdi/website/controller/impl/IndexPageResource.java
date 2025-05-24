@@ -12,15 +12,15 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/index-management")
+@RequestMapping("/auth-management")
 public class IndexPageResource implements IndexRemote {
 
     private final UserMapper userMapper;
     private final UserService userService;
 
     @Override
-    public ResponseEntity<UserDTO> login(UserDTO userDTO) {
-        UserDTO user = userMapper.toDTO(userService.loadUserByUserName(userDTO.getUsername()));
+    public ResponseEntity<UserDTO> login(@RequestBody UserDTO userDTO) {
+        UserDTO user = userMapper.toDTO(userService.loadUserByEmail(userDTO.getEmail()));
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 

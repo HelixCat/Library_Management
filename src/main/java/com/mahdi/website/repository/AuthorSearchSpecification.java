@@ -40,9 +40,6 @@ public class AuthorSearchSpecification implements Specification<Author> {
         if (Objects.nonNull(authorDTO.getActive())) {
             predicates.add(criteriaBuilder.equal(root.get("active"), authorDTO.getActive()));
         }
-        if (StringUtils.hasText(authorDTO.getNationalCode())) {
-            predicates.add(criteriaBuilder.equal(root.get("nationalCode"), authorDTO.getNationalCode()));
-        }
 
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }

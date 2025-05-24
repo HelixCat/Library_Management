@@ -40,9 +40,6 @@ public class TranslatorSearchSpecification implements Specification<Translator> 
         if (Objects.nonNull(translatorDTO.getActive())) {
             predicates.add(criteriaBuilder.equal(root.get("active"), translatorDTO.getActive()));
         }
-        if (StringUtils.hasText(translatorDTO.getNationalCode())) {
-            predicates.add(criteriaBuilder.equal(root.get("nationalCode"), translatorDTO.getNationalCode()));
-        }
         return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
     }
 }

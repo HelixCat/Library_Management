@@ -32,18 +32,10 @@ public class AuthorValidation implements AuthorValidationInterface {
         }
     }
 
-    public void authorNationalCodeValidation(String nationalCode) {
-        Optional<Author> author = authorRepository.findAuthorByNationalCode(nationalCode);
-        if (author.isPresent()) {
-            throw new DuplicateAuthorNationalCodeException();
-        }
-    }
-
     @Override
     public void addAuthorValidation(AuthorDTO authorDTO) {
         authorEmailValidation(authorDTO.getEmail());
         authorPhoneNumberValidation(authorDTO.getPhoneNumber());
-        authorNationalCodeValidation(authorDTO.getNationalCode());
     }
 
     @Override
@@ -53,9 +45,6 @@ public class AuthorValidation implements AuthorValidationInterface {
         }
         if (!authorDTO.getPhoneNumber().equals(author.getPhoneNumber())) {
             authorPhoneNumberValidation(authorDTO.getPhoneNumber());
-        }
-        if (!authorDTO.getNationalCode().equals(author.getNationalCode())) {
-            authorNationalCodeValidation(authorDTO.getNationalCode());
         }
     }
 

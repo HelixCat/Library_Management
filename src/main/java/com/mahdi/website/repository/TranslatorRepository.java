@@ -20,7 +20,4 @@ public interface TranslatorRepository extends CrudRepository<Translator, Long>, 
 
     @Query("SELECT translator FROM Translator translator WHERE translator.lastName = :lastName")
     Optional<Translator> findByTranslatorByLastName(@Param("lastName") String lastName);
-
-    @Query("SELECT translator FROM Translator translator WHERE translator.nationalCode = :nationalCode")
-    Optional<Translator> findTranslatorByNationalCode(@Param("nationalCode") String nationalCode);
 }

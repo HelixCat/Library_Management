@@ -25,15 +25,10 @@ public class Author extends BaseEntity {
     @Email(message = "incorrect format!!!")
     @Column(name = "c_email", unique = true, length = 60)
     private String email;
-    @Column(name = "c_national_code", nullable = false, unique = true, length = 10)
-    private String nationalCode;
     @NotNull
     @NotEmpty
     @Column(name = "c_phone_number", nullable = false, unique = true, length = 11)
     private String phoneNumber;
-    @Lob
-    @Column(name = "c_profile_image", length = 200000)
-    private byte[] profileImage;
     @ManyToMany(mappedBy = "authors")
     private Set<Book> books;
 
