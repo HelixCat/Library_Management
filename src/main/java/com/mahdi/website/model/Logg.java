@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Id;
 
 
 @Data
-@Document(collation = "logs")
+@Document(collection  = "logs")
 public class Logg {
 
     @Id

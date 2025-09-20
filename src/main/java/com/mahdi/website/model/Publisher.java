@@ -26,5 +26,4 @@ public class Publisher extends BaseEntity {
     @Email(message = "incorrect format!!!")
     @Column(name = "c_email", nullable = false, unique = true, length = 60)
     private String email;
-
 }

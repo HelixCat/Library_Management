@@ -1,0 +1,682 @@
+# src/main/resources/db/changelog/changes/001-initial-schema.yaml
+databaseChangeLog:
+  # =============================
+  # 001 - User table
+  # =============================
+  - changeSet:
+      id: 001-create-t_user
+      author: you
+      changes:
+        - createTable:
+            tableName: t_user
+            remarks: "Application users"
+            columns:
+              # ===== BaseEntity fields =====
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_t_user
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(64)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              # ===== User fields =====
+              - column:
+                  name: c_user_name
+                  type: VARCHAR(16)
+                  constraints:
+                    nullable: false
+              - column: { name: c_first_name, type: VARCHAR(45) }
+              - column: { name: c_last_name, type: VARCHAR(45) }
+              - column: { name: c_email, type: VARCHAR(60) }
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_password
+                  type: VARCHAR(4000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_national_code
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_gender
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column: { name: c_birthday, type: VARCHAR(10) }
+              - column: { name: c_register_day, type: VARCHAR(10) }
+              - column:
+                  name: c_profile_image
+                  type: LONGBLOB
+              - column:
+                  name: c_role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+        - addAutoIncrement:
+            tableName: t_user
+            columnName: id
+            columnDataType: BIGINT
+
+        # Unique constraints
+        - addUniqueConstraint:
+            tableName: t_user
+            columnNames: c_user_name
+            constraintName: uk_t_user_username
+        - addUniqueConstraint:
+            tableName: t_user
+            columnNames: c_phone_number
+            constraintName: uk_t_user_phone
+        - addUniqueConstraint:
+            tableName: t_user
+            columnNames: c_national_code
+            constraintName: uk_t_user_national_code
+        # اگر ایمیل باید یکتا باشد، این را فعال کنید:
+        # - addUniqueConstraint:
+        #     tableName: t_user
+        #     columnNames: c_email
+        #     constraintName: uk_t_user_email
+
+        # Indexes
+        - createIndex:
+            tableName: t_user
+            indexName: idx_t_user_username
+            columns:
+              - column: { name: c_user_name }
+        - createIndex:
+            tableName: t_user
+            indexName: idx_t_user_phone
+            columns:
+              - column: { name: c_phone_number }
+        - createIndex:
+            tableName: t_user
+            indexName: idx_t_user_email
+            columns:
+              - column: { name: c_email }
+        - createIndex:
+            tableName: t_user
+            indexName: idx_t_user_manual_id
+            columns:
+              - column: { name: c_manual_id }
+
+  # =============================
+  # 002 - Address table
+  # =============================
+  - changeSet:
+      id: 002-create-t_address
+      author: you
+      changes:
+        - createTable:
+            tableName: t_address
+            remarks: "Addresses for users or publishers"
+            columns:
+              # ===== BaseEntity fields =====
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_t_address
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(64)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              # ===== Address fields =====
+              - column: { name: c_country,  type: VARCHAR(50) }
+              - column: { name: c_province, type: VARCHAR(50) }
+              - column: { name: c_city,     type: VARCHAR(50) }
+              - column:
+                  name: c_postal_code
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+
+              # روابط
+              - column:
+                  name: publisher_id
+                  type: BIGINT
+              - column:
+                  name: user_id
+                  type: BIGINT
+
+        - addAutoIncrement:
+            tableName: t_address
+            columnName: id
+            columnDataType: BIGINT
+
+        # Foreign Keys
+        - addForeignKeyConstraint:
+            baseTableName: t_address
+            baseColumnNames: publisher_id
+            referencedTableName: t_publisher   # اگر نام دیگری دارید اعلام کنید
+            referencedColumnNames: id
+            constraintName: fk_address_publisher
+            onDelete: SET NULL
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: t_address
+            baseColumnNames: user_id
+            referencedTableName: t_user
+            referencedColumnNames: id
+            constraintName: fk_address_user
+            onDelete: SET NULL
+            onUpdate: RESTRICT
+
+        # Indexes
+        - createIndex:
+            tableName: t_address
+            indexName: idx_address_postal_code
+            columns:
+              - column: { name: c_postal_code }
+        - createIndex:
+            tableName: t_address
+            indexName: idx_address_user_id
+            columns:
+              - column: { name: user_id }
+        - createIndex:
+            tableName: t_address
+            indexName: idx_address_publisher_id
+            columns:
+              - column: { name: publisher_id }
+
+        # در صورت نیاز به قید: دست‌کم یکی از user_id یا publisher_id پر باشد
+        # - addCheckConstraint:
+        #     tableName: t_address
+        #     constraintName: chk_address_owner
+        #     checkConstraint: "(user_id IS NOT NULL OR publisher_id IS NOT NULL)"
+
+  # =============================
+  # 003 - Author table
+  # =============================
+  - changeSet:
+      id: 003-create-t_author
+      author: you
+      changes:
+        - createTable:
+            tableName: t_author
+            remarks: "Authors"
+            columns:
+              # ===== BaseEntity fields =====
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_t_author
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(64)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              # ===== Author fields =====
+              - column:
+                  name: c_first_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_last_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+
+        - addAutoIncrement:
+            tableName: t_author
+            columnName: id
+            columnDataType: BIGINT
+
+        # Unique constraints مطابق انتیتی
+        - addUniqueConstraint:
+            tableName: t_author
+            columnNames: c_email
+            constraintName: uk_t_author_email
+        - addUniqueConstraint:
+            tableName: t_author
+            columnNames: c_phone_number
+            constraintName: uk_t_author_phone
+
+        # Indexes پیشنهادی
+        - createIndex:
+            tableName: t_author
+            indexName: idx_author_last_name
+            columns:
+              - column: { name: c_last_name }
+        - createIndex:
+            tableName: t_author
+            indexName: idx_author_manual_id
+            columns:
+              - column: { name: c_manual_id }
+
+  # =============================
+  # 004 - Book table
+  # =============================
+  - changeSet:
+      id: 004-create-t_book
+      author: you
+      changes:
+        - createTable:
+            tableName: t_book
+            remarks: "Books"
+            columns:
+              # ===== BaseEntity fields =====
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_t_book
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(64)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              # ===== Book fields =====
+              - column:
+                  name: c_book_title
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_book_id
+                  type: VARCHAR(80)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_publish_date
+                  type: DATETIME           # اگر فقط تاریخ می‌خواهید، به DATE تغییر دهید
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_publish_year
+                  type: VARCHAR(10)        # اگر سال 4 رقمی است، می‌توان CHAR(4) گذاشت
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_profile_image
+                  type: LONGBLOB
+              - column:
+                  name: publisher_id
+                  type: BIGINT
+
+        - addAutoIncrement:
+            tableName: t_book
+            columnName: id
+            columnDataType: BIGINT
+
+        # Unique constraint روی c_book_id طبق entity
+        - addUniqueConstraint:
+            tableName: t_book
+            columnNames: c_book_id
+            constraintName: uk_t_book_book_id
+
+        # Foreign key به Publisher
+        - addForeignKeyConstraint:
+            baseTableName: t_book
+            baseColumnNames: publisher_id
+            referencedTableName: t_publisher      # اگر نام دیگری دارید اعلام کنید
+            referencedColumnNames: id
+            constraintName: fk_book_publisher
+            onDelete: SET NULL
+            onUpdate: RESTRICT
+
+        # Indexes
+        - createIndex:
+            tableName: t_book
+            indexName: idx_t_book_book_id
+            columns:
+              - column: { name: c_book_id }
+        - createIndex:
+            tableName: t_book
+            indexName: idx_t_book_title
+            columns:
+              - column: { name: c_book_title }
+        - createIndex:
+            tableName: t_book
+            indexName: idx_t_book_publisher_id
+            columns:
+              - column: { name: publisher_id }
+
+  # =============================
+  # 005 - Join table: book_author (Book <-> Author)
+  # =============================
+  - changeSet:
+      id: 005-create-book_author
+      author: you
+      changes:
+        - createTable:
+            tableName: book_author
+            remarks: "Join table between books and authors"
+            columns:
+              - column:
+                  name: book_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: author_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: book_author
+            columnNames: book_id, author_id
+            constraintName: pk_book_author
+
+        - addForeignKeyConstraint:
+            baseTableName: book_author
+            baseColumnNames: book_id
+            referencedTableName: t_book
+            referencedColumnNames: id
+            constraintName: fk_book_author_book
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: book_author
+            baseColumnNames: author_id
+            referencedTableName: t_author
+            referencedColumnNames: id
+            constraintName: fk_book_author_author
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+
+        - createIndex:
+            tableName: book_author
+            indexName: idx_book_author_book
+            columns:
+              - column: { name: book_id }
+        - createIndex:
+            tableName: book_author
+            indexName: idx_book_author_author
+            columns:
+              - column: { name: author_id }
+
+  # =============================
+  # 006 - Join table: book_translator (Book <-> Translator)
+  # =============================
+  - changeSet:
+      id: 006-create-book_translator
+      author: you
+      changes:
+        - createTable:
+            tableName: book_translator
+            remarks: "Join table between books and translators"
+            columns:
+              - column:
+                  name: book_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: translator_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+
+        - addPrimaryKey:
+            tableName: book_translator
+            columnNames: book_id, translator_id
+            constraintName: pk_book_translator
+
+        - addForeignKeyConstraint:
+            baseTableName: book_translator
+            baseColumnNames: book_id
+            referencedTableName: t_book
+            referencedColumnNames: id
+            constraintName: fk_book_translator_book
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+        - addForeignKeyConstraint:
+            baseTableName: book_translator
+            baseColumnNames: translator_id
+            referencedTableName: t_translator     # اگر نام دیگری دارید اعلام کنید
+            referencedColumnNames: id
+            constraintName: fk_book_translator_translator
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+
+        - createIndex:
+            tableName: book_translator
+            indexName: idx_book_translator_book
+            columns:
+              - column: { name: book_id }
+        - createIndex:
+            tableName: book_translator
+            indexName: idx_book_translator_translator
+            columns:
+              - column: { name: translator_id }
+
+  # =============================
+  # 007 - Publisher table
+  # =============================
+  - changeSet:
+      id: 007-create-t_publisher
+      author: you
+      changes:
+        - createTable:
+            tableName: t_publisher
+            remarks: "Publishers"
+            columns:
+              # ===== BaseEntity fields =====
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_t_publisher
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(64)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              # ===== Publisher fields =====
+              - column:
+                  name: c_publisher_name
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+
+        - addAutoIncrement:
+            tableName: t_publisher
+            columnName: id
+            columnDataType: BIGINT
+
+        # Unique constraints طبق entity
+        - addUniqueConstraint:
+            tableName: t_publisher
+            columnNames: c_publisher_name
+            constraintName: uk_t_publisher_name
+        - addUniqueConstraint:
+            tableName: t_publisher
+            columnNames: c_phone_number
+            constraintName: uk_t_publisher_phone
+        - addUniqueConstraint:
+            tableName: t_publisher
+            columnNames: c_email
+            constraintName: uk_t_publisher_email
+
+        # Indexes پیشنهادی
+        - createIndex:
+            tableName: t_publisher
+            indexName: idx_t_publisher_name
+            columns:
+              - column: { name: c_publisher_name }
+        - createIndex:
+            tableName: t_publisher
+            indexName: idx_t_publisher_phone
+            columns:
+              - column: { name: c_phone_number }
+        - createIndex:
+            tableName: t_publisher
+            indexName: idx_t_publisher_email
+            columns:
+              - column: { name: c_email }
+        - createIndex:
+            tableName: t_publisher
+            indexName: idx_t_publisher_manual_id
+            columns:
+              - column: { name: c_manual_id }
+
+  # =============================
+  # 008 - Translator table
+  # =============================
+  - changeSet:
+      id: 008-create-t_translator
+      author: you
+      changes:
+        - createTable:
+            tableName: t_translator
+            remarks: "Translators"
+            columns:
+              # ===== BaseEntity fields =====
+              - column:
+                  name: id
+                  type: BIGINT
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: pk_t_translator
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: BOOLEAN
+                  defaultValueBoolean: true
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(64)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+              # ===== Translator fields =====
+              - column:
+                  name: c_first_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_last_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+
+        - addAutoIncrement:
+            tableName: t_translator
+            columnName: id
+            columnDataType: BIGINT
+
+        # Unique constraints مطابق انتیتی
+        - addUniqueConstraint:
+            tableName: t_translator
+            columnNames: c_phone_number
+            constraintName: uk_t_translator_phone
+
+        # Indexes پیشنهادی
+        - createIndex:
+            tableName: t_translator
+            indexName: idx_t_translator_last_name
+            columns:
+              - column: { name: c_last_name }
+        - createIndex:
+            tableName: t_translator
+            indexName: idx_t_translator_email
+            columns:
+              - column: { name: c_email }
+        - createIndex:
+            tableName: t_translator
+            indexName: idx_t_translator_manual_id
+            columns:
+              - column: { name: c_manual_id }
