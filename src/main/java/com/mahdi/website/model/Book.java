@@ -29,7 +29,7 @@ public class Book extends BaseEntity {
     @Column(name = "c_publish_year", nullable = false)
     private String publishYear;
     @Lob
-    @Column(name = "c_profile_image", length = 200000)
+    @Column(name = "c_profile_image", length = 200000, columnDefinition = "LONGBLOB")
     private byte[] profileImage;
     @ManyToOne
     @JoinColumn(name = "publisher_id")

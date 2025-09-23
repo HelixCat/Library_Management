@@ -1,5 +1,3 @@
 databaseChangeLog:
-  - include:
-      file: database/changelog/changes/001-initial-schema.yaml
-  - include:
-      file: db/changelog/changes/002-mongo-logs-ttl.yaml
+  - includeAll:
+      path: database/changelog/changes/

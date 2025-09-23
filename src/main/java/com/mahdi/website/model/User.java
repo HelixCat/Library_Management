@@ -45,7 +45,7 @@ public class User extends BaseEntity {
     @Column(name = "c_register_day", length = 10)
     private String registerDay;
     @Lob
-    @Column(name = "c_profile_image", length = 200000)
+    @Column(name = "c_profile_image", length = 200000,  columnDefinition = "LONGBLOB")
     private byte[] profileImage;
     @NotNull
     @NotEmpty

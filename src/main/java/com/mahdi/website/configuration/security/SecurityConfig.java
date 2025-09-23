@@ -20,7 +20,18 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
-                .anyRequest().permitAll()) // Allow all requests without authentication
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .requestMatchers("/signup", "/signin", "/public/**").permitAll()
+                .anyRequest().authenticated())
+            .formLogin(form -> form
+                .loginPage("/signin")
+                .defaultSuccessUrl("/home", true)
+                .permitAll())
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/signin?logout")
+                .permitAll())
             .httpBasic(Customizer.withDefaults());
 
         return http.build();

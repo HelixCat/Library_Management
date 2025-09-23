@@ -1,0 +1,225 @@
+databaseChangeLog:
+  - changeSet:
+      id: 001-create-user-table
+      author: mahdi
+      changes:
+        - createTable:
+            tableName: t_user
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: TINYINT(1)
+                  defaultValue: 1
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(255)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_user_name
+                  type: VARCHAR(16)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_first_name
+                  type: VARCHAR(45)
+              - column:
+                  name: c_last_name
+                  type: VARCHAR(45)
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_password
+                  type: VARCHAR(4000)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_national_code
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_gender
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_birthday
+                  type: VARCHAR(10)
+              - column:
+                  name: c_register_day
+                  type: VARCHAR(10)
+              - column:
+                  name: c_profile_image
+                  type: LONGBLOB
+              - column:
+                  name: c_role
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 002-create-publisher-table
+      author: mahdi
+      changes:
+        - createTable:
+            tableName: t_publisher
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: TINYINT(1)
+                  defaultValue: 1
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(255)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_publisher_name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 003-create-author-table
+      author: mahdi
+      changes:
+        - createTable:
+            tableName: t_author
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: TINYINT(1)
+                  defaultValue: 1
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(255)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_first_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_last_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+                    unique: true
+
+  - changeSet:
+      id: 004-create-translator-table
+      author: mahdi
+      changes:
+        - createTable:
+            tableName: t_translator
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: TINYINT(1)
+                  defaultValue: 1
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(255)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_first_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_last_name
+                  type: VARCHAR(45)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_email
+                  type: VARCHAR(60)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_phone_number
+                  type: VARCHAR(11)
+                  constraints:
+                    nullable: false
+                    unique: true

@@ -1,0 +1,54 @@
+databaseChangeLog:
+  - changeSet:
+      id: 006-create-address-table
+      author: mahdi
+      changes:
+        - createTable:
+            tableName: t_address
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: TINYINT(1)
+                  defaultValue: 1
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(255)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_country
+                  type: VARCHAR(50)
+              - column:
+                  name: c_province
+                  type: VARCHAR(50)
+              - column:
+                  name: c_city
+                  type: VARCHAR(50)
+              - column:
+                  name: c_postal_code
+                  type: VARCHAR(10)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: publisher_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_address_publisher
+                    references: t_publisher(id)
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_address_user
+                    references: t_user(id)

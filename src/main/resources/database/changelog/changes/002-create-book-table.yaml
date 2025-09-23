@@ -1,0 +1,58 @@
+databaseChangeLog:
+  - changeSet:
+      id: 005-create-book-table
+      author: mahdi
+      changes:
+        - createTable:
+            tableName: t_book
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: c_active
+                  type: TINYINT(1)
+                  defaultValue: 1
+              - column:
+                  name: c_manual_id
+                  type: VARCHAR(255)
+              - column:
+                  name: c_version
+                  type: INT
+                  defaultValue: 0
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_book_title
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_book_id
+                  type: VARCHAR(80)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: c_publish_date
+                  type: DATETIME
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_publish_year
+                  type: VARCHAR(4)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: c_profile_image
+                  type: LONGBLOB
+              - column:
+                  name: publisher_id
+                  type: BIGINT
+                  constraints:
+                    foreignKeyName: fk_book_publisher
+                    references: t_publisher(id)
