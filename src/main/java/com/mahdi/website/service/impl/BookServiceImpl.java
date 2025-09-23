@@ -10,6 +10,10 @@ import com.mahdi.website.repository.BookSearchSpecification;
 import com.mahdi.website.service.interfaces.BookService;
 import com.mahdi.website.service.validation.interfaces.BookValidation;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,12 +29,19 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
+    @Cacheable(value = "bookSearch", key = "T(java.util.Objects).hash(#bookDTO.title, #bookDTO.author, #bookDTO.publisher, #bookDTO.active)", unless = "#result == null or #result.isEmpty()")
     public List<Book> searchBook(BookDTO bookDTO) {
         BookSearchSpecification  specification = new BookSearchSpecification(bookDTO);
         return bookRepository.findAll(specification);
     }
 
     @Override
+    @Caching(put = {
+        @CachePut(value = "books", key = "#result.id"),
+        @CachePut(value = "bookDetails", key = "#result.bookId")
+    }, evict = {
+        @CacheEvict(value = "bookSearch", allEntries = true)
+    })
     public Book saveBook(BookDTO bookDTO) {
         bookValidation.bookValidation(bookDTO);
         Book book = bookMapper.toEntity(bookDTO);
@@ -39,16 +50,24 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Cacheable(value = "bookDetails", key = "#id", unless = "#result == null")
     public BookDTO findBookDTOById(Long id) {
         return bookMapper.toDTO(findBookById(id));
     }
 
     @Override
+    @Cacheable(value = "books", key = "#id", unless = "#result == null")
     public Book findBookById(Long id) {
         return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
     @Override
+    @Caching(put = {
+        @CachePut(value = "books", key = "#result.id"),
+        @CachePut(value = "bookDetails", key = "#result.bookId")
+    }, evict = {
+        @CacheEvict(value = "bookSearch", allEntries = true)
+    })
     public Book deactivateBookByBookId(String BookId) {
         Book book = bookRepository.findBookByBookId(BookId).orElseThrow(BookNotFoundException::new);
         book.setActive(Boolean.FALSE);
@@ -56,6 +75,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
+    @Caching(put = {
+        @CachePut(value = "books", key = "#result.id"),
+        @CachePut(value = "bookDetails", key = "#result.bookId")
+    }, evict = {
+        @CacheEvict(value = "bookSearch", allEntries = true)
+    })
     public Book updateBook(BookDTO bookDTO) {
         Book book = findBookById(bookDTO.getId());
         book.setTitle(bookDTO.getTitle());

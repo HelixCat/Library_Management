@@ -10,6 +10,10 @@ import com.mahdi.website.service.validation.interfaces.PublisherValidationInterf
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.mahdi.website.exception.publisher.PublisherNotFoundException;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 
 import java.util.List;
 
@@ -22,12 +26,18 @@ public class PublisherServiceImpl implements PublisherService {
     private final PublisherValidationInterface publisherValidation;
 
     @Override
+    @Cacheable(value = "publisherSearch", key = "T(java.util.Objects).hash(#publisherDTO.publisherName, #publisherDTO.email, #publisherDTO.phoneNumber)", unless = "#result == null or #result.isEmpty()")
     public List<Publisher> searchPublisher(PublisherDTO publisherDTO) {
         PublisherSearchSpecification specification = new PublisherSearchSpecification(publisherDTO);
         return publisherRepository.findAll(specification);
     }
 
     @Override
+    @Caching(put = {
+        @CachePut(value = "publishers", key = "#result.id")
+    }, evict = {
+        @CacheEvict(value = "publisherSearch", allEntries = true)
+    })
     public Publisher savePublisher(PublisherDTO publisherDTO) {
         publisherValidation.addPublisherValidation(publisherDTO);
         Publisher publisher = publisherMapper.toEntity(publisherDTO);
@@ -36,32 +46,37 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
+    @Cacheable(value = "publishers", key = "#name", unless = "#result == null")
     public Publisher findPublisherByName(String name) {
         return publisherRepository.findByPublisherName(name)
                 .orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
+    @Cacheable(value = "publishers", key = "#email", unless = "#result == null")
     public Publisher findPublisherByEmail(String email) {
         return publisherRepository.findPublisherByEmail(email)
                 .orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
+    @Cacheable(value = "publishers", key = "#phoneNumber", unless = "#result == null")
     public Publisher findPublisherByPhoneNumber(String phoneNumber) {
         return publisherRepository.findPublisherByPhoneNumber(phoneNumber)
                 .orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
-    public PublisherDTO findPublisherDTOById(Long id) {
-        Publisher publisher = findPublisherById(id);
-        return publisherMapper.toDTO(publisher);
+    @Cacheable(value = "publishers", key = "#id", unless = "#result == null")
+    public Publisher findPublisherById(Long id) {
+        return publisherRepository.findById(id).orElseThrow(PublisherNotFoundException::new);
     }
 
     @Override
-    public Publisher findPublisherById(Long id) {
-        return publisherRepository.findById(id).orElseThrow(PublisherNotFoundException::new);
+    @Cacheable(value = "publisherDetails", key = "#id", unless = "#result == null")
+    public PublisherDTO findPublisherDTOById(Long id) {
+        Publisher publisher = findPublisherById(id);
+        return publisherMapper.toDTO(publisher);
     }
 
     @Override

@@ -87,12 +87,32 @@ public class RedisConfig {
 
         // User cache - longer TTL since user data doesn't change frequently
         cacheConfigurations.put("users", defaultCacheConfig.entryTtl(Duration.ofHours(2)));
-
         // User search cache - shorter TTL since search results may change
         cacheConfigurations.put("userSearch", defaultCacheConfig.entryTtl(Duration.ofMinutes(30)));
-
         // User details cache - medium TTL
         cacheConfigurations.put("userDetails", defaultCacheConfig.entryTtl(Duration.ofHours(1)));
+
+        // Book caches
+        cacheConfigurations.put("books", defaultCacheConfig.entryTtl(Duration.ofHours(2)));
+        cacheConfigurations.put("bookSearch", defaultCacheConfig.entryTtl(Duration.ofMinutes(30)));
+        cacheConfigurations.put("bookDetails", defaultCacheConfig.entryTtl(Duration.ofHours(1)));
+
+        // Address caches
+        cacheConfigurations.put("addresses", defaultCacheConfig.entryTtl(Duration.ofHours(2)));
+        cacheConfigurations.put("addressSearch", defaultCacheConfig.entryTtl(Duration.ofMinutes(30)));
+
+        // Author caches
+        cacheConfigurations.put("authors", defaultCacheConfig.entryTtl(Duration.ofHours(2)));
+        cacheConfigurations.put("authorSearch", defaultCacheConfig.entryTtl(Duration.ofMinutes(30)));
+
+        // Publisher caches
+        cacheConfigurations.put("publishers", defaultCacheConfig.entryTtl(Duration.ofHours(2)));
+        cacheConfigurations.put("publisherSearch", defaultCacheConfig.entryTtl(Duration.ofMinutes(30)));
+        cacheConfigurations.put("publisherDetails", defaultCacheConfig.entryTtl(Duration.ofHours(1)));
+
+        // Translator caches
+        cacheConfigurations.put("translators", defaultCacheConfig.entryTtl(Duration.ofHours(2)));
+        cacheConfigurations.put("translatorSearch", defaultCacheConfig.entryTtl(Duration.ofMinutes(30)));
 
         return RedisCacheManager.builder(connectionFactory)
                 .cacheDefaults(defaultCacheConfig)

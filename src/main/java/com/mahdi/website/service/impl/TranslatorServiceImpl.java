@@ -9,6 +9,10 @@ import com.mahdi.website.repository.TranslatorSearchSpecification;
 import com.mahdi.website.service.interfaces.TranslatorService;
 import com.mahdi.website.service.validation.interfaces.TranslatorValidationInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +28,7 @@ public class TranslatorServiceImpl implements TranslatorService {
 
 
     @Override
+    @Cacheable(value = "translatorSearch", key = "T(java.util.Objects).hash(#translatorDTO.firstName, #translatorDTO.lastName, #translatorDTO.email)", unless = "#result == null or #result.isEmpty()")
     public List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO) {
         TranslatorSearchSpecification  specification = new TranslatorSearchSpecification(translatorDTO);
         List<Translator> translatorList = translatorRepository.findAll(specification);
@@ -31,6 +36,11 @@ public class TranslatorServiceImpl implements TranslatorService {
     }
 
     @Override
+    @Caching(put = {
+        @CachePut(value = "translators", key = "#result.id")
+    }, evict = {
+        @CacheEvict(value = "translatorSearch", allEntries = true)
+    })
     public Translator saveTranslator(TranslatorDTO translatorDTO) {
         translatorValidation.addTranslatorValidation(translatorDTO);
         Translator translator = prepareTranslator(translatorDTO);
@@ -38,24 +48,28 @@ public class TranslatorServiceImpl implements TranslatorService {
     }
 
     @Override
+    @Cacheable(value = "translators", key = "#firstName", unless = "#result == null")
     public Translator findTranslatorByFirstName(String firstName) {
         return translatorRepository.findByTranslatorByFirstName(firstName)
                 .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
+    @Cacheable(value = "translators", key = "#lastName", unless = "#result == null")
     public Translator findTranslatorBylastName(String lastName) {
         return translatorRepository.findByTranslatorByLastName(lastName)
                 .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
+    @Cacheable(value = "translators", key = "#email", unless = "#result == null")
     public Translator findTranslatorByEmail(String email) {
         return translatorRepository.findTranslatorByEmail(email)
                 .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
+    @Cacheable(value = "translators", key = "#phoneNumber", unless = "#result == null")
     public Translator findTranslatorByPhoneNumber(String phoneNumber) {
         return translatorRepository.findTranslatorByPhoneNumber(phoneNumber)
                 .orElseThrow(TranslatorNotFoundException::new);
