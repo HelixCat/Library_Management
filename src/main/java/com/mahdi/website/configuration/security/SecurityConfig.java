@@ -20,12 +20,14 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/", "/index.html", "/assets/**", "/*.ico", "/*.svg", "/robots.txt").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
-                .requestMatchers("/signup", "/signin", "/public/**").permitAll()
+                .requestMatchers("/signup", "/signin", "/api/auth/**", "/public/**").permitAll()
                 .anyRequest().authenticated())
             .formLogin(form -> form
                 .loginPage("/signin")
+                .loginProcessingUrl("/api/auth/signin")
                 .defaultSuccessUrl("/home", true)
                 .permitAll())
             .logout(logout -> logout
