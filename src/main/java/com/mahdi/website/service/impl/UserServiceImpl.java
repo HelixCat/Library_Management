@@ -34,6 +34,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordValidationService passwordValidationService;
     private final SignUpValidationInterface signUpValidation;
 
+    private final HttpServletRequest request;
+    private final HttpServletResponse response;
+
     @Override
     @Caching(put = {
             @CachePut(value = "users", key = "#result.username"),
@@ -218,5 +221,15 @@ public class UserServiceImpl implements UserService {
         passwordValidationService.isValidPassword(userDTO.getPassword(), user.getPassword(), "login");
         log.info("User authenticated successfully: {}", userDTO.getUsername());
         return user;
+    }
+
+    @Override
+    public User signout() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            new SecurityContextLogoutHandler().logout(request, response, auth);
+            SecurityContextHolder.clearContext();
+        }
+        return null;
     }
 }

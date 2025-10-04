@@ -25,4 +25,6 @@ public interface UserService {
     User updateUserPassword(ChangePasswordDTO changePasswordDTO) throws Exception;
 
     User authenticateUser(UserDTO userDTO) throws Exception;
+
+    User signout();
 }

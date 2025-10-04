@@ -3,8 +3,6 @@ package com.mahdi.website.controller.rest;
 
 import com.mahdi.website.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,8 +19,8 @@ public interface AuthRemote {
         @ApiResponse(responseCode = "401", description = "Invalid credentials"),
         @ApiResponse(responseCode = "400", description = "Invalid input")
     })
-    @PostMapping("/signin")
-    ResponseEntity<UserDTO> signin(@RequestBody UserDTO userDTO);
+    @PostMapping("/signing")
+    ResponseEntity<UserDTO> signing(@Valid @RequestBody UserDTO userDTO) throws Exception;
 
     @Operation(summary = "Sign up", description = "Register a new user account")
     @ApiResponses({
@@ -31,5 +29,13 @@ public interface AuthRemote {
         @ApiResponse(responseCode = "409", description = "Username already exists")
     })
     @PostMapping("/signup")
-    ResponseEntity<UserDTO> signup(@RequestBody UserDTO userDTO);
+    ResponseEntity<UserDTO> signup(@Valid @RequestBody UserDTO userDTO) throws Exception;
+
+    @Operation(summary = "Sign out", description = "Sign out the current user and invalidate their session")
+    @ApiResponses({
+        @ApiResponse(responseCode = "200", description = "Successfully signed out"),
+        @ApiResponse(responseCode = "401", description = "Not authenticated")
+    })
+    @PostMapping("/sign out")
+    ResponseEntity<UserDTO> signOut();
 }
