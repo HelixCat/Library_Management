@@ -55,6 +55,9 @@ public interface UserRemote {
         @ApiResponse(responseCode = "200", description = "User found"),
         @ApiResponse(responseCode = "404", description = "User not found")
     })
-    @GetMapping("/{id}")
-    ResponseEntity<UserDTO> findUserById(@PathVariable Long id);
+    @PostMapping("/find-user-by-id")
+    ResponseEntity<UserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception;
+
+    @PostMapping("/deactivate-use")
+    ResponseEntity<UserDTO> deactivateUser(@RequestBody UserDTO userDTO);
 }

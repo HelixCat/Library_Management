@@ -4,6 +4,7 @@ import com.mahdi.website.controller.rest.UserRemote;
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.mapper.UserMapper;
+import com.mahdi.website.model.User;
 import com.mahdi.website.service.interfaces.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +27,7 @@ public class UserResource implements UserRemote {
     @Override
     @Operation(summary = "Search users", description = "Search for users based on provided criteria")
     public ResponseEntity<List<UserDTO>> searchUsers(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(userMapper.toDTOList(userService.searchUser(userDTO)), HttpStatus.FOUND);
+        return new ResponseEntity<>(userService.searchUser(userDTO), HttpStatus.FOUND);
     }
 
     @Override
@@ -44,12 +45,18 @@ public class UserResource implements UserRemote {
     @Override
     @Operation(summary = "Change password", description = "Change user's password")
     public ResponseEntity<UserDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception {
-        return new ResponseEntity<>(userMapper.toDTO(userService.changePassword(changePasswordDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(userMapper.toDTO(userService.updateUserPassword(changePasswordDTO)), HttpStatus.OK);
     }
 
     @Override
     @Operation(summary = "Find user by ID", description = "Retrieve a user by their ID")
-    public ResponseEntity<UserDTO> findUserById(@PathVariable Long id) {
-        return new ResponseEntity<>(userMapper.toDTO(userService.findUserById(id)), HttpStatus.OK);
+    public ResponseEntity<UserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception {
+        return new ResponseEntity<>(userMapper.toDTO(userService.loadUserById(userDTO)), HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<UserDTO> deactivateUser(@RequestBody UserDTO userDTO) {
+        User user = userService.deactivateUser(userDTO);
+        return new ResponseEntity<>(userService.prepareToUserDTO(user), HttpStatus.OK);
     }
 }

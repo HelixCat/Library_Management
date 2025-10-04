@@ -26,5 +26,5 @@ public interface UserService {
 
     User authenticateUser(UserDTO userDTO) throws Exception;
 
-    User signout();
+    User loadUserById(UserDTO userDTO) throws Exception;
 }

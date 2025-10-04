@@ -1,6 +1,7 @@
 package com.mahdi.website.controller.rest;
 
 
+import com.mahdi.website.dto.AuthResponse;
 import com.mahdi.website.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -20,7 +21,7 @@ public interface AuthRemote {
         @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping("/signing")
-    ResponseEntity<UserDTO> signing(@Valid @RequestBody UserDTO userDTO) throws Exception;
+    ResponseEntity<AuthResponse> signing(@Valid @RequestBody UserDTO userDTO);
 
     @Operation(summary = "Sign up", description = "Register a new user account")
     @ApiResponses({
@@ -30,12 +31,4 @@ public interface AuthRemote {
     })
     @PostMapping("/signup")
     ResponseEntity<UserDTO> signup(@Valid @RequestBody UserDTO userDTO) throws Exception;
-
-    @Operation(summary = "Sign out", description = "Sign out the current user and invalidate their session")
-    @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "Successfully signed out"),
-        @ApiResponse(responseCode = "401", description = "Not authenticated")
-    })
-    @PostMapping("/sign out")
-    ResponseEntity<UserDTO> signOut();
 }

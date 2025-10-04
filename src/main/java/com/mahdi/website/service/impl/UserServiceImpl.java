@@ -34,9 +34,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordValidationService passwordValidationService;
     private final SignUpValidationInterface signUpValidation;
 
-    private final HttpServletRequest request;
-    private final HttpServletResponse response;
-
     @Override
     @Caching(put = {
             @CachePut(value = "users", key = "#result.username"),
@@ -224,12 +221,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User signout() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        if (auth != null) {
-            new SecurityContextLogoutHandler().logout(request, response, auth);
-            SecurityContextHolder.clearContext();
-        }
-        return null;
+    public User loadUserById(UserDTO userDTO) {
+        User user = userRepository.findById(userDTO.getId()).orElseThrow(() -> {
+            log.warn("User not found by id: {}", userDTO.getId());
+            return new UserNotFoundException();
+        });
+        return user;
     }
 }
