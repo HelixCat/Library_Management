@@ -8,7 +8,7 @@ import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
 import com.mahdi.website.repository.UserSearchSpecification;
 import com.mahdi.website.service.interfaces.UserService;
-import com.mahdi.website.service.validation.interfaces.LoginValidationInterface;
+import com.mahdi.website.service.validation.impl.PasswordValidationService;
 import com.mahdi.website.service.validation.interfaces.SignUpValidationInterface;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
 
     private final UserMapper userMapper;
     private final UserRepository userRepository;
-    private final LoginValidationInterface loginValidation;
+    private final PasswordValidationService passwordValidationService;
     private final SignUpValidationInterface signUpValidation;
 
     @Override
@@ -38,6 +39,7 @@ public class UserServiceImpl implements UserService {
             @CachePut(value = "users", key = "#result.username"),
             @CachePut(value = "userDetails", key = "#result.email")
     })
+    @Transactional
     public User saveUser(UserDTO userDTO) {
         log.info("Saving user: {}", userDTO.getUsername());
         signUpValidation.signUpValidation(userDTO);
@@ -197,7 +199,7 @@ public class UserServiceImpl implements UserService {
     public User updateUserPassword(ChangePasswordDTO changePasswordDTO) {
         log.info("Updating password for user: {}", changePasswordDTO.getUserName());
         User user = loadUserByUserName(changePasswordDTO.getUserName());
-        loginValidation.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
+        passwordValidationService.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
         String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
         user.setPassword(hashedPassword);
         User updatedUser = userRepository.save(user);
@@ -207,5 +209,14 @@ public class UserServiceImpl implements UserService {
 
     private String prepareByteArrayToBase64(byte[] profileImage) {
         return Base64.getEncoder().encodeToString(profileImage);
+    }
+
+    @Override
+    public User authenticateUser(UserDTO userDTO) {
+        log.info("Authenticating user: {}", userDTO.getUsername());
+        User user = loadUserByUserName(userDTO.getUsername());
+        passwordValidationService.isValidPassword(userDTO.getPassword(), user.getPassword(), "login");
+        log.info("User authenticated successfully: {}", userDTO.getUsername());
+        return user;
     }
 }
