@@ -13,9 +13,9 @@ public interface AddressService {
 
     Address deactivateAddress(AddressDTO addressDTO);
 
-    Address findAddressByPostalCode(String postalCode);
+    Address findAddressByPostalCode(AddressDTO addressDTO);
 
-    Address findAddressById(Long id);
+    Address findAddressById(AddressDTO addressDTO);
 
     Address updateAddress(AddressDTO addressDTOList);
 }

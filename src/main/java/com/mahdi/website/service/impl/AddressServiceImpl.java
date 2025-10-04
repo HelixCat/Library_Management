@@ -28,8 +28,8 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Cacheable(value = "addresses", key = "#id", unless = "#result == null")
-    public Address findAddressById(Long id) {
-        return addressRepository.findById(id).orElseThrow(AddressByIdNotFoundException::new);
+    public Address findAddressById(AddressDTO addressDTO) {
+        return addressRepository.findById(addressDTO.getId()).orElseThrow(AddressByIdNotFoundException::new);
     }
 
     @Override
@@ -58,17 +58,17 @@ public class AddressServiceImpl implements AddressService {
     public Address deactivateAddress(AddressDTO addressDTO) {
         Address address;
         if (Objects.nonNull(addressDTO.getId())) {
-            address = findAddressById(addressDTO.getId());
+            address = findAddressById(addressDTO);
         } else {
-            address = findAddressByPostalCode(addressDTO.getPostalCode());
+            address = findAddressByPostalCode(addressDTO);
         }
         return addressRepository.save(address);
     }
 
     @Override
     @Cacheable(value = "addresses", key = "#postalCode", unless = "#result == null")
-    public Address findAddressByPostalCode(String postalCode) {
-        return addressRepository.findByPostalCode(postalCode).orElseThrow(AddressByPostalCodeNotFoundException::new);
+    public Address findAddressByPostalCode(AddressDTO addressDTO) {
+        return addressRepository.findByPostalCode(addressDTO.getPostalCode()).orElseThrow(AddressByPostalCodeNotFoundException::new);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class AddressServiceImpl implements AddressService {
     })
     public Address updateAddress(AddressDTO addressDTO) {
 
-        Address address = findAddressById(addressDTO.getId());
+        Address address = findAddressById(addressDTO);
         if (Objects.nonNull(addressDTO.getCountry())) {
             address.setCountry(addressDTO.getCountry());
         }

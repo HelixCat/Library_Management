@@ -1,5 +1,6 @@
 package com.mahdi.website.service.impl;
 
+import com.mahdi.website.dto.AddressDTO;
 import com.mahdi.website.exception.address.AddressByIdNotFoundException;
 import com.mahdi.website.model.Address;
 import com.mahdi.website.repository.AddressRepository;
@@ -33,7 +34,9 @@ class AddressServiceImplTest {
         Address address = new Address();
         address.setId(1L);
         when(addressRepository.findById(1L)).thenReturn(Optional.of(address));
-        Address result = addressServiceImpl.findAddressById(1L);
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setId(2L);
+        Address result = addressServiceImpl.findAddressById(addressDTO);
         assertNotNull(result);
         assertEquals(1L, result.getId());
         verify(addressRepository, times(1)).findById(1L);
@@ -42,7 +45,9 @@ class AddressServiceImplTest {
     @Test
     void findAddressById_notFound() {
         when(addressRepository.findById(2L)).thenReturn(Optional.empty());
-        assertThrows(AddressByIdNotFoundException.class, () -> addressServiceImpl.findAddressById(2L));
+        AddressDTO addressDTO = new AddressDTO();
+        addressDTO.setId(2L);
+        assertThrows(AddressByIdNotFoundException.class, () -> addressServiceImpl.findAddressById(addressDTO));
         verify(addressRepository, times(1)).findById(2L);
     }
 }
