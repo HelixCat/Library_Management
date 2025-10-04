@@ -31,16 +31,16 @@ public class BookServiceImpl implements BookService {
     @Override
     @Cacheable(value = "bookSearch", key = "T(java.util.Objects).hash(#bookDTO.title, #bookDTO.author, #bookDTO.publisher, #bookDTO.active)", unless = "#result == null or #result.isEmpty()")
     public List<Book> searchBook(BookDTO bookDTO) {
-        BookSearchSpecification  specification = new BookSearchSpecification(bookDTO);
+        BookSearchSpecification specification = new BookSearchSpecification(bookDTO);
         return bookRepository.findAll(specification);
     }
 
     @Override
     @Caching(put = {
-        @CachePut(value = "books", key = "#result.id"),
-        @CachePut(value = "bookDetails", key = "#result.bookId")
+            @CachePut(value = "books", key = "#result.id"),
+            @CachePut(value = "bookDetails", key = "#result.bookId")
     }, evict = {
-        @CacheEvict(value = "bookSearch", allEntries = true)
+            @CacheEvict(value = "bookSearch", allEntries = true)
     })
     public Book saveBook(BookDTO bookDTO) {
         bookValidation.bookValidation(bookDTO);
@@ -63,10 +63,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "books", key = "#result.id"),
-        @CachePut(value = "bookDetails", key = "#result.bookId")
+            @CachePut(value = "books", key = "#result.id"),
+            @CachePut(value = "bookDetails", key = "#result.bookId")
     }, evict = {
-        @CacheEvict(value = "bookSearch", allEntries = true)
+            @CacheEvict(value = "bookSearch", allEntries = true)
     })
     public Book deactivateBookByBookId(String BookId) {
         Book book = bookRepository.findBookByBookId(BookId).orElseThrow(BookNotFoundException::new);
@@ -76,10 +76,10 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "books", key = "#result.id"),
-        @CachePut(value = "bookDetails", key = "#result.bookId")
+            @CachePut(value = "books", key = "#result.id"),
+            @CachePut(value = "bookDetails", key = "#result.bookId")
     }, evict = {
-        @CacheEvict(value = "bookSearch", allEntries = true)
+            @CacheEvict(value = "bookSearch", allEntries = true)
     })
     public Book updateBook(BookDTO bookDTO) {
         Book book = findBookById(bookDTO.getId());

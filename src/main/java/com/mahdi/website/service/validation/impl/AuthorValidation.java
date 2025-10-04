@@ -2,7 +2,6 @@ package com.mahdi.website.service.validation.impl;
 
 import com.mahdi.website.dto.AuthorDTO;
 import com.mahdi.website.exception.author.DuplicateAuthorEmailException;
-import com.mahdi.website.exception.author.DuplicateAuthorNationalCodeException;
 import com.mahdi.website.exception.author.DuplicateAuthorPhoneNumberException;
 import com.mahdi.website.model.Author;
 import com.mahdi.website.repository.AuthorRepository;

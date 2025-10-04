@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface BookService {
     List<Book> searchBook(BookDTO bookDTO);
+
     Book saveBook(BookDTO bookDTO);
+
     BookDTO findBookDTOById(Long id);
+
     Book findBookById(Long id);
+
     Book deactivateBookByBookId(String BookId);
+
     Book updateBook(BookDTO bookDTO);
 }

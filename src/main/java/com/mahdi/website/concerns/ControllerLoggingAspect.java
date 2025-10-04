@@ -17,9 +17,9 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class ControllerLoggingAspect {
 
+    private static final Logger logger = Logger.getLogger(ControllerLoggingAspect.class.getName());
     private final LogHandler logHandler;
     private final String packageName = "Controller";
-    private static final Logger logger = Logger.getLogger(ControllerLoggingAspect.class.getName());
 
     @Before("execution(* com.mahdi.website.service..*(..))")
     public void loggBeforeCreateUser(JoinPoint joinPoint) {
@@ -38,7 +38,7 @@ public class ControllerLoggingAspect {
     }
 
     @AfterThrowing(pointcut = "execution(* com.mahdi.website.service..*(..))", throwing = "ex")
-    public void logAfterThrowingCreateUser(JoinPoint joinPoint, Exception ex){
+    public void logAfterThrowingCreateUser(JoinPoint joinPoint, Exception ex) {
         StringBuilder stringBuilder = logHandler.prepareLog(joinPoint, packageName, null, ex);
         logger.info(stringBuilder.toString());
         logHandler.mangoDBLoggSaver(new Date(), "ERROR", stringBuilder.toString());

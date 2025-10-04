@@ -30,16 +30,16 @@ public class TranslatorServiceImpl implements TranslatorService {
     @Override
     @Cacheable(value = "translatorSearch", key = "T(java.util.Objects).hash(#translatorDTO.firstName, #translatorDTO.lastName, #translatorDTO.email)", unless = "#result == null or #result.isEmpty()")
     public List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO) {
-        TranslatorSearchSpecification  specification = new TranslatorSearchSpecification(translatorDTO);
+        TranslatorSearchSpecification specification = new TranslatorSearchSpecification(translatorDTO);
         List<Translator> translatorList = translatorRepository.findAll(specification);
         return prepareTranslatorList(translatorList);
     }
 
     @Override
     @Caching(put = {
-        @CachePut(value = "translators", key = "#result.id")
+            @CachePut(value = "translators", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "translatorSearch", allEntries = true)
+            @CacheEvict(value = "translatorSearch", allEntries = true)
     })
     public Translator saveTranslator(TranslatorDTO translatorDTO) {
         translatorValidation.addTranslatorValidation(translatorDTO);

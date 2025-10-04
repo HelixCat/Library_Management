@@ -18,13 +18,13 @@ public class Address extends BaseEntity {
     private String city;
     @NotBlank
     @NotNull
-    @Column(name = "c_postal_code" ,length = 10, nullable = false)
+    @Column(name = "c_postal_code", length = 10, nullable = false)
     private String postalCode;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="publisher_id")
+    @JoinColumn(name = "publisher_id")
     private Publisher publisher;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="user_id")
+    @JoinColumn(name = "user_id")
     private User user;
 
 }

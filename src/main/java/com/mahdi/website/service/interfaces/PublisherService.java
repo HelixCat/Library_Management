@@ -6,7 +6,7 @@ import com.mahdi.website.model.Publisher;
 import java.util.List;
 
 public interface PublisherService {
-    List<Publisher>  searchPublisher(PublisherDTO publisherDTO);
+    List<Publisher> searchPublisher(PublisherDTO publisherDTO);
 
     Publisher savePublisher(PublisherDTO publisherDTO);
 

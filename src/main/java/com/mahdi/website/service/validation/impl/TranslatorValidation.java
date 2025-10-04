@@ -1,7 +1,6 @@
 package com.mahdi.website.service.validation.impl;
 
 import com.mahdi.website.dto.TranslatorDTO;
-import com.mahdi.website.exception.translator.DuplicateTranslatorNationalCodeException;
 import com.mahdi.website.exception.translator.DuplicateTranslatorEmailException;
 import com.mahdi.website.exception.translator.DuplicateTranslatorPhoneNumberException;
 import com.mahdi.website.model.Translator;

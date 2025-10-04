@@ -41,9 +41,9 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "addresses", key = "#result.id")
+            @CachePut(value = "addresses", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "addressSearch", allEntries = true)
+            @CacheEvict(value = "addressSearch", allEntries = true)
     })
     public Address saveAddress(AddressDTO addressDTO) {
         return addressRepository.save(addressMapper.toEntity(addressDTO));
@@ -51,9 +51,9 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "addresses", key = "#result.id")
+            @CachePut(value = "addresses", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "addressSearch", allEntries = true)
+            @CacheEvict(value = "addressSearch", allEntries = true)
     })
     public Address deactivateAddress(AddressDTO addressDTO) {
         Address address;
@@ -73,9 +73,9 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "addresses", key = "#result.id")
+            @CachePut(value = "addresses", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "addressSearch", allEntries = true)
+            @CacheEvict(value = "addressSearch", allEntries = true)
     })
     public Address updateAddress(AddressDTO addressDTO) {
 

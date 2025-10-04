@@ -7,13 +7,22 @@ import java.util.List;
 
 public interface TranslatorService {
     List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO);
+
     Translator saveTranslator(TranslatorDTO translatorDTO);
+
     Translator findTranslatorByFirstName(String firstName);
+
     Translator findTranslatorBylastName(String lastName);
+
     Translator findTranslatorByEmail(String email);
+
     Translator findTranslatorByPhoneNumber(String phoneNumber);
+
     TranslatorDTO findTranslatorDTOById(Long id);
+
     Translator findTranslatorById(Long id);
+
     Translator deactivateTranslatorById(Long id);
+
     Translator updateTranslator(TranslatorDTO translatorDTO);
 }

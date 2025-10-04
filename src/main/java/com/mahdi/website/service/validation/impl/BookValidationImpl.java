@@ -18,7 +18,7 @@ public class BookValidationImpl implements BookValidation {
 
     @Override
     public void bookValidation(BookDTO bookDTO) {
-        Optional<Book> optionalBook =  bookRepository.findBookByBookId(bookDTO.getBookId());
+        Optional<Book> optionalBook = bookRepository.findBookByBookId(bookDTO.getBookId());
         if (optionalBook.isPresent()) {
             throw new DuplicateBookIdException();
         }

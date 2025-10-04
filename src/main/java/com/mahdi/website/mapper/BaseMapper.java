@@ -3,7 +3,7 @@ package com.mahdi.website.mapper;
 import java.util.List;
 
 
-public interface BaseMapper<E, D>{
+public interface BaseMapper<E, D> {
 
     E toEntity(D d);
 

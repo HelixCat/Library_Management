@@ -18,7 +18,7 @@ public class LoginValidation implements LoginValidationInterface {
 
     @Override
     public void isValidPassword(String plainPassword, String hashedPassword, String context) {
-        if (Boolean.FALSE.equals(passwordEncoder.matches(plainPassword, hashedPassword))) {
+        if (!passwordEncoder.matches(plainPassword, hashedPassword)) {
             throw new IncorrectPasswordException();
         }
     }

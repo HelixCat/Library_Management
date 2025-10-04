@@ -14,6 +14,7 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -28,15 +29,15 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     @Cacheable(value = "authorSearch", key = "T(java.util.Objects).hash(#authorDTO.firstName, #authorDTO.lastName, #authorDTO.email)", unless = "#result == null or #result.isEmpty()")
     public List<Author> searchAuthor(AuthorDTO authorDTO) {
-        AuthorSearchSpecification  specification = new AuthorSearchSpecification(authorDTO);
+        AuthorSearchSpecification specification = new AuthorSearchSpecification(authorDTO);
         return authorRepository.findAll(specification);
     }
 
     @Override
     @Caching(put = {
-        @CachePut(value = "authors", key = "#result.id")
+            @CachePut(value = "authors", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "authorSearch", allEntries = true)
+            @CacheEvict(value = "authorSearch", allEntries = true)
     })
     public Author saveAuthor(AuthorDTO authorDTO) {
         authorValidation.addAuthorValidation(authorDTO);
@@ -53,9 +54,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "authors", key = "#result.id")
+            @CachePut(value = "authors", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "authorSearch", allEntries = true)
+            @CacheEvict(value = "authorSearch", allEntries = true)
     })
     public Author deactivateAuthor(AuthorDTO authorDTO) {
         Author author = findAuthorById(authorDTO.getId());
@@ -65,9 +66,9 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     @Caching(put = {
-        @CachePut(value = "authors", key = "#result.id")
+            @CachePut(value = "authors", key = "#result.id")
     }, evict = {
-        @CacheEvict(value = "authorSearch", allEntries = true)
+            @CacheEvict(value = "authorSearch", allEntries = true)
     })
     public Author updateAuthor(AuthorDTO authorDTO) {
         Author author = findAuthorById(authorDTO.getId());

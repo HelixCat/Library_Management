@@ -2,7 +2,6 @@ package com.mahdi.website.controller.rest;
 
 import com.mahdi.website.dto.AuthorDTO;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;

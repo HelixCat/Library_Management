@@ -1,8 +1,8 @@
 package com.mahdi.website.mapper;
 
-import org.mapstruct.Mapper;
-import com.mahdi.website.model.Book;
 import com.mahdi.website.dto.BookDTO;
+import com.mahdi.website.model.Book;
+import org.mapstruct.Mapper;
 
 
 @Mapper(componentModel = "spring")

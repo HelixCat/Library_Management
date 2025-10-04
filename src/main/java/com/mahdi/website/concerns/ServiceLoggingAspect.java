@@ -3,26 +3,26 @@ package com.mahdi.website.concerns;
 import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 import java.util.Date;
 import java.util.Objects;
 import java.util.logging.Logger;
-
-import org.slf4j.LoggerFactory;
 
 @Aspect
 @Component
 @RequiredArgsConstructor
 public class ServiceLoggingAspect {
 
-    private final LogHandler logHandler;
-    private final String packageName = "Service";
     private static final Logger logger = Logger.getLogger(ServiceLoggingAspect.class.getName());
     private static final org.slf4j.Logger slf4jLogger = LoggerFactory.getLogger(ServiceLoggingAspect.class);
-
+    private final LogHandler logHandler;
+    private final String packageName = "Service";
 
     @Pointcut("execution(* com.mahdi.website.service..*(..))")
-    public void serviceMethods() {}
+    public void serviceMethods() {
+    }
 
     @Before("serviceMethods()")
     public void logBefore(JoinPoint joinPoint) {
@@ -35,7 +35,7 @@ public class ServiceLoggingAspect {
     @AfterReturning(pointcut = "serviceMethods()", returning = "result")
     public void loggAfterCreateUser(JoinPoint joinPoint, Object result) {
         if (Objects.nonNull(result)) {
-            StringBuilder stringBuilder = logHandler.prepareLog(joinPoint, packageName, result.toString(),  null);
+            StringBuilder stringBuilder = logHandler.prepareLog(joinPoint, packageName, result.toString(), null);
             logger.info(stringBuilder.toString());
             logHandler.mangoDBLoggSaver(new Date(), "INFO", stringBuilder.toString());
         }
@@ -50,7 +50,7 @@ public class ServiceLoggingAspect {
     }
 
     @AfterThrowing(pointcut = "serviceMethods()", throwing = "ex")
-    public void logAfterThrowingCreateUser(JoinPoint joinPoint, Exception ex){
+    public void logAfterThrowingCreateUser(JoinPoint joinPoint, Exception ex) {
         StringBuilder stringBuilder = logHandler.prepareLog(joinPoint, packageName, null, ex);
         logger.info(stringBuilder.toString());
         logHandler.mangoDBLoggSaver(new Date(), "ERROR", stringBuilder.toString());

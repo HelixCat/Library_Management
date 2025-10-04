@@ -1,12 +1,15 @@
 package com.mahdi.website.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Lob;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.EqualsAndHashCode;
 
 @Getter
 @Setter
@@ -45,7 +48,7 @@ public class User extends BaseEntity {
     @Column(name = "c_register_day", length = 10)
     private String registerDay;
     @Lob
-    @Column(name = "c_profile_image", length = 200000,  columnDefinition = "LONGBLOB")
+    @Column(name = "c_profile_image", length = 200000, columnDefinition = "LONGBLOB")
     private byte[] profileImage;
     @NotNull
     @NotEmpty
