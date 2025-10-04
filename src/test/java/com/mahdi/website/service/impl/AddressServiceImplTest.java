@@ -35,7 +35,7 @@ class AddressServiceImplTest {
         address.setId(1L);
         when(addressRepository.findById(1L)).thenReturn(Optional.of(address));
         AddressDTO addressDTO = new AddressDTO();
-        addressDTO.setId(2L);
+                addressDTO.setId(1L);
         Address result = addressServiceImpl.findAddressById(addressDTO);
         assertNotNull(result);
         assertEquals(1L, result.getId());

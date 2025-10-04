@@ -27,7 +27,7 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Override
-    @Cacheable(value = "addresses", key = "#id", unless = "#result == null")
+    @Cacheable(value = "addresses", key = "#addressDTO.id", unless = "#result == null")
     public Address findAddressById(AddressDTO addressDTO) {
         return addressRepository.findById(addressDTO.getId()).orElseThrow(AddressByIdNotFoundException::new);
     }
