@@ -2,6 +2,7 @@ package com.mahdi.website.service.impl;
 
 import com.mahdi.website.dto.ChangePasswordDTO;
 import com.mahdi.website.dto.UserDTO;
+import com.mahdi.website.enumeration.Role;
 import com.mahdi.website.exception.user.UserNotFoundException;
 import com.mahdi.website.mapper.UserMapper;
 import com.mahdi.website.model.User;
@@ -52,7 +53,6 @@ public class UserServiceImpl implements UserService {
     private User prepareUser(User userDetail, UserDTO userDTO) {
         User user = Objects.nonNull(userDetail) ? userDetail : new User();
         user.setActive(Boolean.TRUE);
-        user.setRole(prepareRoleUser(userDTO));
         user.setUsername(userDTO.getUsername());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
@@ -74,18 +74,15 @@ public class UserServiceImpl implements UserService {
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
             user.setRegisterDay((formatter.format(new Date())));
         }
+        user.setRoles(new HashSet<>(Collections.singletonList(prepareRoleUser(userDTO))));
         return user;
     }
 
-    private String prepareRoleUser(UserDTO userDTO) {
-        if (Boolean.TRUE.equals(userDTO.getAdmin())) {
-            return "ADMIN";
+    private Role prepareRoleUser(UserDTO userDTO) {
+        if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
+            return Role.ROLE_ADMIN;
         } else {
-            if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
-                return "ADMIN";
-            } else {
-                return "NOT_ADMIN";
-            }
+            return Role.ROLE_USER;
         }
     }
 

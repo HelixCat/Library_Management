@@ -1,0 +1,6 @@
+package com.mahdi.website.enumeration;
+
+public enum Role {
+    ROLE_USER,
+    ROLE_ADMIN
+}

@@ -6,7 +6,7 @@ import com.mahdi.website.model.Translator;
 import java.util.List;
 
 public interface TranslatorService {
-    List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO);
+    List<Translator> searchTranslator(TranslatorDTO translatorDTO);
 
     Translator saveTranslator(TranslatorDTO translatorDTO);
 

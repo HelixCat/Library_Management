@@ -28,11 +28,11 @@ public class TranslatorServiceImpl implements TranslatorService {
 
 
     @Override
-    @Cacheable(value = "translatorSearch", key = "T(java.util.Objects).hash(#translatorDTO.firstName, #translatorDTO.lastName, #translatorDTO.email)", unless = "#result == null or #result.isEmpty()")
-    public List<TranslatorDTO> searchTranslator(TranslatorDTO translatorDTO) {
+    @Cacheable(value = "translatorSearch", key = "T(java.util.Objects).hash(#translator.firstName, #translator.lastName, #translator.email)", unless = "#result == null or #result.isEmpty()")
+    public List<Translator> searchTranslator(TranslatorDTO translatorDTO) {
         TranslatorSearchSpecification specification = new TranslatorSearchSpecification(translatorDTO);
         List<Translator> translatorList = translatorRepository.findAll(specification);
-        return prepareTranslatorList(translatorList);
+        return translatorList;
     }
 
     @Override
@@ -110,14 +110,5 @@ public class TranslatorServiceImpl implements TranslatorService {
         Translator translator = translatorMapper.toEntity(translatorDTO);
         translator.setActive(Boolean.TRUE);
         return translator;
-    }
-
-    private List<TranslatorDTO> prepareTranslatorList(List<Translator> translatorList) {
-        List<TranslatorDTO> translatorDTOList = new ArrayList<>();
-        for (Translator translator : translatorList) {
-            TranslatorDTO translatorDTO = translatorMapper.toDTO(translator);
-            translatorDTOList.add(translatorDTO);
-        }
-        return translatorDTOList;
     }
 }

@@ -1,6 +1,8 @@
 package com.mahdi.website.controller.impl;
 
-import com.mahdi.website.configuration.jwt.JwtUtil;
+import com.mahdi.website.model.User;
+import com.mahdi.website.service.security.CustomUserDetailsService;
+import com.mahdi.website.service.security.jwt.JwtUtil;
 import com.mahdi.website.controller.rest.AuthRemote;
 import com.mahdi.website.dto.AuthResponse;
 import com.mahdi.website.dto.UserDTO;
@@ -14,9 +16,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -26,20 +32,24 @@ public class AuthResource implements AuthRemote {
 
     private final UserMapper userMapper;
     private final UserService userService;
-    private final AuthenticationManager authenticationManager;
+    private final CustomUserDetailsService UserDetailsService;
     private final JwtUtil jwtUtil;
 
 
     @Override
     @Operation(summary = "Sign in", description = "Authenticate user and generate session/token")
-    public ResponseEntity<AuthResponse> signing(@Valid @RequestBody UserDTO userDTO) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(userDTO.getUsername(), userDTO.getPassword())
-        );
+    public ResponseEntity<Map<String, String>> signing(@Valid @RequestBody UserDTO userDTO) throws Exception {
+        User user = userService.authenticateUser(userDTO);
 
-        String token = jwtUtil.generateToken(authentication.getName());
+        UserDetails userDetails = UserDetailsService.loadUserByUsername(user.getUsername());
+        String jwt = jwtUtil.generateToken(userDetails);
 
-        return ResponseEntity.ok(new AuthResponse(token, authentication.getName()));
+        Map<String, String> response = new HashMap<>();
+        response.put("token", jwt);
+        response.put("username", user.getUsername());
+        response.put("roles", user.getRoles().toString());
+
+        return ResponseEntity.ok(response);
     }
 
     @Override

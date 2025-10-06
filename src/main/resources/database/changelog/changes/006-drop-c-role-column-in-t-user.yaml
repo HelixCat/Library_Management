@@ -1,0 +1,8 @@
+databaseChangeLog:
+  - changeSet:
+      id: drop-c-role-column
+      author: mahdi
+      changes:
+        - dropColumn:
+            columnName: c_role
+            tableName: t_user

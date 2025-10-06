@@ -1,9 +1,13 @@
 package com.mahdi.website.dto;
 
 
+import com.mahdi.website.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -13,7 +17,6 @@ public class UserDTO {
     private Long id;
     private String email;
     private byte[] image;
-    private Boolean admin;
     private String gender;
     private Boolean active;
     private String birthday;
@@ -26,4 +29,5 @@ public class UserDTO {
     private String phoneNumber;
     private String nationalCode;
     private String base64ProfileImage;
+    private Set<Role> roles = new HashSet<>();
 }

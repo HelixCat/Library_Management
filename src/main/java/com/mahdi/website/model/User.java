@@ -1,15 +1,16 @@
 package com.mahdi.website.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Lob;
-import jakarta.persistence.Table;
+import com.mahdi.website.enumeration.Role;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -52,7 +53,13 @@ public class User extends BaseEntity {
     private byte[] profileImage;
     @NotNull
     @NotEmpty
-    @Column(name = "c_role", nullable = false, length = 20)
-    private String role;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(
+            name = "t_user_roles",
+            joinColumns = @JoinColumn(name = "user_id")
+    )
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Set<Role> roles = new HashSet<>();
 }
 

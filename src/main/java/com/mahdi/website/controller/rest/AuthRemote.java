@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.Map;
+
 @Tag(name = "Authentication", description = "Authentication APIs")
 public interface AuthRemote {
     @Operation(summary = "Sign in", description = "Authenticate user and generate session/token")
@@ -21,7 +23,7 @@ public interface AuthRemote {
         @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping("/signing")
-    ResponseEntity<AuthResponse> signing(@Valid @RequestBody UserDTO userDTO);
+    ResponseEntity<Map<String, String>> signing(@Valid @RequestBody UserDTO userDTO) throws Exception;
 
     @Operation(summary = "Sign up", description = "Register a new user account")
     @ApiResponses({
