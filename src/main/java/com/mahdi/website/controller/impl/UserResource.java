@@ -47,7 +47,7 @@ public class UserResource implements UserRemote {
     public ResponseEntity<UserDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception {
         return new ResponseEntity<>(userMapper.toDTO(userService.updateUserPassword(changePasswordDTO)), HttpStatus.OK);
     }
-
+ 
     @Override
     @Operation(summary = "Find user by ID", description = "Retrieve a user by their ID")
     public ResponseEntity<UserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception {
