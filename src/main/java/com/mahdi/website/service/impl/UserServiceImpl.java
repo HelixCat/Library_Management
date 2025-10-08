@@ -107,22 +107,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Cacheable(value = "users", key = "#userName", unless = "#result == null")
-    public User loadUserByUserName(String userName) {
-        log.info("Loading user by username from database: {}", userName);
-        return userRepository.findByUserName(userName)
+    public User loadUserByUserName(UserDTO userDTO) {
+        log.info("Loading user by username from database: {}", userDTO.getUsername());
+        return userRepository.findByUserName(userDTO.getUsername())
                 .orElseThrow(() -> {
-                    log.warn("User not found: {}", userName);
+                    log.warn("User not found: {}", userDTO.getUsername());
                     return new UserNotFoundException();
                 });
     }
 
     @Override
     @Cacheable(value = "userDetails", key = "#email", unless = "#result == null")
-    public User loadUserByEmail(String email) {
-        log.info("Loading user by email from database: {}", email);
-        return userRepository.findByEmail(email)
+    public User loadUserByEmail(UserDTO userDTO) {
+        log.info("Loading user by email from database: {}", userDTO.getEmail());
+        return userRepository.findByEmail(userDTO.getEmail())
                 .orElseThrow(() -> {
-                    log.warn("User not found by email: {}", email);
+                    log.warn("User not found by email: {}", userDTO.getEmail());
                     return new UserNotFoundException();
                 });
     }
@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
     )
     public User deactivateUser(UserDTO userDTO) {
         log.info("Deactivating user: {}", userDTO.getUsername());
-        User user = loadUserByUserName(userDTO.getUsername());
+        User user = loadUserByUserName(userDTO);
         user.setActive(Boolean.FALSE);
         User deactivatedUser = userRepository.save(user);
         log.info("User deactivated and cache updated: {}", deactivatedUser.getUsername());
@@ -184,7 +184,9 @@ public class UserServiceImpl implements UserService {
     )
     public User updateUserPassword(ChangePasswordDTO changePasswordDTO) {
         log.info("Updating password for user: {}", changePasswordDTO.getUserName());
-        User user = loadUserByUserName(changePasswordDTO.getUserName());
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername(changePasswordDTO.getUserName());
+        User user = loadUserByUserName(userDTO);
         passwordValidationService.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
         String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
         user.setPassword(hashedPassword);
@@ -200,7 +202,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User authenticateUser(UserDTO userDTO) {
         log.info("Authenticating user: {}", userDTO.getUsername());
-        User user = loadUserByUserName(userDTO.getUsername());
+        User user = loadUserByUserName(userDTO);
         passwordValidationService.isValidPassword(userDTO.getPassword(), user.getPassword(), "login");
         log.info("User authenticated successfully: {}", userDTO.getUsername());
         return user;

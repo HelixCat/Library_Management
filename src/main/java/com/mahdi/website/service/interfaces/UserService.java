@@ -12,9 +12,9 @@ public interface UserService {
 
     User deactivateUser(UserDTO userDTO);
 
-    User loadUserByUserName(String userName);
+    User loadUserByUserName(UserDTO userDTO);
 
-    User loadUserByEmail(String email);
+    User loadUserByEmail(UserDTO userDTO);
 
     User saveUser(UserDTO userDTO) throws Exception;
 
