@@ -1,4 +1,4 @@
-package com.mahdi.website.web.impl;
+package com.mahdi.website.web.resource;
 
 import com.mahdi.website.web.remote.UserRemote;
 import com.mahdi.website.dto.ChangePasswordDTO;

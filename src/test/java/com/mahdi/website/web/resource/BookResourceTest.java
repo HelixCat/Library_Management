@@ -1,9 +1,9 @@
-package com.mahdi.website.web.impl;
+package com.mahdi.website.web.resource;
 
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-class AuthorResourceTest {
+class BookResourceTest {
     @Test
     void sampleUnitTest() {
         assertTrue(true);
