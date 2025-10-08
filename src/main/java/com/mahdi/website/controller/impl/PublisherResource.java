@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/publisher-management")
+@RequestMapping("/admin/publisher-management")
 @Tag(name = "Publisher", description = "Publisher management operations")
 public class PublisherResource implements PublisherRemote {
 

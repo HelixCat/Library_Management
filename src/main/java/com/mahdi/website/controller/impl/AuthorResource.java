@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/author-management")
+@RequestMapping("/admin/author-management")
 @Tag(name = "Author", description = "Author management operations")
 public class AuthorResource implements AuthorRemote {
 

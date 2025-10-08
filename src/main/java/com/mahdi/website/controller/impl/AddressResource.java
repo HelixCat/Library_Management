@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/address-management")
+@RequestMapping("/admin/address-management")
 @Tag(name = "Address", description = "Address management operations")
 public class AddressResource implements AddressRemote {
 

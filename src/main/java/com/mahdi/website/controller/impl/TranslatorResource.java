@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/translator-management")
+@RequestMapping("/admin/translator-management")
 @Tag(name = "Translator", description = "Translator management operations")
 public class TranslatorResource implements TranslatorRemote {
 

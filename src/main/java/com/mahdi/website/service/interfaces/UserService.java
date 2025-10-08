@@ -8,9 +8,7 @@ import com.mahdi.website.model.User;
 import java.util.List;
 
 public interface UserService {
-    List<UserDTO> searchUser(UserDTO userDTO);
-
-    UserDTO prepareToUserDTO(User user);
+    List<User> searchUser(UserDTO userDTO);
 
     User deactivateUser(UserDTO userDTO);
 

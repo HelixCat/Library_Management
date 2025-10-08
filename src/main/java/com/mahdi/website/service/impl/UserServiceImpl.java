@@ -51,32 +51,42 @@ public class UserServiceImpl implements UserService {
     }
 
     private User prepareUser(User userDetail, UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("userDTO must not be null");
+        }
+
         User user = Objects.nonNull(userDetail) ? userDetail : new User();
         user.setActive(Boolean.TRUE);
-        user.setUsername(userDTO.getUsername());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        user.setEmail(userDTO.getEmail());
-        user.setNationalCode(userDTO.getNationalCode());
-        user.setPhoneNumber(userDTO.getPhoneNumber());
-        user.setProfileImage(userDTO.getImage());
-        user.setBirthday(userDTO.getBirthday());
-        if (Objects.nonNull(userDTO.getGender())) {
-            user.setGender(userDTO.getGender());
-        }
-        if (Objects.nonNull(userDTO.getPassword())) {
-            user.setPassword(prepareHashedPassword(userDTO.getPassword()));
-        }
-        if (Objects.nonNull(userDTO.getGender())) {
-            user.setGender(userDTO.getGender());
-        }
+
+        Optional.ofNullable(userDTO.getUsername()).ifPresent(user::setUsername);
+        Optional.ofNullable(userDTO.getFirstName()).ifPresent(user::setFirstName);
+        Optional.ofNullable(userDTO.getLastName()).ifPresent(user::setLastName);
+        Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
+        Optional.ofNullable(userDTO.getNationalCode()).ifPresent(user::setNationalCode);
+        Optional.ofNullable(userDTO.getPhoneNumber()).ifPresent(user::setPhoneNumber);
+        Optional.ofNullable(userDTO.getImage()).ifPresent(user::setProfileImage);
+        Optional.ofNullable(userDTO.getBirthday()).ifPresent(user::setBirthday);
+        Optional.ofNullable(userDTO.getGender()).ifPresent(user::setGender);
+
+        Optional.ofNullable(userDTO.getPassword())
+                .map(this::prepareHashedPassword)
+                .ifPresent(user::setPassword);
         if (Objects.isNull(user.getRegisterDay())) {
             SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            user.setRegisterDay((formatter.format(new Date())));
+            user.setRegisterDay(formatter.format(new Date()));
         }
-        user.setRoles(new HashSet<>(Collections.singletonList(prepareRoleUser(userDTO))));
+
+        if ((Objects.isNull(user.getRoles())) ||(user.getRoles().isEmpty())) {
+            if (Objects.nonNull(userDTO.getRoles()) && !userDTO.getRoles().isEmpty()) {
+                user.getRoles().addAll(userDTO.getRoles());
+            } else {
+                user.setRoles(new HashSet<>(Collections.singletonList(prepareRoleUser(userDTO))));
+            }
+        }
+
         return user;
     }
+
 
     private Role prepareRoleUser(UserDTO userDTO) {
         if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
@@ -117,33 +127,15 @@ public class UserServiceImpl implements UserService {
                 });
     }
 
-    @Override
-    @Cacheable(value = "userSearch",
+    @Cacheable(
+            value = "userSearch",
             key = "T(java.util.Objects).hash(#userDTO.username, #userDTO.email, #userDTO.firstName, #userDTO.lastName, #userDTO.active)",
-            unless = "#result == null or #result.isEmpty()")
-    public List<UserDTO> searchUser(UserDTO userDTO) {
+            unless = "#result == null or #result.isEmpty()"
+    )
+    public List<User> searchUser(UserDTO userDTO) {
         log.info("Searching users with criteria: {}", userDTO);
         UserSearchSpecification specification = new UserSearchSpecification(userDTO);
-        List<User> users = userRepository.findAll(specification);
-        List<UserDTO> result = prepareUserDTOList(users);
-        log.info("Found {} users matching criteria", result.size());
-        return result;
-    }
-
-    private List<UserDTO> prepareUserDTOList(List<User> users) {
-        List<UserDTO> userDTOS = new ArrayList<>();
-        for (User user : users) {
-            userDTOS.add(prepareToUserDTO(user));
-        }
-        return userDTOS;
-    }
-
-    @Override
-    @Cacheable(value = "userDetails", key = "#user.username", condition = "#user != null")
-    public UserDTO prepareToUserDTO(User user) {
-        UserDTO DTO = userMapper.toDTO(user);
-        DTO.setPassword(null);
-        return DTO;
+        return userRepository.findAll(specification);
     }
 
     @Override
@@ -158,11 +150,8 @@ public class UserServiceImpl implements UserService {
     )
     public User updateUser(UserDTO userDTO) {
         log.info("Updating user: {}", userDTO.getUsername());
-        User user = prepareUser(loadUserByUserName(userDTO.getUsername()), userDTO);
+        User user = prepareUser(loadUserById(userDTO), userDTO);
         User updatedUser = userRepository.save(user);
-        if (Objects.nonNull(user.getProfileImage())) {
-            userDTO.setBase64ProfileImage(prepareByteArrayToBase64(user.getProfileImage()));
-        }
         log.info("User updated and cache refreshed: {}", updatedUser.getUsername());
         return updatedUser;
     }
@@ -219,10 +208,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loadUserById(UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.getId()).orElseThrow(() -> {
+        return userRepository.findById(userDTO.getId()).orElseThrow(() -> {
             log.warn("User not found by id: {}", userDTO.getId());
             return new UserNotFoundException();
         });
-        return user;
     }
 }

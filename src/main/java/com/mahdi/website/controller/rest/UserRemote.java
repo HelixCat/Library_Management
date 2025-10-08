@@ -1,6 +1,7 @@
 package com.mahdi.website.controller.rest;
 
 import com.mahdi.website.dto.ChangePasswordDTO;
+import com.mahdi.website.dto.ResponseUserDTO;
 import com.mahdi.website.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -21,7 +22,7 @@ public interface UserRemote {
         @ApiResponse(responseCode = "404", description = "No users found")
     })
     @GetMapping("/search")
-    ResponseEntity<List<UserDTO>> searchUsers(@RequestBody UserDTO userDTO);
+    ResponseEntity<List<ResponseUserDTO>> searchUsers(@RequestBody UserDTO userDTO);
 
     @Operation(summary = "Save new user", description = "Register a new user in the system")
     @ApiResponses({
@@ -30,7 +31,7 @@ public interface UserRemote {
         @ApiResponse(responseCode = "409", description = "User already exists")
     })
     @PostMapping("/save")
-    ResponseEntity<UserDTO> saveUser(@RequestBody UserDTO userDTO) throws Exception;
+    ResponseEntity<ResponseUserDTO> saveUser(@RequestBody UserDTO userDTO) throws Exception;
 
     @Operation(summary = "Update user", description = "Update an existing user's information")
     @ApiResponses({
@@ -39,7 +40,7 @@ public interface UserRemote {
         @ApiResponse(responseCode = "400", description = "Invalid input data")
     })
     @PutMapping("/update")
-    ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDTO) throws Exception;
+    ResponseEntity<ResponseUserDTO> updateUser(@RequestBody UserDTO userDTO) throws Exception;
 
     @Operation(summary = "Change password", description = "Change user's password")
     @ApiResponses({
@@ -48,7 +49,7 @@ public interface UserRemote {
         @ApiResponse(responseCode = "404", description = "User not found")
     })
     @PutMapping("/change-password")
-    ResponseEntity<UserDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception;
+    ResponseEntity<ResponseUserDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception;
 
     @Operation(summary = "Find user by ID", description = "Retrieve a user by their ID")
     @ApiResponses({
@@ -56,8 +57,8 @@ public interface UserRemote {
         @ApiResponse(responseCode = "404", description = "User not found")
     })
     @PostMapping("/find-user-by-id")
-    ResponseEntity<UserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception;
+    ResponseEntity<ResponseUserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception;
 
     @PostMapping("/deactivate-use")
-    ResponseEntity<UserDTO> deactivateUser(@RequestBody UserDTO userDTO);
+    ResponseEntity<ResponseUserDTO> deactivateUser(@RequestBody UserDTO userDTO);
 }
