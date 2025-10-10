@@ -27,7 +27,7 @@ public class UserResource implements UserRemote {
     @Override
     @Operation(summary = "Search users", description = "Search for users based on provided criteria")
     public ResponseEntity<List<ResponseUserDTO>> searchUsers(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(responseUserMapper.toDTOList(userService.searchUser(userDTO)), HttpStatus.FOUND);
+        return new ResponseEntity<>(userService.searchUserDTO(userDTO), HttpStatus.FOUND);
     }
 
     @Override
@@ -44,14 +44,14 @@ public class UserResource implements UserRemote {
 
     @Override
     @Operation(summary = "Change password", description = "Change user's password")
-    public ResponseEntity<ResponseUserDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) throws Exception {
-        return new ResponseEntity<>(responseUserMapper.toDTO(userService.updateUserPassword(changePasswordDTO)), HttpStatus.OK);
+    public ResponseEntity<ResponseUserDTO> changePassword(@RequestBody ChangePasswordDTO changePasswordDTO) {
+        return new ResponseEntity<>(userService.updateUserDTOPassword(changePasswordDTO), HttpStatus.OK);
     }
  
     @Override
     @Operation(summary = "Find user by ID", description = "Retrieve a user by their ID")
     public ResponseEntity<ResponseUserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception {
-        return new ResponseEntity<>(responseUserMapper.toDTO(userService.loadUserById(userDTO)), HttpStatus.FOUND);
+        return new ResponseEntity<>(responseUserMapper.toDTO(userService.findById(userDTO)), HttpStatus.FOUND);
     }
 
     @Override
@@ -63,6 +63,6 @@ public class UserResource implements UserRemote {
     @Override
     @Operation(summary = "deactivate user by username", description = "deactivate a user by their username")
     public ResponseEntity<ResponseUserDTO> deactivateUser(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(responseUserMapper.toDTO(userService.deactivateUser(userDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(userService.deactivateUserDTO(userDTO), HttpStatus.OK);
     }
 }

@@ -13,9 +13,12 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     @EntityGraph(attributePaths = "roles")
     Optional<User> findUserByEmail(String email);
 
+    @EntityGraph(attributePaths = "roles")
     Optional<User> findUserByUsername(@Param("username") String username);
 
+    @EntityGraph(attributePaths = "roles")
     Optional<User> findUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
+    @EntityGraph(attributePaths = "roles")
     Optional<User> findUserByNationalCode(@Param("nationalCode") String nationalCode);
 }

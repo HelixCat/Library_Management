@@ -69,7 +69,7 @@ public class BookServiceImpl implements BookService {
             @CacheEvict(value = "bookSearch", allEntries = true)
     })
     public Book deactivateBookByBookId(String BookId) {
-        Book book = bookRepository.findBookByBookId(BookId).orElseThrow(BookNotFoundException::new);
+        Book book = bookRepository.findBooksByBookId(BookId).orElseThrow(BookNotFoundException::new);
         book.setActive(Boolean.FALSE);
         return bookRepository.save(book);
     }

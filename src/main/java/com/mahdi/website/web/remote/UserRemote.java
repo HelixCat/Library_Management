@@ -16,12 +16,13 @@ import java.util.List;
 
 @Tag(name = "User", description = "User management APIs")
 public interface UserRemote {
+
     @Operation(summary = "Search users", description = "Search for users based on provided criteria")
     @ApiResponses({
         @ApiResponse(responseCode = "302", description = "Users found", content = @Content(schema = @Schema(implementation = UserDTO.class))),
         @ApiResponse(responseCode = "404", description = "No users found")
     })
-    @GetMapping("/search")
+    @PostMapping("/search")
     ResponseEntity<List<ResponseUserDTO>> searchUsers(@RequestBody UserDTO userDTO);
 
     @Operation(summary = "Save new user", description = "Register a new user in the system")
@@ -62,6 +63,6 @@ public interface UserRemote {
     @PostMapping("/find-user-by-email")
     ResponseEntity<ResponseUserDTO> findUserByEmail(@RequestBody UserDTO userDTO);
 
-    @PostMapping("/deactivate-user")
+    @PutMapping("/deactivate-user")
     ResponseEntity<ResponseUserDTO> deactivateUser(@RequestBody UserDTO userDTO);
 }

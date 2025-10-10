@@ -1,5 +1,6 @@
 package com.mahdi.website.repository;
 
+import com.mahdi.website.dto.TranslatorDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.model.User;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -15,9 +16,9 @@ import java.util.Objects;
 
 public class UserSearchSpecification implements Specification<User> {
 
-    private UserDTO userDTO;
+    private final UserDTO userDTO;
 
-    public UserSearchSpecification(UserDTO UserDTO) {
+    public UserSearchSpecification(UserDTO userDTO) {
         this.userDTO = userDTO;
     }
 
@@ -32,7 +33,7 @@ public class UserSearchSpecification implements Specification<User> {
             predicates.add(criteriaBuilder.like(root.get("lastName"), "%" + userDTO.getLastName() + "%"));
         }
         if (StringUtils.hasText(userDTO.getUsername())) {
-            predicates.add(criteriaBuilder.like(root.get("userName"), "%" + userDTO.getUsername() + "%"));
+            predicates.add(criteriaBuilder.like(root.get("username"), "%" + userDTO.getUsername() + "%"));
         }
         if (StringUtils.hasText(userDTO.getEmail())) {
             predicates.add(criteriaBuilder.equal(root.get("email"), userDTO.getEmail()));

@@ -36,11 +36,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordValidationService passwordValidationService;
     private final SignUpValidationInterface signUpValidation;
 
-    @Override
-    @Caching(put = {
-            @CachePut(value = "users", key = "#result.username"),
-            @CachePut(value = "userDetails", key = "#result.email")
-    })
     @Transactional
     public User saveUser(UserDTO userDTO) {
         log.info("Saving user: {}", userDTO.getUsername());
@@ -107,14 +102,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "users", key = "#userName", unless = "#result == null")
-    public User loadUserByUserName(UserDTO userDTO) {
+    public User findUserByUsername(UserDTO userDTO) {
         log.info("Loading user by username from database: {}", userDTO.getUsername());
         return userRepository.findUserByUsername(userDTO.getUsername())
                 .orElseThrow(() -> {
                     log.warn("User not found: {}", userDTO.getUsername());
                     return new UserNotFoundException();
                 });
+    }
+
+    @Override
+    @Cacheable(value = "user", key = "#userDTO.username", unless = "#result == null")
+    public ResponseUserDTO findUserDTObyUsername(UserDTO userDTO) {
+        return responseUserMapper.toDTO(findUserByUsername(userDTO));
+
     }
 
     @Override
@@ -128,16 +129,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value = "userDetails", key = "#userDTO.email", unless = "#result == null")
     public ResponseUserDTO findUserDTOByEmail(UserDTO userDTO) {
         log.info("Loading userDTO by email from database: {}", userDTO.getEmail());
         return responseUserMapper.toDTO(findUserByEmail(userDTO));
     }
 
-    @Cacheable(
-            value = "userSearch",
-            key = "T(java.util.Objects).hash(#userDTO.username, #userDTO.email, #userDTO.firstName, #userDTO.lastName, #userDTO.active)",
-            unless = "#result == null or #result.isEmpty()"
-    )
     public List<User> searchUser(UserDTO userDTO) {
         log.info("Searching users with criteria: {}", userDTO);
         UserSearchSpecification specification = new UserSearchSpecification(userDTO);
@@ -145,18 +142,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Caching(
-            put = {
-                    @CachePut(value = "users", key = "#result.username"),
-                    @CachePut(value = "userDetails", key = "#result.email")
-            },
-            evict = {
-                    @CacheEvict(value = "userSearch", allEntries = true)
-            }
+    @Cacheable(
+            value = "userSearch",
+            key = "T(java.util.Objects).hash(#userDTO.username, #userDTO.email, #userDTO.firstName, #userDTO.lastName, #userDTO.active)",
+            unless = "#result == null or #result.isEmpty()"
     )
+    public List<ResponseUserDTO> searchUserDTO(UserDTO userDTO) {
+        return responseUserMapper.toDTOList(searchUser(userDTO));
+    }
+
+    @Override
     public User updateUser(UserDTO userDTO) {
         log.info("Updating user: {}", userDTO.getUsername());
-        User user = prepareUser(loadUserById(userDTO), userDTO);
+        User user = prepareUser(findById(userDTO), userDTO);
         User updatedUser = userRepository.save(user);
         log.info("User updated and cache refreshed: {}", updatedUser.getUsername());
         return updatedUser;
@@ -165,16 +163,21 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             put = {
-                    @CachePut(value = "users", key = "#result.username"),
+                    @CachePut(value = "user", key = "#result.username"),
                     @CachePut(value = "userDetails", key = "#result.email")
             },
             evict = {
                     @CacheEvict(value = "userSearch", allEntries = true)
             }
     )
+    public ResponseUserDTO updateUserDTO(UserDTO userDTO) {
+        return responseUserMapper.toDTO(updateUser(userDTO));
+    }
+
+    @Override
     public User deactivateUser(UserDTO userDTO) {
         log.info("Deactivating user: {}", userDTO.getUsername());
-        User user = loadUserByUserName(userDTO);
+        User user = findUserByUsername(userDTO);
         user.setActive(Boolean.FALSE);
         User deactivatedUser = userRepository.save(user);
         log.info("User deactivated and cache updated: {}", deactivatedUser.getUsername());
@@ -184,15 +187,23 @@ public class UserServiceImpl implements UserService {
     @Override
     @Caching(
             put = {
-                    @CachePut(value = "users", key = "#result.username"),
+                    @CachePut(value = "user", key = "#result.username"),
                     @CachePut(value = "userDetails", key = "#result.email")
+            },
+            evict = {
+                    @CacheEvict(value = "userSearch", allEntries = true)
             }
     )
+    public ResponseUserDTO deactivateUserDTO(UserDTO userDTO) {
+        return responseUserMapper.toDTO(deactivateUser(userDTO));
+    }
+
+    @Override
     public User updateUserPassword(ChangePasswordDTO changePasswordDTO) {
         log.info("Updating password for user: {}", changePasswordDTO.getUserName());
         UserDTO userDTO = new UserDTO();
         userDTO.setUsername(changePasswordDTO.getUserName());
-        User user = loadUserByUserName(userDTO);
+        User user = findUserByUsername(userDTO);
         passwordValidationService.isValidPassword(changePasswordDTO.getOldPassword(), user.getPassword(), "change password");
         String hashedPassword = prepareHashedPassword(changePasswordDTO.getNewPassword());
         user.setPassword(hashedPassword);
@@ -201,21 +212,28 @@ public class UserServiceImpl implements UserService {
         return updatedUser;
     }
 
-    private String prepareByteArrayToBase64(byte[] profileImage) {
-        return Base64.getEncoder().encodeToString(profileImage);
+    @Override
+    @Caching(
+            put = {
+                    @CachePut(value = "user", key = "#result.username"),
+                    @CachePut(value = "userDetails", key = "#result.email")
+            }
+    )
+    public ResponseUserDTO updateUserDTOPassword(ChangePasswordDTO changePasswordDTO) {
+        return responseUserMapper.toDTO(updateUserPassword(changePasswordDTO));
     }
 
     @Override
     public User authenticateUser(UserDTO userDTO) {
         log.info("Authenticating user: {}", userDTO.getUsername());
-        User user = loadUserByUserName(userDTO);
+        User user = findUserByUsername(userDTO);
         passwordValidationService.isValidPassword(userDTO.getPassword(), user.getPassword(), "login");
         log.info("User authenticated successfully: {}", userDTO.getUsername());
         return user;
     }
 
     @Override
-    public User loadUserById(UserDTO userDTO) {
+    public User findById(UserDTO userDTO) {
         return userRepository.findById(userDTO.getId()).orElseThrow(() -> {
             log.warn("User not found by id: {}", userDTO.getId());
             return new UserNotFoundException();

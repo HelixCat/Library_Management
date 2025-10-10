@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class TranslatorSearchSpecification implements Specification<Translator> {
 
-    private TranslatorDTO translatorDTO;
+    private final TranslatorDTO translatorDTO;
 
     public TranslatorSearchSpecification(TranslatorDTO translatorDTO) {
         this.translatorDTO = translatorDTO;
