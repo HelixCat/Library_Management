@@ -23,7 +23,7 @@ public class PublisherValidation implements PublisherValidationInterface {
     }
 
     public void publisherNameValidation(String publisherName) {
-        Optional<Publisher> publisher = publisherRepository.findByPublisherName(publisherName);
+        Optional<Publisher> publisher = publisherRepository.findPublisherByName(publisherName);
         if (publisher.isPresent()) {
             throw new DuplicatePublisherNameException();
         }

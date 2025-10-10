@@ -59,9 +59,9 @@ public interface UserRemote {
     @PostMapping("/find-user-by-id")
     ResponseEntity<ResponseUserDTO> findUserById(@RequestBody UserDTO userDTO) throws Exception;
 
-    @PostMapping("/find-user-by-id")
+    @PostMapping("/find-user-by-email")
     ResponseEntity<ResponseUserDTO> findUserByEmail(@RequestBody UserDTO userDTO);
 
-    @PostMapping("/deactivate-use")
+    @PostMapping("/deactivate-user")
     ResponseEntity<ResponseUserDTO> deactivateUser(@RequestBody UserDTO userDTO);
 }

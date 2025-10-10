@@ -68,7 +68,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     @Cacheable(value = "addresses", key = "#postalCode", unless = "#result == null")
     public Address findAddressByPostalCode(AddressDTO addressDTO) {
-        return addressRepository.findByPostalCode(addressDTO.getPostalCode()).orElseThrow(AddressByPostalCodeNotFoundException::new);
+        return addressRepository.findAddressByPostalCode(addressDTO.getPostalCode()).orElseThrow(AddressByPostalCodeNotFoundException::new);
     }
 
     @Override

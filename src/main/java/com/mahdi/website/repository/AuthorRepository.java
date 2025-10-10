@@ -1,23 +1,19 @@
 package com.mahdi.website.repository;
 
 import com.mahdi.website.model.Author;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+
 import java.util.Optional;
 
-public interface AuthorRepository extends CrudRepository<Author, Long>, JpaSpecificationExecutor<Author> {
+public interface AuthorRepository extends JpaRepository<Author, Long>, JpaSpecificationExecutor<Author> {
 
-    @Query("SELECT author FROM Author author WHERE author.email = :email")
-    Optional<Author> findAuthorByEmail(@Param("email") String email);
+    Optional<Author> findAuthorsByEmail(@Param("email") String email);
 
-    @Query("SELECT author FROM Author author WHERE author.phoneNumber = :phoneNumber")
-    Optional<Author> findAuthorByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    Optional<Author> findAuthorsByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
-    @Query("SELECT author FROM Author author WHERE author.firstName = :firstName")
-    Optional<Author> findByAuthorByFirstName(@Param("firstName") String firstName);
+    Optional<Author> findAuthorsByFirstName(@Param("firstName") String firstName);
 
-    @Query("SELECT author FROM Author author WHERE author.lastName = :lastName")
-    Optional<Author> findByAuthorByLastName(@Param("lastName") String lastName);
+    Optional<Author> findAuthorsByLastName(@Param("lastName") String lastName);
 }

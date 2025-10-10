@@ -57,7 +57,7 @@ public class UserResource implements UserRemote {
     @Override
     @Operation(summary = "Find user by Email", description = "Retrieve a user by their Email")
     public ResponseEntity<ResponseUserDTO> findUserByEmail(@RequestBody UserDTO userDTO) {
-        return new ResponseEntity<>(responseUserMapper.toDTO(userService.loadUserByEmail(userDTO)), HttpStatus.FOUND);
+        return new ResponseEntity<>(userService.findUserDTOByEmail(userDTO), HttpStatus.FOUND);
     }
 
     @Override

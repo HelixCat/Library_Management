@@ -1,22 +1,22 @@
 package com.mahdi.website.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mahdi.website.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
-@EqualsAndHashCode(callSuper = false)
+@Data
 @Entity
 @Table(name = "t_user")
+@EqualsAndHashCode(callSuper = true)
 public class User extends BaseEntity {
 
     @NotNull
@@ -53,13 +53,10 @@ public class User extends BaseEntity {
     private byte[] profileImage;
     @NotNull
     @NotEmpty
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(
-            name = "t_user_roles",
-            joinColumns = @JoinColumn(name = "user_id")
-    )
-    @Enumerated(EnumType.STRING)
     @Column(name = "role")
+    @Enumerated(EnumType.STRING)
+    @CollectionTable(name = "t_user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @ElementCollection(fetch = FetchType.EAGER)
     private Set<Role> roles = new HashSet<>();
 }
 

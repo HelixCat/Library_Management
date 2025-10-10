@@ -1,24 +1,20 @@
 package com.mahdi.website.repository;
 
 import com.mahdi.website.model.Publisher;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface PublisherRepository extends CrudRepository<Publisher, Long>, JpaSpecificationExecutor<Publisher> {
+public interface PublisherRepository extends JpaRepository<Publisher, Long>, JpaSpecificationExecutor<Publisher> {
 
-    @Query("SELECT p FROM Publisher p WHERE p.email = :email")
     Optional<Publisher> findPublisherByEmail(@Param("email") String email);
 
-    @Query("SELECT p FROM Publisher p WHERE p.phoneNumber = :phoneNumber")
     Optional<Publisher> findPublisherByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
-    @Query("SELECT p FROM Publisher p WHERE p.name = :name")
-    Optional<Publisher> findByPublisherName(@Param("name") String name);
+    Optional<Publisher> findPublisherByName(@Param("name") String name);
 
 }

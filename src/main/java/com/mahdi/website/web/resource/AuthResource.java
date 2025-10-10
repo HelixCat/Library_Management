@@ -1,5 +1,7 @@
 package com.mahdi.website.web.resource;
 
+import com.mahdi.website.dto.ResponseUserDTO;
+import com.mahdi.website.mapper.ResponseUserMapper;
 import com.mahdi.website.model.User;
 import com.mahdi.website.service.security.CustomUserDetailsService;
 import com.mahdi.website.service.security.jwt.JwtUtil;
@@ -26,7 +28,7 @@ import java.util.Map;
 @Tag(name = "Authentication", description = "Authentication operations")
 public class AuthResource implements AuthRemote {
 
-    private final UserMapper userMapper;
+    private final ResponseUserMapper responseUserMapper;
     private final UserService userService;
     private final CustomUserDetailsService UserDetailsService;
     private final JwtUtil jwtUtil;
@@ -50,7 +52,7 @@ public class AuthResource implements AuthRemote {
 
     @Override
     @Operation(summary = "Sign up", description = "Register a new user account")
-    public ResponseEntity<UserDTO> signup(@Valid @RequestBody UserDTO userDTO) throws Exception {
-        return ResponseEntity.ok(userMapper.toDTO(userService.saveUser(userDTO)));
+    public ResponseEntity<ResponseUserDTO> signup(@Valid @RequestBody UserDTO userDTO) throws Exception {
+        return ResponseEntity.ok(responseUserMapper.toDTO(userService.saveUser(userDTO)));
     }
 }

@@ -50,14 +50,14 @@ public class TranslatorServiceImpl implements TranslatorService {
     @Override
     @Cacheable(value = "translators", key = "#firstName", unless = "#result == null")
     public Translator findTranslatorByFirstName(String firstName) {
-        return translatorRepository.findByTranslatorByFirstName(firstName)
+        return translatorRepository.findTranslatorByFirstName(firstName)
                 .orElseThrow(TranslatorNotFoundException::new);
     }
 
     @Override
     @Cacheable(value = "translators", key = "#lastName", unless = "#result == null")
     public Translator findTranslatorBylastName(String lastName) {
-        return translatorRepository.findByTranslatorByLastName(lastName)
+        return translatorRepository.findTranslatorByLastName(lastName)
                 .orElseThrow(TranslatorNotFoundException::new);
     }
 

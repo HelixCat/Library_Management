@@ -8,12 +8,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Set;
 
 @Data
 @Entity
 @Table(name = "t_translator")
+@EqualsAndHashCode(callSuper = true)
 public class Translator extends BaseEntity {
 
     @NotNull

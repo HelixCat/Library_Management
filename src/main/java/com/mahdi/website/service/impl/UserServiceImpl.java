@@ -1,10 +1,11 @@
 package com.mahdi.website.service.impl;
 
 import com.mahdi.website.dto.ChangePasswordDTO;
+import com.mahdi.website.dto.ResponseUserDTO;
 import com.mahdi.website.dto.UserDTO;
 import com.mahdi.website.enumeration.Role;
 import com.mahdi.website.exception.user.UserNotFoundException;
-import com.mahdi.website.mapper.UserMapper;
+import com.mahdi.website.mapper.ResponseUserMapper;
 import com.mahdi.website.model.User;
 import com.mahdi.website.repository.UserRepository;
 import com.mahdi.website.repository.UserSearchSpecification;
@@ -30,7 +31,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private final UserMapper userMapper;
+    private final ResponseUserMapper responseUserMapper;
     private final UserRepository userRepository;
     private final PasswordValidationService passwordValidationService;
     private final SignUpValidationInterface signUpValidation;
@@ -109,7 +110,7 @@ public class UserServiceImpl implements UserService {
     @Cacheable(value = "users", key = "#userName", unless = "#result == null")
     public User loadUserByUserName(UserDTO userDTO) {
         log.info("Loading user by username from database: {}", userDTO.getUsername());
-        return userRepository.findByUserName(userDTO.getUsername())
+        return userRepository.findUserByUsername(userDTO.getUsername())
                 .orElseThrow(() -> {
                     log.warn("User not found: {}", userDTO.getUsername());
                     return new UserNotFoundException();
@@ -117,14 +118,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Cacheable(value = "userDetails", key = "#email", unless = "#result == null")
-    public User loadUserByEmail(UserDTO userDTO) {
+    public User findUserByEmail(UserDTO userDTO) {
         log.info("Loading user by email from database: {}", userDTO.getEmail());
-        return userRepository.findByEmail(userDTO.getEmail())
+        return userRepository.findUserByEmail(userDTO.getEmail())
                 .orElseThrow(() -> {
                     log.warn("User not found by email: {}", userDTO.getEmail());
                     return new UserNotFoundException();
                 });
+    }
+
+    @Override
+    public ResponseUserDTO findUserDTOByEmail(UserDTO userDTO) {
+        log.info("Loading userDTO by email from database: {}", userDTO.getEmail());
+        return responseUserMapper.toDTO(findUserByEmail(userDTO));
     }
 
     @Cacheable(

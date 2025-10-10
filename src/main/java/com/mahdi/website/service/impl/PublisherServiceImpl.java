@@ -48,7 +48,7 @@ public class PublisherServiceImpl implements PublisherService {
     @Override
     @Cacheable(value = "publishers", key = "#name", unless = "#result == null")
     public Publisher findPublisherByName(String name) {
-        return publisherRepository.findByPublisherName(name)
+        return publisherRepository.findPublisherByName(name)
                 .orElseThrow(PublisherNotFoundException::new);
     }
 

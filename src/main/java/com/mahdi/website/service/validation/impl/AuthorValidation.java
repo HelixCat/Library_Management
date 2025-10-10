@@ -18,14 +18,14 @@ public class AuthorValidation implements AuthorValidationInterface {
     private final AuthorRepository authorRepository;
 
     public void authorEmailValidation(String email) {
-        Optional<Author> author = authorRepository.findAuthorByEmail(email);
+        Optional<Author> author = authorRepository.findAuthorsByEmail(email);
         if (author.isPresent()) {
             throw new DuplicateAuthorEmailException();
         }
     }
 
     public void authorPhoneNumberValidation(String phoneNumber) {
-        Optional<Author> author = authorRepository.findAuthorByPhoneNumber(phoneNumber);
+        Optional<Author> author = authorRepository.findAuthorsByPhoneNumber(phoneNumber);
         if (author.isPresent()) {
             throw new DuplicateAuthorPhoneNumberException();
         }

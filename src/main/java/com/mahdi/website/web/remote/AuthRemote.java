@@ -1,6 +1,7 @@
 package com.mahdi.website.web.remote;
 
 
+import com.mahdi.website.dto.ResponseUserDTO;
 import com.mahdi.website.dto.UserDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -31,5 +32,5 @@ public interface AuthRemote {
         @ApiResponse(responseCode = "409", description = "Username already exists")
     })
     @PostMapping("/signup")
-    ResponseEntity<UserDTO> signup(@Valid @RequestBody UserDTO userDTO) throws Exception;
+    ResponseEntity<ResponseUserDTO> signup(@Valid @RequestBody UserDTO userDTO) throws Exception;
 }

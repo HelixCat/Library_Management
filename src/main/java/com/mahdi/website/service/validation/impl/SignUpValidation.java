@@ -21,7 +21,7 @@ public class SignUpValidation implements SignUpValidationInterface {
 
     @Override
     public void userNameValidation(String userName) {
-        Optional<User> user = userRepository.findByUserName(userName);
+        Optional<User> user = userRepository.findUserByUsername(userName);
         if (user.isPresent()) {
             throw new DuplicateUserNameException();
         }
@@ -29,7 +29,7 @@ public class SignUpValidation implements SignUpValidationInterface {
 
     @Override
     public void emailValidation(String email) {
-        Optional<User> user = userRepository.findByEmail(email);
+        Optional<User> user = userRepository.findUserByEmail(email);
         if (user.isPresent()) {
             throw new DuplicateEmailException();
         }
@@ -37,7 +37,7 @@ public class SignUpValidation implements SignUpValidationInterface {
 
     @Override
     public void phoneNumberValidation(String phoneNumber) {
-        Optional<User> user = userRepository.findByPhoneNumber(phoneNumber);
+        Optional<User> user = userRepository.findUserByPhoneNumber(phoneNumber);
         if (user.isPresent()) {
             throw new DuplicatePhoneNumberException();
         }
@@ -45,7 +45,7 @@ public class SignUpValidation implements SignUpValidationInterface {
 
     @Override
     public void nationalCodeValidation(String nationalCode) {
-        Optional<User> user = userRepository.findByNationalCode(nationalCode);
+        Optional<User> user = userRepository.findUserByNationalCode(nationalCode);
         if (user.isPresent()) {
             throw new DuplicateNationalCodeException();
         }

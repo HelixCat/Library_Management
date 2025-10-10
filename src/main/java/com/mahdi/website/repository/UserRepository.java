@@ -1,24 +1,21 @@
 package com.mahdi.website.repository;
 
 import com.mahdi.website.model.User;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface UserRepository extends CrudRepository<User, Long>, JpaSpecificationExecutor<User> {
+public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
 
-    @Query("SELECT u FROM User u WHERE u.email = :email")
-    Optional<User> findByEmail(@Param("email") String email);
+    @EntityGraph(attributePaths = "roles")
+    Optional<User> findUserByEmail(String email);
 
-    @Query("SELECT u FROM User u WHERE u.username = :username")
-    Optional<User> findByUserName(@Param("username") String username);
+    Optional<User> findUserByUsername(@Param("username") String username);
 
-    @Query("SELECT u FROM User u WHERE u.phoneNumber = :phoneNumber")
-    Optional<User> findByPhoneNumber(@Param("phoneNumber") String phoneNumber);
+    Optional<User> findUserByPhoneNumber(@Param("phoneNumber") String phoneNumber);
 
-    @Query("SELECT u FROM User u WHERE u.nationalCode = :nationalCode")
-    Optional<User> findByNationalCode(@Param("nationalCode") String nationalCode);
+    Optional<User> findUserByNationalCode(@Param("nationalCode") String nationalCode);
 }

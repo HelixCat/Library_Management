@@ -8,12 +8,15 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Set;
+
 
 @Data
 @Entity
 @Table(name = "t_author")
+@EqualsAndHashCode(callSuper = true)
 public class Author extends BaseEntity {
 
     @NotNull
