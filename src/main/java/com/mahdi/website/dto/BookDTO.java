@@ -2,7 +2,7 @@ package com.mahdi.website.dto;
 
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 
@@ -17,8 +17,8 @@ public class BookDTO {
     private Boolean active;
     private Integer version;
     private String manualId;
-    private Date publishDate;
-    private String publishYear;
+    private LocalDate  publishDate;
+    private LocalDate publishYear;
     private PublisherDTO publisher;
     private Integer publisherNumber;
     private Set<AuthorDTO> authors;

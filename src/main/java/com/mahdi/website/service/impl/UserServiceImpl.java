@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.SecureRandom;
-import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Slf4j
@@ -78,8 +78,7 @@ public class UserServiceImpl implements UserService {
                 .map(this::prepareHashedPassword)
                 .ifPresent(user::setPassword);
         if (Objects.isNull(user.getRegisterDay())) {
-            SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
-            user.setRegisterDay(formatter.format(new Date()));
+            user.setRegisterDay(LocalDateTime.now());
         }
 
         if ((Objects.isNull(user.getRoles())) ||(user.getRoles().isEmpty())) {

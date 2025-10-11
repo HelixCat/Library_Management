@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Repository
@@ -17,9 +17,9 @@ public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificat
 
     Optional<Book> findBooksByBookId(@Param("bookId") String bookId);
 
-    Optional<Book> findBooksByPublishYear(@Param("publishYear") String publishYear);
+    Optional<Book> findBooksByPublishYear(@Param("publishYear") LocalDate publishYear);
 
-    Optional<Book> findBooksByPublishDate(@Param("publishDate") Date publishDate);
+    Optional<Book> findBooksByPublishDate(@Param("publishDate") LocalDate publishDate);
 
     @Query("SELECT book FROM Book book JOIN Author author WHERE author.firstName = :authorFirstName")
     Optional<Book> findBookByAuthorFirstName(@Param("authorFirstName") String authorFirstName);

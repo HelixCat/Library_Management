@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -19,9 +19,9 @@ public class SearchBookDTO {
     private Boolean active;
     private Integer version;
     private String manualId;
-    private Date publishDate;
+    private LocalDate publishDate;
     private String authorName;
-    private String publishYear;
+    private LocalDate publishYear;
     private String publisherName;
     private String translatorName;
 }

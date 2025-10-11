@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -20,7 +21,7 @@ public class UserDTO implements Serializable {
     private byte[] image;
     private String gender;
     private Boolean active;
-    private String birthday;
+    private LocalDate birthday;
     private Integer version;
     private String manualId;
     private String username;

@@ -1,22 +1,25 @@
 package com.mahdi.website.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.mahdi.website.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.springframework.data.jpa.repository.EntityGraph;
+import lombok.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Data
+@Getter
+@Setter
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "t_user")
-@EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"roles"})
+@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
 public class User extends BaseEntity {
 
     @NotNull
@@ -45,9 +48,9 @@ public class User extends BaseEntity {
     @Column(name = "c_gender", nullable = false, length = 10)
     private String gender;
     @Column(name = "c_birthday", length = 10)
-    private String birthday;
+    private LocalDate birthday;
     @Column(name = "c_register_day", length = 10)
-    private String registerDay;
+    private LocalDateTime registerDay;
     @Lob
     @Column(name = "c_profile_image", length = 200000, columnDefinition = "LONGBLOB")
     private byte[] profileImage;

@@ -1,13 +1,14 @@
 package com.mahdi.website.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @Entity
@@ -28,4 +29,7 @@ public class Publisher extends BaseEntity {
     @Email(message = "incorrect format!!!")
     @Column(name = "c_email", nullable = false, unique = true, length = 60)
     private String email;
+    // In Publisher.java, add:
+    @OneToMany(mappedBy = "publisher", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Book> books = new HashSet<>();
 }
