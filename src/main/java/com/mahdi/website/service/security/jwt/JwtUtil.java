@@ -19,11 +19,20 @@ import java.util.Objects;
 @Component
 public class JwtUtil {
 
-    @Value("${jwt.secret}")
-    private final String SECRET = "replace-with-a-very-strong-secret-key-of-32-bytes";
-    private final long EXPIRATION_TIME = 1000 * 60 * 60;
+    private final String SECRET;
 
-    private final Key key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    private final long EXPIRATION_TIME;
+
+    private final Key key;
+
+    public JwtUtil(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration.time}") long expirationTime
+    ) {
+        this.SECRET = secret;
+        this.EXPIRATION_TIME = expirationTime;
+        this.key = Keys.hmacShaKeyFor(SECRET.getBytes());
+    }
 
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
