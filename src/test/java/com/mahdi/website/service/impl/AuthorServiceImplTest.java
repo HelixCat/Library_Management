@@ -1,5 +1,6 @@
 package com.mahdi.website.service.impl;
 
+import com.mahdi.website.dto.AuthorDTO;
 import com.mahdi.website.exception.author.AuthorNotFoundException;
 import com.mahdi.website.model.Author;
 import com.mahdi.website.repository.AuthorRepository;
@@ -36,7 +37,9 @@ class AuthorServiceImplTest {
         Author author = new Author();
         author.setId(1L);
         when(authorRepository.findById(1L)).thenReturn(Optional.of(author));
-        Author result = authorServiceImpl.findAuthorById(1L);
+        AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(author.getId());
+        Author result = authorServiceImpl.findAuthorById(authorDTO);
         assertNotNull(result);
         assertEquals(1L, result.getId());
         verify(authorRepository, times(1)).findById(1L);
@@ -45,7 +48,9 @@ class AuthorServiceImplTest {
     @Test
     void findAuthorById_notFound() {
         when(authorRepository.findById(2L)).thenReturn(Optional.empty());
-        assertThrows(AuthorNotFoundException.class, () -> authorServiceImpl.findAuthorById(2L));
+        AuthorDTO authorDTO = new AuthorDTO();
+        authorDTO.setId(2L);
+        assertThrows(AuthorNotFoundException.class, () -> authorServiceImpl.findAuthorById(authorDTO));
         verify(authorRepository, times(1)).findById(2L);
     }
 }

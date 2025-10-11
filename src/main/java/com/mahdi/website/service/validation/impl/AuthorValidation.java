@@ -9,6 +9,7 @@ import com.mahdi.website.service.validation.interfaces.AuthorValidationInterface
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -39,12 +40,12 @@ public class AuthorValidation implements AuthorValidationInterface {
 
     @Override
     public void updateAuthorValidation(Author author, AuthorDTO authorDTO) {
-        if (!authorDTO.getEmail().equals(author.getEmail())) {
+        if (Objects.nonNull(authorDTO.getEmail()) && !authorDTO.getEmail().equals(author.getEmail())) {
             authorEmailValidation(authorDTO.getEmail());
         }
-        if (!authorDTO.getPhoneNumber().equals(author.getPhoneNumber())) {
+        if (Objects.nonNull(authorDTO.getPhoneNumber()) && !authorDTO.getPhoneNumber().equals(author.getPhoneNumber())) {
             authorPhoneNumberValidation(authorDTO.getPhoneNumber());
         }
     }
-
 }
+

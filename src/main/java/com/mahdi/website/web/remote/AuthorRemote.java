@@ -45,6 +45,14 @@ public interface AuthorRemote {
         @ApiResponse(responseCode = "200", description = "Author found"),
         @ApiResponse(responseCode = "404", description = "Author not found")
     })
-    @GetMapping("/{id}")
-    ResponseEntity<AuthorDTO> findAuthorById(@PathVariable Long id);
+    @PostMapping("/find-author-by-id")
+    ResponseEntity<AuthorDTO> findAuthorById(@RequestBody AuthorDTO authorDTO);
+
+    @Operation(summary = "deactivate author by ID", description = "deactivate an author by their ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Author Deactivate"),
+            @ApiResponse(responseCode = "404", description = "Author not found")
+    })
+    @PostMapping("/deactivate-author-by-id")
+    ResponseEntity<AuthorDTO> deactivateAuthorById(@RequestBody AuthorDTO authorDTO);
 }

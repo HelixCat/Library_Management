@@ -25,7 +25,7 @@ public class AuthorResource implements AuthorRemote {
     @Override
     @Operation(summary = "Search authors", description = "Search for authors based on provided criteria")
     public ResponseEntity<List<AuthorDTO>> searchAuthors(@RequestBody AuthorDTO authorDTO) {
-        return new ResponseEntity<>(authorMapper.toDTOList(authorService.searchAuthor(authorDTO)), HttpStatus.FOUND);
+        return new ResponseEntity<>(authorService.searchAuthorDTO(authorDTO), HttpStatus.FOUND);
     }
 
     @Override
@@ -42,7 +42,13 @@ public class AuthorResource implements AuthorRemote {
 
     @Override
     @Operation(summary = "Find author by ID", description = "Retrieve an author by their ID")
-    public ResponseEntity<AuthorDTO> findAuthorById(@PathVariable Long id) {
-        return new ResponseEntity<>(authorMapper.toDTO(authorService.findAuthorById(id)), HttpStatus.OK);
+    public ResponseEntity<AuthorDTO> findAuthorById(@RequestBody AuthorDTO authorDTO) {
+        return new ResponseEntity<>(authorService.findAuthorDTOById(authorDTO), HttpStatus.OK);
+    }
+
+    @Override
+    @Operation(summary = "deactivate author by ID", description = "deactivate an author by their ID")
+    public ResponseEntity<AuthorDTO> deactivateAuthorById(@RequestBody AuthorDTO authorDTO) {
+        return new ResponseEntity<>(authorService.deactivateAuthorDTO(authorDTO), HttpStatus.OK);
     }
 }

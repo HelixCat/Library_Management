@@ -36,6 +36,16 @@ public class UserServiceImpl implements UserService {
     private final PasswordValidationService passwordValidationService;
     private final SignUpValidationInterface signUpValidation;
 
+    @Override
+    @Caching(
+            put = {
+                    @CachePut(value = "user", key = "#result.username"),
+                    @CachePut(value = "userDetails", key = "#result.email")
+            },
+            evict = {
+                    @CacheEvict(value = "userSearch", allEntries = true)
+            }
+    )
     @Transactional
     public User saveUser(UserDTO userDTO) {
         log.info("Saving user: {}", userDTO.getUsername());

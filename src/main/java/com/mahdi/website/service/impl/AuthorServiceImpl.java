@@ -27,10 +27,15 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorValidationInterface authorValidation;
 
     @Override
-    @Cacheable(value = "authorSearch", key = "T(java.util.Objects).hash(#authorDTO.firstName, #authorDTO.lastName, #authorDTO.email)", unless = "#result == null or #result.isEmpty()")
     public List<Author> searchAuthor(AuthorDTO authorDTO) {
         AuthorSearchSpecification specification = new AuthorSearchSpecification(authorDTO);
         return authorRepository.findAll(specification);
+    }
+
+    @Override
+    @Cacheable(value = "authorSearch", key = "T(java.util.Objects).hash(#authorDTO.firstName, #authorDTO.lastName, #authorDTO.email)", unless = "#result == null or #result.isEmpty()")
+    public List<AuthorDTO> searchAuthorDTO(AuthorDTO authorDTO) {
+        return authorMapper.toDTOList(searchAuthor(authorDTO));
     }
 
     @Override
@@ -47,19 +52,19 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Cacheable(value = "authors", key = "#id", unless = "#result == null")
-    public Author findAuthorById(Long id) {
-        return authorRepository.findById(id).orElseThrow(AuthorNotFoundException::new);
+    public Author findAuthorById(AuthorDTO authorDTO) {
+        return authorRepository.findById(authorDTO.getId()).orElseThrow(AuthorNotFoundException::new);
     }
 
     @Override
-    @Caching(put = {
-            @CachePut(value = "authors", key = "#result.id")
-    }, evict = {
-            @CacheEvict(value = "authorSearch", allEntries = true)
-    })
+    @Cacheable(value = "authors", key = "#authorDTO.id", unless = "#result == null")
+    public AuthorDTO findAuthorDTOById(AuthorDTO authorDTO) {
+        return authorMapper.toDTO(findAuthorById(authorDTO));
+    }
+
+    @Override
     public Author deactivateAuthor(AuthorDTO authorDTO) {
-        Author author = findAuthorById(authorDTO.getId());
+        Author author = findAuthorById(authorDTO);
         author.setActive(Boolean.FALSE);
         return authorRepository.save(author);
     }
@@ -70,8 +75,18 @@ public class AuthorServiceImpl implements AuthorService {
     }, evict = {
             @CacheEvict(value = "authorSearch", allEntries = true)
     })
+    public AuthorDTO deactivateAuthorDTO(AuthorDTO authorDTO) {
+        return authorMapper.toDTO(deactivateAuthor(authorDTO));
+    }
+
+    @Override
+    @Caching(put = {
+            @CachePut(value = "authors", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "authorSearch", allEntries = true)
+    })
     public Author updateAuthor(AuthorDTO authorDTO) {
-        Author author = findAuthorById(authorDTO.getId());
+        Author author = findAuthorById(authorDTO);
         authorValidation.updateAuthorValidation(author, authorDTO);
         update(authorDTO, author);
         return authorRepository.save(author);
