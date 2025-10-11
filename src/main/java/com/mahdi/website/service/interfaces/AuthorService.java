@@ -13,6 +13,8 @@ public interface AuthorService {
 
     Author saveAuthor(AuthorDTO authorDTO);
 
+    AuthorDTO saveAuthorDTO(AuthorDTO authorDTO);
+
     Author findAuthorById(AuthorDTO authorDTO );
 
     AuthorDTO findAuthorDTOById(AuthorDTO authorDTO);
@@ -22,4 +24,6 @@ public interface AuthorService {
     AuthorDTO deactivateAuthorDTO(AuthorDTO authorDTO);
 
     Author updateAuthor(AuthorDTO authorDTO);
+
+    AuthorDTO updateAuthorDTO(AuthorDTO authorDTO);
 }

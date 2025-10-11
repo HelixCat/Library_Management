@@ -52,6 +52,16 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "authors", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "authorSearch", allEntries = true)
+    })
+    public AuthorDTO saveAuthorDTO(AuthorDTO authorDTO) {
+        return authorMapper.toDTO(saveAuthor(authorDTO));
+    }
+
+    @Override
     public Author findAuthorById(AuthorDTO authorDTO) {
         return authorRepository.findById(authorDTO.getId()).orElseThrow(AuthorNotFoundException::new);
     }
@@ -80,16 +90,21 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    @Caching(put = {
-            @CachePut(value = "authors", key = "#result.id")
-    }, evict = {
-            @CacheEvict(value = "authorSearch", allEntries = true)
-    })
     public Author updateAuthor(AuthorDTO authorDTO) {
         Author author = findAuthorById(authorDTO);
         authorValidation.updateAuthorValidation(author, authorDTO);
         update(authorDTO, author);
         return authorRepository.save(author);
+    }
+
+    @Override
+    @Caching(put = {
+            @CachePut(value = "authors", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "authorSearch", allEntries = true)
+    })
+    public AuthorDTO updateAuthorDTO(AuthorDTO authorDTO) {
+        return authorMapper.toDTO(updateAuthor(authorDTO));
     }
 
     private void update(AuthorDTO authorDTO, Author author) {
