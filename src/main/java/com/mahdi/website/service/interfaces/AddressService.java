@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface AddressService {
 
+    AddressDTO findAddressDTOById(AddressDTO addressDTO);
+
     List<Address> search(AddressDTO addressDTO);
 
     Address saveAddress(AddressDTO addressDTO);
@@ -16,6 +18,8 @@ public interface AddressService {
     Address findAddressByPostalCode(AddressDTO addressDTO);
 
     Address findAddressById(AddressDTO addressDTO);
+
+    AddressDTO findAddressDTOByPostalCode(AddressDTO addressDTO);
 
     Address updateAddress(AddressDTO addressDTOList);
 }

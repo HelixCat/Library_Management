@@ -29,7 +29,7 @@ public class BookServiceImpl implements BookService {
 
 
     @Override
-    @Cacheable(value = "bookSearch", key = "T(java.util.Objects).hash(#bookDTO.title, #bookDTO.author, #bookDTO.publisher, #bookDTO.active)", unless = "#result == null or #result.isEmpty()")
+    @Cacheable(value = "bookSearch", key = "T(java.util.Objects).hash(#bookDTO.title, #bookDTO.authors, #bookDTO.publisher, #bookDTO.active)", unless = "#result == null or #result.isEmpty()")
     public List<Book> searchBook(BookDTO bookDTO) {
         BookSearchSpecification specification = new BookSearchSpecification(bookDTO);
         return bookRepository.findAll(specification);
@@ -37,7 +37,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Caching(put = {
-            @CachePut(value = "books", key = "#result.id"),
             @CachePut(value = "bookDetails", key = "#result.bookId")
     }, evict = {
             @CacheEvict(value = "bookSearch", allEntries = true)
@@ -56,14 +55,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @Cacheable(value = "books", key = "#id", unless = "#result == null")
     public Book findBookById(Long id) {
         return bookRepository.findById(id).orElseThrow(BookNotFoundException::new);
     }
 
     @Override
     @Caching(put = {
-            @CachePut(value = "books", key = "#result.id"),
             @CachePut(value = "bookDetails", key = "#result.bookId")
     }, evict = {
             @CacheEvict(value = "bookSearch", allEntries = true)
@@ -76,7 +73,6 @@ public class BookServiceImpl implements BookService {
 
     @Override
     @Caching(put = {
-            @CachePut(value = "books", key = "#result.id"),
             @CachePut(value = "bookDetails", key = "#result.bookId")
     }, evict = {
             @CacheEvict(value = "bookSearch", allEntries = true)

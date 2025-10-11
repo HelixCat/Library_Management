@@ -26,7 +26,7 @@ public class PublisherServiceImpl implements PublisherService {
     private final PublisherValidationInterface publisherValidation;
 
     @Override
-    @Cacheable(value = "publisherSearch", key = "T(java.util.Objects).hash(#publisherDTO.publisherName, #publisherDTO.email, #publisherDTO.phoneNumber)", unless = "#result == null or #result.isEmpty()")
+    @Cacheable(value = "publisherSearch", key = "T(java.util.Objects).hash(#publisherDTO.name, #publisherDTO.email, #publisherDTO.phoneNumber)", unless = "#result == null or #result.isEmpty()")
     public List<Publisher> searchPublisher(PublisherDTO publisherDTO) {
         PublisherSearchSpecification specification = new PublisherSearchSpecification(publisherDTO);
         return publisherRepository.findAll(specification);
@@ -67,7 +67,6 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    @Cacheable(value = "publishers", key = "#id", unless = "#result == null")
     public Publisher findPublisherById(Long id) {
         return publisherRepository.findById(id).orElseThrow(PublisherNotFoundException::new);
     }
@@ -80,6 +79,12 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "publishers", key = "#result.id"),
+            @CachePut(value = "publisherDetails", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "publisherSearch", allEntries = true)
+    })
     public Publisher deactivatePublisherById(Long id) {
         Publisher publisher = findPublisherById(id);
         publisher.setActive(Boolean.FALSE);
@@ -87,6 +92,12 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "publishers", key = "#result.id"),
+            @CachePut(value = "publisherDetails", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "publisherSearch", allEntries = true)
+    })
     public Publisher updatePublisher(PublisherDTO publisherDTO) {
         Publisher publisher = findPublisherById(publisherDTO.getId());
         publisherValidation.updatePublisherValidation(publisher, publisherDTO);

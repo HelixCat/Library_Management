@@ -15,7 +15,6 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -28,11 +27,10 @@ public class TranslatorServiceImpl implements TranslatorService {
 
 
     @Override
-    @Cacheable(value = "translatorSearch", key = "T(java.util.Objects).hash(#translator.firstName, #translator.lastName, #translator.email)", unless = "#result == null or #result.isEmpty()")
+    @Cacheable(value = "translatorSearch", key = "T(java.util.Objects).hash(#translatorDTO.firstName, #translatorDTO.lastName, #translatorDTO.email)", unless = "#result == null or #result.isEmpty()")
     public List<Translator> searchTranslator(TranslatorDTO translatorDTO) {
         TranslatorSearchSpecification specification = new TranslatorSearchSpecification(translatorDTO);
-        List<Translator> translatorList = translatorRepository.findAll(specification);
-        return translatorList;
+        return translatorRepository.findAll(specification);
     }
 
     @Override
@@ -87,6 +85,11 @@ public class TranslatorServiceImpl implements TranslatorService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "translators", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "translatorSearch", allEntries = true)
+    })
     public Translator deactivateTranslatorById(Long id) {
         Translator translator = findTranslatorById(id);
         translator.setActive(Boolean.FALSE);
@@ -94,6 +97,11 @@ public class TranslatorServiceImpl implements TranslatorService {
     }
 
     @Override
+    @Caching(put = {
+            @CachePut(value = "translators", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "translatorSearch", allEntries = true)
+    })
     public Translator updateTranslator(TranslatorDTO translatorDTO) {
         Translator translator = findTranslatorById(translatorDTO.getId());
         translatorValidation.updateTranslatorValidation(translator, translatorDTO);

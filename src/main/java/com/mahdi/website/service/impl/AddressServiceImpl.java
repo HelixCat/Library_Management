@@ -27,13 +27,18 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepository;
 
     @Override
-    @Cacheable(value = "addresses", key = "#addressDTO.id", unless = "#result == null")
     public Address findAddressById(AddressDTO addressDTO) {
         return addressRepository.findById(addressDTO.getId()).orElseThrow(AddressByIdNotFoundException::new);
     }
 
     @Override
-    @Cacheable(value = "addressSearch", key = "T(java.util.Objects).hash(#addressDTO.city, #addressDTO.postalCode, #addressDTO.street)", unless = "#result == null or #result.isEmpty()")
+    @Cacheable(value = "addresses", key = "#addressDTO.id", unless = "#result == null")
+    public AddressDTO findAddressDTOById(AddressDTO addressDTO) {
+        return addressMapper.toDTO(findAddressById(addressDTO));
+    }
+
+    @Override
+    @Cacheable(value = "addressSearch", key = "T(java.util.Objects).hash(#addressDTO.city, #addressDTO.postalCode)", unless = "#result == null or #result.isEmpty()")
     public List<Address> search(AddressDTO addressDTO) {
         AddressSearchSpecification specification = new AddressSearchSpecification(addressDTO);
         return addressRepository.findAll(specification);
@@ -66,9 +71,14 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    @Cacheable(value = "addresses", key = "#postalCode", unless = "#result == null")
     public Address findAddressByPostalCode(AddressDTO addressDTO) {
         return addressRepository.findAddressByPostalCode(addressDTO.getPostalCode()).orElseThrow(AddressByPostalCodeNotFoundException::new);
+    }
+
+    @Override
+    @Cacheable(value = "addresses", key = "#addressDTO.postalCode", unless = "#result == null")
+    public AddressDTO findAddressDTOByPostalCode(AddressDTO addressDTO) {
+        return addressMapper.toDTO(findAddressByPostalCode(addressDTO));
     }
 
     @Override
