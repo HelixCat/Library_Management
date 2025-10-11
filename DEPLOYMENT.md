@@ -27,7 +27,6 @@ docker-compose down -v
 ### Access Points
 - **Application**: http://localhost:8080
 - **Swagger UI**: http://localhost:8080/swagger-ui.html
-- **Health Check**: http://localhost:8080/actuator/health
 - **MySQL**: localhost:3306
 - **MongoDB**: localhost:27017
 - **Redis**: localhost:6379
