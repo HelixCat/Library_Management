@@ -38,6 +38,8 @@ public class SecurityConfig {
                         .requestMatchers("/", "/index.html", "/assets/**", "/*.ico", "/*.svg", "/robots.txt").permitAll()
                         .requestMatchers("/signup", "/signin", "/api/auth/**", "/public/**").permitAll()
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/actuator/health").permitAll() // ✅ allow this endpoint
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated()
