@@ -1,0 +1,122 @@
+databaseChangeLog:
+  # ========================================
+  # BOOK TABLE CHANGES
+  # ========================================
+  
+  # Change 1: Modify t_book.c_publish_date from DATETIME to DATE
+  # Reason: Changed from java.util.Date to java.time.LocalDate in Book entity
+  - changeSet:
+      id: 007-001-modify-book-publish-date-to-date
+      author: mahdi
+      changes:
+        - modifyDataType:
+            tableName: t_book
+            columnName: c_publish_date
+            newDataType: DATE
+      rollback:
+        - modifyDataType:
+            tableName: t_book
+            columnName: c_publish_date
+            newDataType: DATETIME
+
+  # Change 2: Modify t_book.c_publish_year from VARCHAR(4) to DATE
+  # Reason: Changed from String to java.time.LocalDate in Book entity
+  - changeSet:
+      id: 007-002-modify-book-publish-year-to-date
+      author: mahdi
+      changes:
+        - modifyDataType:
+            tableName: t_book
+            columnName: c_publish_year
+            newDataType: DATE
+      rollback:
+        - modifyDataType:
+            tableName: t_book
+            columnName: c_publish_year
+            newDataType: VARCHAR(4)
+
+  # Change 3: Add indexes to t_book table for performance optimization
+  # Reason: Added @Index annotations in Book entity for frequently queried fields
+  - changeSet:
+      id: 007-003-add-book-indexes
+      author: mahdi
+      changes:
+        - createIndex:
+            indexName: idx_book_title
+            tableName: t_book
+            columns:
+              - column:
+                  name: c_book_title
+        - createIndex:
+            indexName: idx_publish_year
+            tableName: t_book
+            columns:
+              - column:
+                  name: c_publish_year
+      rollback:
+        - dropIndex:
+            indexName: idx_book_title
+            tableName: t_book
+        - dropIndex:
+            indexName: idx_publish_year
+            tableName: t_book
+
+  # ========================================
+  # USER TABLE CHANGES
+  # ========================================
+
+  # Change 4: Modify t_user.c_birthday from VARCHAR(10) to DATE
+  # Reason: Changed from String to java.time.LocalDate in User entity
+  - changeSet:
+      id: 007-004-modify-user-birthday-to-date
+      author: mahdi
+      changes:
+        - modifyDataType:
+            tableName: t_user
+            columnName: c_birthday
+            newDataType: DATE
+      rollback:
+        - modifyDataType:
+            tableName: t_user
+            columnName: c_birthday
+            newDataType: VARCHAR(10)
+
+  # Change 5: Modify t_user.c_register_day from VARCHAR(10) to DATETIME
+  # Reason: Changed from String to java.time.LocalDateTime in User entity
+  - changeSet:
+      id: 007-005-modify-user-register-day-to-datetime
+      author: mahdi
+      changes:
+        - modifyDataType:
+            tableName: t_user
+            columnName: c_register_day
+            newDataType: DATETIME
+      rollback:
+        - modifyDataType:
+            tableName: t_user
+            columnName: c_register_day
+            newDataType: VARCHAR(10)
+
+  # ========================================
+  # SUMMARY OF CHANGES
+  # ========================================
+  # 
+  # DATABASE SCHEMA CHANGES (included above):
+  # 1. Book.publishDate: DATETIME -> DATE (java.time.LocalDate)
+  # 2. Book.publishYear: VARCHAR(4) -> DATE (java.time.LocalDate)
+  # 3. Book table: Added indexes on c_book_title and c_publish_year
+  # 4. User.birthday: VARCHAR(10) -> DATE (java.time.LocalDate)
+  # 5. User.registerDay: VARCHAR(10) -> DATETIME (java.time.LocalDateTime)
+  #
+  # APPLICATION-LEVEL CHANGES (no schema changes required):
+  # - Author: Changed @Data to @Getter/@Setter/@ToString/@EqualsAndHashCode, added @JsonIgnore on books
+  # - Translator: Changed @Data to @Getter/@Setter/@ToString/@EqualsAndHashCode, added @JsonIgnore on books
+  # - Book: Changed @Data to @Getter/@Setter/@ToString/@EqualsAndHashCode, added FetchType.LAZY on publisher
+  # - Book: Added cascade strategies (PERSIST, MERGE) on authors and translators relationships
+  # - User: Changed @Data to @Getter/@Setter/@ToString/@EqualsAndHashCode
+  # - Publisher: Added bidirectional @OneToMany relationship to books (no schema change)
+  #
+  # NO CHANGES NEEDED FOR:
+  # - Author table: Schema already matches entity definition
+  # - Translator table: Schema already matches entity definition (email already unique)
+  # - Publisher table: Schema already matches entity definition
