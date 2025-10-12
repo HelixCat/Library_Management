@@ -1,5 +1,6 @@
 package com.mahdi.website.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mahdi.website.model.Book;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,6 +23,7 @@ public class TranslatorDTO {
     private String lastName;
     private String firstName;
     private String phoneNumber;
+    @JsonIgnore
     private Set<Book> books;
 
 }

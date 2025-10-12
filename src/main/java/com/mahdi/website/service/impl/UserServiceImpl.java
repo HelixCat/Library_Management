@@ -67,6 +67,7 @@ public class UserServiceImpl implements UserService {
         Optional.ofNullable(userDTO.getUsername()).ifPresent(user::setUsername);
         Optional.ofNullable(userDTO.getFirstName()).ifPresent(user::setFirstName);
         Optional.ofNullable(userDTO.getLastName()).ifPresent(user::setLastName);
+        Optional.ofNullable(userDTO.getActive()).ifPresent(user::setActive);
         Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
         Optional.ofNullable(userDTO.getNationalCode()).ifPresent(user::setNationalCode);
         Optional.ofNullable(userDTO.getPhoneNumber()).ifPresent(user::setPhoneNumber);

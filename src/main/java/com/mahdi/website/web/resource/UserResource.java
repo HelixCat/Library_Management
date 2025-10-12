@@ -39,7 +39,7 @@ public class UserResource implements UserRemote {
     @Override
     @Operation(summary = "Update user", description = "Update an existing user's information")
     public ResponseEntity<ResponseUserDTO> updateUser(@RequestBody UserDTO userDTO) throws Exception {
-        return new ResponseEntity<>(responseUserMapper.toDTO(userService.updateUser(userDTO)), HttpStatus.OK);
+        return new ResponseEntity<>(userService.updateUserDTO(userDTO), HttpStatus.OK);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.mahdi.website.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import com.mahdi.website.model.Book;
 
@@ -18,5 +19,6 @@ public class AuthorDTO {
     private String manualId;
     private String firstName;
     private String phoneNumber;
+    @JsonIgnore
     private Set<Book> books;
 }
