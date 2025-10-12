@@ -1,5 +1,6 @@
 package com.mahdi.website.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mahdi.website.enumeration.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -47,8 +48,10 @@ public class User extends BaseEntity {
     private String nationalCode;
     @Column(name = "c_gender", nullable = false, length = 10)
     private String gender;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "c_birthday", length = 10)
     private LocalDate birthday;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     @Column(name = "c_register_day", length = 10)
     private LocalDateTime registerDay;
     @Lob

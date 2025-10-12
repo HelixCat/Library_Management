@@ -3,6 +3,7 @@ package com.mahdi.website.configuration.redis;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -39,7 +40,7 @@ public class RedisConfig {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setHostName(redisHost);
         config.setPort(redisPort);
-        config.setUsername("default"); // Explicitly set the default username
+        config.setUsername("default");
         if (!redisPassword.isEmpty()) {
             config.setPassword(redisPassword);
         }
@@ -65,6 +66,7 @@ public class RedisConfig {
     @Bean
     public GenericJackson2JsonRedisSerializer jsonRedisSerializer() {
         ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
         objectMapper.activateDefaultTyping(
                 LaissezFaireSubTypeValidator.instance,
                 ObjectMapper.DefaultTyping.NON_FINAL,
@@ -76,7 +78,7 @@ public class RedisConfig {
     @Bean
     public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration defaultCacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofHours(1)) // Default TTL: 1 hour
+                .entryTtl(Duration.ofHours(1))
                 .serializeKeysWith(org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair
                         .fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(org.springframework.data.redis.serializer.RedisSerializationContext.SerializationPair

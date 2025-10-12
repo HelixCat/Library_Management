@@ -1,6 +1,7 @@
 package com.mahdi.website.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.mahdi.website.enumeration.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,6 +22,7 @@ public class UserDTO implements Serializable {
     private byte[] image;
     private String gender;
     private Boolean active;
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate birthday;
     private Integer version;
     private String manualId;
