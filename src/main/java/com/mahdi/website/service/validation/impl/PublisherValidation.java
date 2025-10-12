@@ -10,6 +10,7 @@ import com.mahdi.website.service.validation.interfaces.PublisherValidationInterf
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -52,13 +53,13 @@ public class PublisherValidation implements PublisherValidationInterface {
 
     @Override
     public void updatePublisherValidation(Publisher publisher, PublisherDTO publisherDTO) {
-        if (!publisherDTO.getName().equals(publisher.getName())) {
+        if (Objects.nonNull(publisherDTO.getName()) && !publisherDTO.getName().equals(publisher.getName())) {
             publisherNameValidation(publisherDTO.getName());
         }
-        if (!publisherDTO.getEmail().equals(publisher.getEmail())) {
+        if (Objects.nonNull(publisherDTO.getEmail()) && !publisherDTO.getEmail().equals(publisher.getEmail())) {
             publisherEmailValidation(publisherDTO.getEmail());
         }
-        if (!publisherDTO.getPhoneNumber().equals(publisher.getPhoneNumber())) {
+        if (Objects.nonNull(publisherDTO.getPhoneNumber()) && !publisherDTO.getPhoneNumber().equals(publisher.getPhoneNumber())) {
             publisherPhoneNumberValidation(publisherDTO.getPhoneNumber());
         }
     }

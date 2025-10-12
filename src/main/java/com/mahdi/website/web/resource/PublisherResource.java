@@ -45,4 +45,10 @@ public class PublisherResource implements PublisherRemote {
     public ResponseEntity<PublisherDTO> findPublisherById(@PathVariable Long id) {
         return new ResponseEntity<>(publisherMapper.toDTO(publisherService.findPublisherById(id)), HttpStatus.OK);
     }
+
+    @Override
+    @Operation(summary = "deactivate publisher by ID", description = "deactivate a publisher by their ID")
+    public ResponseEntity<PublisherDTO> deactivatePublisher(@RequestBody PublisherDTO publisherDTO) {
+        return new ResponseEntity<>(publisherService.deactivatePublisherDTOById(publisherDTO), HttpStatus.OK);
+    }
 }

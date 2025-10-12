@@ -16,6 +16,7 @@ import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +27,23 @@ public class PublisherServiceImpl implements PublisherService {
     private final PublisherValidationInterface publisherValidation;
 
     @Override
-    @Cacheable(value = "publisherSearch", key = "T(java.util.Objects).hash(#publisherDTO.name, #publisherDTO.email, #publisherDTO.phoneNumber)", unless = "#result == null or #result.isEmpty()")
     public List<Publisher> searchPublisher(PublisherDTO publisherDTO) {
         PublisherSearchSpecification specification = new PublisherSearchSpecification(publisherDTO);
         return publisherRepository.findAll(specification);
+    }
+
+    @Override
+    @Cacheable(value = "publisherSearch", key = "T(java.util.Objects).hash(#publisherDTO.name, #publisherDTO.email, #publisherDTO.phoneNumber)", unless = "#result == null or #result.isEmpty()")
+    public List<PublisherDTO> searchPublisherDTO(PublisherDTO publisherDTO) {
+        return publisherMapper.toDTOList(searchPublisher(publisherDTO));
+    }
+
+    @Override
+    public Publisher savePublisher(PublisherDTO publisherDTO) {
+        publisherValidation.addPublisherValidation(publisherDTO);
+        Publisher publisher = publisherMapper.toEntity(publisherDTO);
+        publisher.setActive(Boolean.TRUE);
+        return publisherRepository.save(publisher);
     }
 
     @Override
@@ -38,11 +52,8 @@ public class PublisherServiceImpl implements PublisherService {
     }, evict = {
             @CacheEvict(value = "publisherSearch", allEntries = true)
     })
-    public Publisher savePublisher(PublisherDTO publisherDTO) {
-        publisherValidation.addPublisherValidation(publisherDTO);
-        Publisher publisher = publisherMapper.toEntity(publisherDTO);
-        publisher.setActive(Boolean.TRUE);
-        return publisherRepository.save(publisher);
+    public PublisherDTO savePublisherDTO(PublisherDTO publisherDTO) {
+        return publisherMapper.toDTO(savePublisher(publisherDTO));
     }
 
     @Override
@@ -79,14 +90,8 @@ public class PublisherServiceImpl implements PublisherService {
     }
 
     @Override
-    @Caching(put = {
-            @CachePut(value = "publishers", key = "#result.id"),
-            @CachePut(value = "publisherDetails", key = "#result.id")
-    }, evict = {
-            @CacheEvict(value = "publisherSearch", allEntries = true)
-    })
-    public Publisher deactivatePublisherById(Long id) {
-        Publisher publisher = findPublisherById(id);
+    public Publisher deactivatePublisherById(PublisherDTO publisherDTO) {
+        Publisher publisher = findPublisherById(publisherDTO.getId());
         publisher.setActive(Boolean.FALSE);
         return publisherRepository.save(publisher);
     }
@@ -98,13 +103,29 @@ public class PublisherServiceImpl implements PublisherService {
     }, evict = {
             @CacheEvict(value = "publisherSearch", allEntries = true)
     })
+    public PublisherDTO deactivatePublisherDTOById(PublisherDTO publisherDTO) {
+        return publisherMapper.toDTO(deactivatePublisherById(publisherDTO));
+    }
+
+    @Override
     public Publisher updatePublisher(PublisherDTO publisherDTO) {
         Publisher publisher = findPublisherById(publisherDTO.getId());
         publisherValidation.updatePublisherValidation(publisher, publisherDTO);
-        publisher.setName(publisherDTO.getName());
-        publisher.setEmail(publisherDTO.getEmail());
-        publisher.setPhoneNumber(publisherDTO.getPhoneNumber());
-        publisher.setActive(publisherDTO.getActive());
+        Optional.ofNullable(publisherDTO.getName()).ifPresent(publisher::setName);
+        Optional.ofNullable(publisherDTO.getEmail()).ifPresent(publisher::setEmail);
+        Optional.ofNullable(publisherDTO.getPhoneNumber()).ifPresent(publisher::setPhoneNumber);
+        Optional.ofNullable(publisherDTO.getActive()).ifPresent(publisher::setActive);
         return publisherRepository.save(publisher);
+    }
+
+    @Override
+    @Caching(put = {
+            @CachePut(value = "publishers", key = "#result.id"),
+            @CachePut(value = "publisherDetails", key = "#result.id")
+    }, evict = {
+            @CacheEvict(value = "publisherSearch", allEntries = true)
+    })
+    public PublisherDTO updatePublisherDTO(PublisherDTO publisherDTO) {
+        return publisherMapper.toDTO(updatePublisher(publisherDTO));
     }
 }

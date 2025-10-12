@@ -8,7 +8,11 @@ import java.util.List;
 public interface PublisherService {
     List<Publisher> searchPublisher(PublisherDTO publisherDTO);
 
+    List<PublisherDTO> searchPublisherDTO(PublisherDTO publisherDTO);
+
     Publisher savePublisher(PublisherDTO publisherDTO);
+
+    PublisherDTO savePublisherDTO(PublisherDTO publisherDTO);
 
     Publisher findPublisherByName(String name);
 
@@ -20,7 +24,11 @@ public interface PublisherService {
 
     Publisher findPublisherById(Long id);
 
-    Publisher deactivatePublisherById(Long id);
+    Publisher deactivatePublisherById(PublisherDTO publisherDTO);
+
+    PublisherDTO deactivatePublisherDTOById(PublisherDTO publisherDTO);
 
     Publisher updatePublisher(PublisherDTO publisherDTO);
+
+    PublisherDTO updatePublisherDTO(PublisherDTO publisherDTO);
 }

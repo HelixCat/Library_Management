@@ -56,61 +56,6 @@ public class UserServiceImpl implements UserService {
         return savedUser;
     }
 
-    private User prepareUser(User userDetail, UserDTO userDTO) {
-        if (userDTO == null) {
-            throw new IllegalArgumentException("userDTO must not be null");
-        }
-
-        User user = Objects.nonNull(userDetail) ? userDetail : new User();
-        user.setActive(Boolean.TRUE);
-
-        Optional.ofNullable(userDTO.getUsername()).ifPresent(user::setUsername);
-        Optional.ofNullable(userDTO.getFirstName()).ifPresent(user::setFirstName);
-        Optional.ofNullable(userDTO.getLastName()).ifPresent(user::setLastName);
-        Optional.ofNullable(userDTO.getActive()).ifPresent(user::setActive);
-        Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
-        Optional.ofNullable(userDTO.getNationalCode()).ifPresent(user::setNationalCode);
-        Optional.ofNullable(userDTO.getPhoneNumber()).ifPresent(user::setPhoneNumber);
-        Optional.ofNullable(userDTO.getImage()).ifPresent(user::setProfileImage);
-        Optional.ofNullable(userDTO.getBirthday()).ifPresent(user::setBirthday);
-        Optional.ofNullable(userDTO.getGender()).ifPresent(user::setGender);
-
-        Optional.ofNullable(userDTO.getPassword())
-                .map(this::prepareHashedPassword)
-                .ifPresent(user::setPassword);
-        if (Objects.isNull(user.getRegisterDay())) {
-            user.setRegisterDay(LocalDateTime.now());
-        }
-
-        if ((Objects.isNull(user.getRoles())) ||(user.getRoles().isEmpty())) {
-            if (Objects.nonNull(userDTO.getRoles()) && !userDTO.getRoles().isEmpty()) {
-                user.getRoles().addAll(userDTO.getRoles());
-            } else {
-                user.setRoles(new HashSet<>(Collections.singletonList(prepareRoleUser(userDTO))));
-            }
-        }
-
-        return user;
-    }
-
-
-    private Role prepareRoleUser(UserDTO userDTO) {
-        if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
-            return Role.ROLE_ADMIN;
-        } else {
-            return Role.ROLE_USER;
-        }
-    }
-
-    private String prepareHashedPassword(String password) {
-        return createHashedPassword(password);
-    }
-
-    private String createHashedPassword(String password) {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
-        return encoder.encode(password);
-    }
-
     @Override
     public User findUserByUsername(UserDTO userDTO) {
         log.info("Loading user by username from database: {}", userDTO.getUsername());
@@ -248,5 +193,59 @@ public class UserServiceImpl implements UserService {
             log.warn("User not found by id: {}", userDTO.getId());
             return new UserNotFoundException();
         });
+    }
+
+    private User prepareUser(User userDetail, UserDTO userDTO) {
+        if (userDTO == null) {
+            throw new IllegalArgumentException("userDTO must not be null");
+        }
+
+        User user = Objects.nonNull(userDetail) ? userDetail : new User();
+        user.setActive(Boolean.TRUE);
+
+        Optional.ofNullable(userDTO.getUsername()).ifPresent(user::setUsername);
+        Optional.ofNullable(userDTO.getFirstName()).ifPresent(user::setFirstName);
+        Optional.ofNullable(userDTO.getLastName()).ifPresent(user::setLastName);
+        Optional.ofNullable(userDTO.getActive()).ifPresent(user::setActive);
+        Optional.ofNullable(userDTO.getEmail()).ifPresent(user::setEmail);
+        Optional.ofNullable(userDTO.getNationalCode()).ifPresent(user::setNationalCode);
+        Optional.ofNullable(userDTO.getPhoneNumber()).ifPresent(user::setPhoneNumber);
+        Optional.ofNullable(userDTO.getImage()).ifPresent(user::setProfileImage);
+        Optional.ofNullable(userDTO.getBirthday()).ifPresent(user::setBirthday);
+        Optional.ofNullable(userDTO.getGender()).ifPresent(user::setGender);
+
+        Optional.ofNullable(userDTO.getPassword())
+                .map(this::prepareHashedPassword)
+                .ifPresent(user::setPassword);
+        if (Objects.isNull(user.getRegisterDay())) {
+            user.setRegisterDay(LocalDateTime.now());
+        }
+
+        if ((Objects.isNull(user.getRoles())) ||(user.getRoles().isEmpty())) {
+            if (Objects.nonNull(userDTO.getRoles()) && !userDTO.getRoles().isEmpty()) {
+                user.getRoles().addAll(userDTO.getRoles());
+            } else {
+                user.setRoles(new HashSet<>(Collections.singletonList(prepareRoleUser(userDTO))));
+            }
+        }
+
+        return user;
+    }
+
+    private Role prepareRoleUser(UserDTO userDTO) {
+        if (Objects.equals(userDTO.getNationalCode(), "3240005905")) {
+            return Role.ROLE_ADMIN;
+        } else {
+            return Role.ROLE_USER;
+        }
+    }
+
+    private String prepareHashedPassword(String password) {
+        return createHashedPassword(password);
+    }
+
+    private String createHashedPassword(String password) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(10, new SecureRandom());
+        return encoder.encode(password);
     }
 }

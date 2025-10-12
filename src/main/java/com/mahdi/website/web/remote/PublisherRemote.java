@@ -47,4 +47,13 @@ public interface PublisherRemote {
     })
     @GetMapping("/{id}")
     ResponseEntity<PublisherDTO> findPublisherById(@PathVariable Long id);
+
+
+    @Operation(summary = "deactivate publisher by ID", description = "deactivate a publisher by their ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Publisher found"),
+            @ApiResponse(responseCode = "404", description = "Publisher not found")
+    })
+    @PostMapping("/deactivate-publisher")
+    ResponseEntity<PublisherDTO> deactivatePublisher(@RequestBody PublisherDTO publisherDTO);
 }
